@@ -24,3 +24,14 @@ type ReviewResponseItem struct {
 	// example: "2025-05-26"
 	D string `json:"d"`
 }
+
+// APIError represents a standard API error response.
+// swagger:model APIError
+type APIError struct {
+	// Code is the HTTP status code.
+	// example: 400
+	Code int `json:"code"`
+	// Message is a human-readable error message.
+	// example: "invalid JSON body"
+	Message string `json:"message"`
+}

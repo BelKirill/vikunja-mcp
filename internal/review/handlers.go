@@ -17,22 +17,22 @@ func RegisterRoutes(app *fiber.App) {
 // @Produce      json
 // @Param        request  body      ReviewRequest  true  "360-review request payload"
 // @Success      200      {array}   ReviewResponseItem
-// @Failure      400      {object}  fiber.Error
-// @Failure      500      {object}  fiber.Error
+// @Failure      400      {object}  APIError
+// @Failure      500      {object}  APIError
 // @Router       /api/v1/360-review [post]
 func reviewHandler(c *fiber.Ctx) error {
 	var req ReviewRequest
 	if err := c.BodyParser(&req); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "invalid JSON body")
+		return c.Status(fiber.StatusBadRequest).JSON(APIError{Code: fiber.StatusBadRequest, Message: "invalid JSON body"})
 	}
 	// TODO: Allow running without project ID, brings all projects
 	if len(req.ProjectIDs) == 0 {
-		return fiber.NewError(fiber.StatusBadRequest, "project_ids is required")
+		return c.Status(fiber.StatusBadRequest).JSON(APIError{Code: fiber.StatusBadRequest, Message: "project_ids is required"})
 	}
 
 	items, err := reviewService.Review(req.ProjectIDs)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(APIError{Code: fiber.StatusInternalServerError, Message: err.Error()})
 	}
 
 	// Build slim response
