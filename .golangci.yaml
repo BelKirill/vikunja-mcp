@@ -1,0 +1,21 @@
+version: "2"
+run:
+  # include test files in linting
+  tests: true
+
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - unused
+  exclusions:
+    rules:
+      - path: "_test\\.go"
+        linters:
+          - errcheck
+formatters:
+  enable:
+    - gofmt
+    - goimports    # import grouping
+    
