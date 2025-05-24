@@ -387,6 +387,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "MCP server exposing micro-tools for Vikunja integration",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {
