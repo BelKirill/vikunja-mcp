@@ -15,21 +15,6 @@ type FocusItem struct {
     Estimate float64 // est
 }
 
-// --- Request/Response DTOs ---------------------------------------------------
-
-// req: {"date": "2025-05-26", "hours": 5}
-type FocusRequest struct {
-    Date  string  `json:"date,omitempty"`  // optional, default = tomorrow
-    Hours float64 `json:"hours,omitempty"` // optional, derive from calendar if zero
-}
-
-// FocusResponseItem is slim: {t,p,est}
-type FocusResponseItem struct {
-    T   string  `json:"t"`
-    P   string  `json:"p"`
-    Est float64 `json:"est"`
-}
-
 // --- Default stubs (override via setter) ------------------------------------
 
 // --- Default stubs (override via setter) ------------------------------------

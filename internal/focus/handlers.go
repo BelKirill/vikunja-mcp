@@ -8,7 +8,7 @@ import (
 
 // --- Handler registration ----------------------------------------------------
 
-func RegisterReviewRoutes(app *fiber.App) {
+func RegisterRoutes(app *fiber.App) {
     api := app.Group("/api/v1")
     api.Post("/daily-focus", focusHandler)
 }
@@ -16,6 +16,16 @@ func RegisterReviewRoutes(app *fiber.App) {
 
 // --- Handlers ----------------------------------------------------------------
 
+// @Summary      Create or update daily focus
+// @Description  Set or update the daily focus for the user
+// @Tags         focus
+// @Accept       json
+// @Produce      json
+// @Param        request  body      FocusRequest  true  "Daily focus payload"
+// @Success      200      {object}  FocusResponse
+// @Failure      400      {object}  fiber.Error
+// @Failure      500      {object}  fiber.Error
+// @Router       /api/v1/daily-focus [post]
 func focusHandler(c *fiber.Ctx) error {
     var req FocusRequest
     if err := c.BodyParser(&req); err != nil {

@@ -18,20 +18,7 @@ type ReviewItem struct {
     DueDate   time.Time // d
 }
 
-// --- Request/Response DTOs ---------------------------------------------------
 
-// ReviewRequest mirrors the `360-review` contract
-// req: {"project_ids": ["proj-1", "proj-2"]}
-type ReviewRequest struct {
-    ProjectIDs []string `json:"project_ids"`
-}
-
-// ReviewResponseItem is slim: {p,t,d}
-type ReviewResponseItem struct {
-    P string `json:"p"`
-    T string `json:"t"`
-    D string `json:"d"` // date only YYYY-MM-DD
-}
 
 // --- Default stubs (override via setter) ------------------------------------
 
