@@ -20,7 +20,7 @@ import (
 func main() {
 	app := fiber.New()
 
-	app.Get("/swagger/*", fiberSwagger.HandlerDefault)
+	app.Get("/docs/*", fiberSwagger.HandlerDefault)
 
 	// tool routes
 	peek.RegisterRoutes(app)
