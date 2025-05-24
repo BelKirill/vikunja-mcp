@@ -24,3 +24,21 @@ type FocusResponseItem struct {
 	// example: 2.5
 	Est float64 `json:"est"`
 }
+
+// FocusResponse represents the daily focus endpoint response comprising a slice of focus response items.
+// swagger:model FocusResponse
+type FocusResponse struct {
+	// Items is a list of focus response items.
+	Items []FocusResponseItem `json:"items"`
+}
+
+// APIError represents a standard API error response.
+// swagger:model APIError
+type APIError struct {
+	// Code is the HTTP status code.
+	// example: 400
+	Code int `json:"code"`
+	// Message is a human-readable error message.
+	// example: "invalid JSON body"
+	Message string `json:"message"`
+}

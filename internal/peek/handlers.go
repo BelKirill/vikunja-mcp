@@ -18,25 +18,24 @@ func RegisterRoutes(app *fiber.App) {
 // @Produce      json
 // @Param        request  body      TaskPeekRequest  true  "Task peek request payload"
 // @Success      200      {object}  TaskPeekResponse
-// @Failure      400      {object}  fiber.Error
-// @Failure      500      {object}  fiber.Error
+// @Failure      400      {object}  APIError
+// @Failure      500      {object}  APIError
 // @Router       /api/v1/task-peek [post]
 func taskPeekHandler(c *fiber.Ctx) error {
 	var req TaskPeekRequest
 	if err := c.BodyParser(&req); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "invalid JSON body")
+		return c.Status(fiber.StatusBadRequest).JSON(APIError{Code: fiber.StatusBadRequest, Message: "invalid JSON body"})
 	}
 	if req.ID == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "id is required")
+		return c.Status(fiber.StatusBadRequest).JSON(APIError{Code: fiber.StatusBadRequest, Message: "id is required"})
 	}
 	if len(req.Fields) == 0 {
-		req.Fields = []string{"title"}
+		req.Fields = []string{"name"}
 	}
 
-	// Delegate to the service
 	data, err := taskService.Peek(req.ID, req.Fields)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(APIError{Code: fiber.StatusInternalServerError, Message: err.Error()})
 	}
 
 	resp := TaskPeekResponse{T: req.ID, F: data}
@@ -50,25 +49,24 @@ func taskPeekHandler(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        request  body      ProjectPeekRequest  true  "Project peek request payload"
 // @Success      200      {object}  ProjectPeekResponse
-// @Failure      400      {object}  fiber.Error
-// @Failure      500      {object}  fiber.Error
+// @Failure      400      {object}  APIError
+// @Failure      500      {object}  APIError
 // @Router       /api/v1/project-peek [post]
 func projectPeekHandler(c *fiber.Ctx) error {
 	var req ProjectPeekRequest
 	if err := c.BodyParser(&req); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "invalid JSON body")
+		return c.Status(fiber.StatusBadRequest).JSON(APIError{Code: fiber.StatusBadRequest, Message: "invalid JSON body"})
 	}
 	if req.ID == "" {
-		return fiber.NewError(fiber.StatusBadRequest, "id is required")
+		return c.Status(fiber.StatusBadRequest).JSON(APIError{Code: fiber.StatusBadRequest, Message: "id is required"})
 	}
 	if len(req.Fields) == 0 {
 		req.Fields = []string{"name"}
 	}
 
-	// Delegate to the service
 	data, err := projectService.Peek(req.ID, req.Fields)
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(APIError{Code: fiber.StatusInternalServerError, Message: err.Error()})
 	}
 
 	resp := ProjectPeekResponse{P: req.ID, F: data}
