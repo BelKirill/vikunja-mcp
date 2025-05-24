@@ -16,27 +16,6 @@ type ProjectService interface {
     Peek(projID string, fields []string) (map[string]interface{}, error)
 }
 
-// --- Request/Response DTOs ---------------------------------------------------
-
-type TaskPeekRequest struct {
-    ID     string   `json:"id"`
-    Fields []string `json:"fields,omitempty"`
-}
-
-type TaskPeekResponse struct {
-    T string                 `json:"t"`
-    F map[string]interface{} `json:"f"`
-}
-
-type ProjectPeekRequest struct {
-    ID     string   `json:"id"`
-    Fields []string `json:"fields,omitempty"`
-}
-
-type ProjectPeekResponse struct {
-    P string                 `json:"p"`
-    F map[string]interface{} `json:"f"`
-}
 
 // --- Default stubs (override via setter) ------------------------------------
 
