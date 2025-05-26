@@ -9,6 +9,11 @@ fmt:
 lint:
 	golangci-lint run -v -cover -c ./.golangci.yaml ./...
 
+test:
+	go test -v -cover ./...
+
 # Build the server binary
 build:
 	go build -o bin/server ./cmd/server
+
+ci-local: fmt lint test
