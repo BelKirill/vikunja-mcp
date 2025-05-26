@@ -33,9 +33,11 @@ func focusHandler(c *fiber.Ctx) error {
 
 	// Set defaults: if date empty use tomorrow
 	if req.Date == "" {
-		req.Date = time.Now().Add(24 * time.Hour).Format("2006-01-02")
+		req.Date = time.Now().Format("2006-01-02")
 	}
-	// if hours zero, service may derive from calendar
+	if req.Hours == 0 {
+		req.Hours = 5
+	}
 
 	items, err := focusService.Focus(req.Date, req.Hours)
 	if err != nil {
