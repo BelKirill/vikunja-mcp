@@ -1,6 +1,7 @@
 package peek
 
 import (
+	"errors"
 	"time"
 )
 
@@ -38,6 +39,9 @@ func SetProjectService(svc ProjectService) {
 type stubTaskService struct{}
 
 func (s *stubTaskService) Peek(id string, fields []string) (map[string]interface{}, error) {
+	if id == "" {
+		return nil, errors.New(("empty id"))
+	}
 	now := time.Now().UTC().Format(time.RFC3339)
 	result := make(map[string]interface{})
 	for _, f := range fields {
@@ -56,6 +60,9 @@ func (s *stubTaskService) Peek(id string, fields []string) (map[string]interface
 type stubProjectService struct{}
 
 func (s *stubProjectService) Peek(id string, fields []string) (map[string]interface{}, error) {
+	if id == "" {
+		return nil, errors.New(("empty id"))
+	}
 	result := make(map[string]interface{})
 	for _, f := range fields {
 		switch f {
