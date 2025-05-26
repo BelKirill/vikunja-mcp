@@ -8,7 +8,7 @@ import (
 
 func TestTaskService_Peek_Empty(t *testing.T) {
 	// Example: test Peek with empty input (mock or minimal implementation)
-	var s Service // replace with actual service if needed
+	var s stubTaskService // replace with actual service if needed
 	resp, err := s.Peek("", nil)
 	assert.Error(t, err)
 	assert.Nil(t, resp)
