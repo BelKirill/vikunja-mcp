@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "🔎 Running local CI before commit…"
+make ci-local
+
+# Uncomment to auto-format on every commit:
+# go fmt ./...
+# goimports -w .
+
+echo "✅ Pre-commit checks passed."
