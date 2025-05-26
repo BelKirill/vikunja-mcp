@@ -1,0 +1,31 @@
+# .github/workflows/build-lint-test.yml
+name: Build, lint, and test Vikunja-mcp
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ '*' ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        cache: 'go-mod'
+
+    - name: Install golangci-lint
+      run: |
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.53.3
+
+    - name: Lint
+      run: golangci-lint run ./...
+
+    - name: Run unit tests
+      run: go test -v -coverprofile=coverage.out ./...
