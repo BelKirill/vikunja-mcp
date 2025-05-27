@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "🔎 Running local CI before commit…"
+make ci-local
+
+echo "✅ Pre-commit checks passed."
+
+echo "🔍 Running gitleaks scan..."
+if ! gitleaks detect --source . --redact; then
+  echo "🚨 Potential secrets detected! Commit aborted."
+  exit 1
+fi
+echo "✅ No secrets found. Proceeding with commit."
