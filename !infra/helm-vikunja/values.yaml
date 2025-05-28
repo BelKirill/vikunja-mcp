@@ -1,0 +1,59 @@
+# Default values for fairgen.
+
+nameOverride: ""
+fullnameOverride: ""
+
+db:
+  type: postgres
+  host: vikunja-postgres
+  database: vikunja
+  user: vikunja
+  password: vikunja
+
+  image:
+    repository: postgres
+    tag: "15"
+    pullPolicy: IfNotPresent
+
+  port: 5432
+  servicePort: 5432
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+  persistence:
+    enabled: true
+    size: 20Gi
+
+
+
+vikunja:
+  name: vikunja
+  host: tasks.gilblinov.com
+
+  image: 
+    repository: vikunja/api
+    pullPolicy: IfNotPresent 
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "0.21.0"
+
+  replicas: 1
+
+  port: 3456
+  servicePort: 3456
+
+  labels: {}
+  matchLabels: {}
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi

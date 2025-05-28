@@ -1,0 +1,38 @@
+# Default values for fairgen.
+
+nameOverride: ""
+fullnameOverride: ""
+
+db:
+  type:
+  host:
+  database:
+  user:
+  password:
+
+
+vikunja:
+  name: vikunja
+  host: tasks.gilblinov.com
+
+  image: 
+    repository: europe-docker.pkg.dev/fairgen-common/docker/db-service
+    pullPolicy: IfNotPresent 
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  replicas: 1
+
+  port: 3456
+  servicePort: 3456
+
+  labels:
+  matchLabels: 
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
