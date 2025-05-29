@@ -34,3 +34,14 @@ spec:
             limits:
               memory: {{ .Values.vikunja.resources.limits.memory }}
               cpu: {{ .Values.vikunja.resources.limits.cpu }}
+          {{- if .Values.vikunja.persistence.enabled }}
+          volumeMounts:
+            - name: vikunja-data
+              mountPath: /app/vikunja/files
+          {{- end }}
+{{- if .Values.vikunja.persistence.enabled }}
+      volumes:
+        - name: vikunja-data
+          persistentVolumeClaim:
+            claimName: vikunja-data-pvc
+{{- end }}
