@@ -1,14 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: vikunja-postgres
   labels:
     app: vikunja-postgres
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: vikunja-postgres
+  serviceName: "vikunja-postgres"
+  replicas: 1
   template:
     metadata:
       labels:
@@ -17,10 +18,8 @@ spec:
       containers:
         - name: postgres
           image: "{{ .Values.db.image.repository }}:{{ .Values.db.image.tag }}"
-          imagePullPolicy: {{ .Values.db.image.pullPolicy }}
           ports:
-            - name: postgres
-              containerPort: {{ .Values.db.port }}
+            - containerPort: {{ .Values.db.port }}
           env:
             - name: POSTGRES_DB
               value: {{ .Values.db.database | quote }}
@@ -31,17 +30,14 @@ spec:
                 secretKeyRef:
                   name: vikunja-secret
                   key: VIKUNJA_DATABASE_PASSWORD
-          resources:
-            requests:
-              memory: {{ .Values.db.resources.requests.memory }}
-              cpu: {{ .Values.db.resources.requests.cpu }}
-            limits:
-              memory: {{ .Values.db.resources.limits.memory }}
-              cpu: {{ .Values.db.resources.limits.cpu }}
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: postgres-data
-          persistentVolumeClaim:
-            claimName: postgres-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.db.persistence.size }}

@@ -9,3 +9,8 @@ data:
   VIKUNJA_DATABASE_HOST: {{ .Values.db.host | quote }}
   VIKUNJA_DATABASE_USER: {{ .Values.db.user | quote }}
   VIKUNJA_DATABASE_DATABASE: {{ .Values.db.database | quote }}
+
+  VIKUNJA_SERVICE_PUBLICURL: {{ .Values.vikunja.host }}
+  VIKUNJA_SERVICE_TIMEZONE: {{ .Values.vikunja.config.timezone }}
+  
+

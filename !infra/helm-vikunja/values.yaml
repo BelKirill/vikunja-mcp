@@ -37,10 +37,10 @@ vikunja:
   host: tasks.gilblinov.com
 
   image: 
-    repository: vikunja/api
+    repository: vikunja/vikunja
     pullPolicy: IfNotPresent 
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "0.21.0"
+    tag: "latest"
 
   replicas: 1
 
@@ -57,3 +57,6 @@ vikunja:
     limits:
       cpu: 500m
       memory: 1Gi
+
+  config:
+    timezone: "Asia/Jerusalem"
