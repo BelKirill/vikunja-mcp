@@ -58,5 +58,18 @@ vikunja:
       cpu: 500m
       memory: 1Gi
 
+  persistence:
+    enabled: true
+    volumeSize: 10Gi
+
   config:
     timezone: "Asia/Jerusalem"
+
+smtp:
+  enabled: true
+  host: smtp-relay.brevo.com
+  port: 587
+  user: vikunja
+  password: vikunja
+  fromEmail: vikunja@gilblinov.com
+  skipTLS: false

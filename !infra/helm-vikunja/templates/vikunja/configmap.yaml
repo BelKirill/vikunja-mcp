@@ -10,7 +10,12 @@ data:
   VIKUNJA_DATABASE_USER: {{ .Values.db.user | quote }}
   VIKUNJA_DATABASE_DATABASE: {{ .Values.db.database | quote }}
 
-  VIKUNJA_SERVICE_PUBLICURL: {{ .Values.vikunja.host }}
-  VIKUNJA_SERVICE_TIMEZONE: {{ .Values.vikunja.config.timezone }}
-  
+  VIKUNJA_SERVICE_PUBLICURL: {{ .Values.vikunja.host | quote }}
+  VIKUNJA_SERVICE_TIMEZONE: {{ .Values.vikunja.config.timezone | quote }}
 
+  VIKUNJA_MAILER_ENABLED: {{ .Values.smtp.enabled | quote }}
+  VIKUNJA_MAILER_HOST: {{ .Values.smtp.host | quote }}
+  VIKUNJA_MAILER_PORT: {{ .Values.smtp.port | quote }}
+  VIKUNJA_MAILER_USERNAME: {{ .Values.smtp.user | quote }}
+  VIKUNJA_MAILER_FROM_EMAIL: {{ .Values.smtp.fromEmail | quote }}
+  VIKUNJA_MAILER_SKIP_TLS_VERIFY: {{ .Values.smtp.skipTLS | quote }}
