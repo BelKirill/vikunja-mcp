@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vikunja
+  labels:
+    app: vikunja
+spec:
+  replicas: {{ .Values.vikunja.replicas }}
+  selector:
+    matchLabels:
+      app: vikunja
+  template:
+    metadata:
+      labels:
+        app: vikunja
+    spec:
+      containers:
+        - name: vikunja
+          image: "{{ .Values.vikunja.image.repository }}:{{ .Values.vikunja.image.tag }}"
+          imagePullPolicy: {{ .Values.vikunja.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.vikunja.port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: vikunja-config
+            - secretRef:
+                name: vikunja-secret
+          resources:
+            requests:
+              memory: {{ .Values.vikunja.resources.requests.memory }}
+              cpu: {{ .Values.vikunja.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.vikunja.resources.limits.memory }}
+              cpu: {{ .Values.vikunja.resources.limits.cpu }}
+          {{- if .Values.vikunja.persistence.enabled }}
+          volumeMounts:
+            - name: vikunja-data
+              mountPath: /app/vikunja/files
+          {{- end }}
+{{- if .Values.vikunja.persistence.enabled }}
+      volumes:
+        - name: vikunja-data
+          persistentVolumeClaim:
+            claimName: vikunja-data-pvc
+{{- end }}

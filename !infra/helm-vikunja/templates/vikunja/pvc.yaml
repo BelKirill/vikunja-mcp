@@ -1,0 +1,14 @@
+{{- if .Values.vikunja.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vikunja-data-pvc
+  labels:
+    app: vikunja
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.vikunja.persistence.volumeSize }}
+{{- end}}
