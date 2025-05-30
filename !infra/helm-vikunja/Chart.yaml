@@ -1,6 +1,3 @@
-# Test chart: helm install fairgen fairgen --dry-run --debug
-# Install chart: helm install fairgen <chart_location> --namespace fairgen --create-namespace
-
 apiVersion: v2
 name: vikunja
 description: A Helm chart for deploying the Vikunja to Kubernetes

@@ -12,6 +12,7 @@ data:
 
   VIKUNJA_SERVICE_PUBLICURL: {{ .Values.vikunja.host | quote }}
   VIKUNJA_SERVICE_TIMEZONE: {{ .Values.vikunja.config.timezone | quote }}
+  VIKUNJA_SERVICE_ENABLEREGISTRATION: {{ .Values.vikunja.config.registrationEnabled | quote }}
 
   VIKUNJA_MAILER_ENABLED: {{ .Values.smtp.enabled | quote }}
   VIKUNJA_MAILER_HOST: {{ .Values.smtp.host | quote }}

@@ -1,4 +1,4 @@
-# Default values for fairgen.
+# Default values for Vikunja.
 
 nameOverride: ""
 fullnameOverride: ""
@@ -64,6 +64,7 @@ vikunja:
 
   config:
     timezone: "Asia/Jerusalem"
+    registrationEnabled: false
 
 smtp:
   enabled: true
