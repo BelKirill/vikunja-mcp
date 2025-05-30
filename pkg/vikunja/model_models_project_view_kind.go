@@ -21,9 +21,9 @@ type ModelsProjectViewKind int32
 
 // List of models.ProjectViewKind
 const (
-	ProjectViewKindList ModelsProjectViewKind = 0
-	ProjectViewKindGantt ModelsProjectViewKind = 1
-	ProjectViewKindTable ModelsProjectViewKind = 2
+	ProjectViewKindList   ModelsProjectViewKind = 0
+	ProjectViewKindGantt  ModelsProjectViewKind = 1
+	ProjectViewKindTable  ModelsProjectViewKind = 2
 	ProjectViewKindKanban ModelsProjectViewKind = 3
 )
 
@@ -113,4 +113,3 @@ func (v *NullableModelsProjectViewKind) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

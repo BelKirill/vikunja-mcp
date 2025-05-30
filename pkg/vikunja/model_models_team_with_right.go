@@ -37,8 +37,8 @@ type ModelsTeamWithRight struct {
 	// The name of this team.
 	Name *string `json:"name,omitempty"`
 	// The team's oidc id delivered by the oidc provider
-	OidcId *string `json:"oidc_id,omitempty"`
-	Right *ModelsRight `json:"right,omitempty"`
+	OidcId *string      `json:"oidc_id,omitempty"`
+	Right  *ModelsRight `json:"right,omitempty"`
 	// A timestamp when this relation was last updated. You cannot change this value.
 	Updated *string `json:"updated,omitempty"`
 }
@@ -413,7 +413,7 @@ func (o *ModelsTeamWithRight) SetUpdated(v string) {
 }
 
 func (o ModelsTeamWithRight) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -493,5 +493,3 @@ func (v *NullableModelsTeamWithRight) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

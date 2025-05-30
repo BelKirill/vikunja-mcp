@@ -21,15 +21,15 @@ var _ MappedNullable = &V1UserWithSettings{}
 // V1UserWithSettings struct for V1UserWithSettings
 type V1UserWithSettings struct {
 	// A timestamp when this task was created. You cannot change this value.
-	Created *string `json:"created,omitempty"`
+	Created             *string `json:"created,omitempty"`
 	DeletionScheduledAt *string `json:"deletion_scheduled_at,omitempty"`
 	// The user's email address.
 	Email *string `json:"email,omitempty"`
 	// The unique, numeric id of this user.
-	Id *int32 `json:"id,omitempty"`
-	IsLocalUser *bool `json:"is_local_user,omitempty"`
+	Id          *int32 `json:"id,omitempty"`
+	IsLocalUser *bool  `json:"is_local_user,omitempty"`
 	// The full name of the user.
-	Name *string `json:"name,omitempty"`
+	Name     *string         `json:"name,omitempty"`
 	Settings *V1UserSettings `json:"settings,omitempty"`
 	// A timestamp when this task was last updated. You cannot change this value.
 	Updated *string `json:"updated,omitempty"`
@@ -343,7 +343,7 @@ func (o *V1UserWithSettings) SetUsername(v string) {
 }
 
 func (o V1UserWithSettings) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -417,5 +417,3 @@ func (v *NullableV1UserWithSettings) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

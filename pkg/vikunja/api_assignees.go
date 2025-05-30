@@ -20,15 +20,14 @@ import (
 	"strings"
 )
 
-
 // AssigneesAPIService AssigneesAPI service
 type AssigneesAPIService service
 
 type ApiTasksTaskIDAssigneesBulkPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AssigneesAPIService
-	taskID int32
-	assignee *ModelsBulkAssignees
+	taskID     int32
+	assignee   *ModelsBulkAssignees
 }
 
 // The array of assignees
@@ -46,26 +45,27 @@ TasksTaskIDAssigneesBulkPost Add multiple new assignees to a task
 
 Adds multiple new assignees to a task. The assignee needs to have access to the project, the doer must be able to edit this task. Every user not in the project will be unassigned from the task, pass an empty array to unassign everyone.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @return ApiTasksTaskIDAssigneesBulkPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@return ApiTasksTaskIDAssigneesBulkPostRequest
 */
 func (a *AssigneesAPIService) TasksTaskIDAssigneesBulkPost(ctx context.Context, taskID int32) ApiTasksTaskIDAssigneesBulkPostRequest {
 	return ApiTasksTaskIDAssigneesBulkPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ctx:        ctx,
+		taskID:     taskID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskAssginee
+//
+//	@return ModelsTaskAssginee
 func (a *AssigneesAPIService) TasksTaskIDAssigneesBulkPostExecute(r ApiTasksTaskIDAssigneesBulkPostRequest) (*ModelsTaskAssginee, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskAssginee
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskAssginee
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssigneesAPIService.TasksTaskIDAssigneesBulkPost")
@@ -145,8 +145,8 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesBulkPostExecute(r ApiTasksTask
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -156,8 +156,8 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesBulkPostExecute(r ApiTasksTask
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -175,12 +175,12 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesBulkPostExecute(r ApiTasksTask
 }
 
 type ApiTasksTaskIDAssigneesGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AssigneesAPIService
-	taskID int32
-	page *int32
-	perPage *int32
-	s *string
+	taskID     int32
+	page       *int32
+	perPage    *int32
+	s          *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -210,26 +210,27 @@ TasksTaskIDAssigneesGet Get all assignees for a task
 
 Returns an array with all assignees for this task.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @return ApiTasksTaskIDAssigneesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@return ApiTasksTaskIDAssigneesGetRequest
 */
 func (a *AssigneesAPIService) TasksTaskIDAssigneesGet(ctx context.Context, taskID int32) ApiTasksTaskIDAssigneesGetRequest {
 	return ApiTasksTaskIDAssigneesGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ctx:        ctx,
+		taskID:     taskID,
 	}
 }
 
 // Execute executes the request
-//  @return []UserUser
+//
+//	@return []UserUser
 func (a *AssigneesAPIService) TasksTaskIDAssigneesGetExecute(r ApiTasksTaskIDAssigneesGetRequest) ([]UserUser, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []UserUser
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []UserUser
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssigneesAPIService.TasksTaskIDAssigneesGet")
@@ -313,8 +314,8 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesGetExecute(r ApiTasksTaskIDAss
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -332,10 +333,10 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesGetExecute(r ApiTasksTaskIDAss
 }
 
 type ApiTasksTaskIDAssigneesPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AssigneesAPIService
-	taskID int32
-	assignee *ModelsTaskAssginee
+	taskID     int32
+	assignee   *ModelsTaskAssginee
 }
 
 // The assingee object
@@ -353,26 +354,27 @@ TasksTaskIDAssigneesPut Add a new assignee to a task
 
 Adds a new assignee to a task. The assignee needs to have access to the project, the doer must be able to edit this task.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @return ApiTasksTaskIDAssigneesPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@return ApiTasksTaskIDAssigneesPutRequest
 */
 func (a *AssigneesAPIService) TasksTaskIDAssigneesPut(ctx context.Context, taskID int32) ApiTasksTaskIDAssigneesPutRequest {
 	return ApiTasksTaskIDAssigneesPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ctx:        ctx,
+		taskID:     taskID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskAssginee
+//
+//	@return ModelsTaskAssginee
 func (a *AssigneesAPIService) TasksTaskIDAssigneesPutExecute(r ApiTasksTaskIDAssigneesPutRequest) (*ModelsTaskAssginee, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskAssginee
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskAssginee
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssigneesAPIService.TasksTaskIDAssigneesPut")
@@ -452,8 +454,8 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesPutExecute(r ApiTasksTaskIDAss
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -463,8 +465,8 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesPutExecute(r ApiTasksTaskIDAss
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -482,10 +484,10 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesPutExecute(r ApiTasksTaskIDAss
 }
 
 type ApiTasksTaskIDAssigneesUserIDDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AssigneesAPIService
-	taskID int32
-	userID int32
+	taskID     int32
+	userID     int32
 }
 
 func (r ApiTasksTaskIDAssigneesUserIDDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -497,28 +499,29 @@ TasksTaskIDAssigneesUserIDDelete Delete an assignee
 
 Un-assign a user from a task.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @param userID Assignee user ID
- @return ApiTasksTaskIDAssigneesUserIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@param userID Assignee user ID
+	@return ApiTasksTaskIDAssigneesUserIDDeleteRequest
 */
 func (a *AssigneesAPIService) TasksTaskIDAssigneesUserIDDelete(ctx context.Context, taskID int32, userID int32) ApiTasksTaskIDAssigneesUserIDDeleteRequest {
 	return ApiTasksTaskIDAssigneesUserIDDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
-		userID: userID,
+		ctx:        ctx,
+		taskID:     taskID,
+		userID:     userID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *AssigneesAPIService) TasksTaskIDAssigneesUserIDDeleteExecute(r ApiTasksTaskIDAssigneesUserIDDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssigneesAPIService.TasksTaskIDAssigneesUserIDDelete")
@@ -594,8 +597,8 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesUserIDDeleteExecute(r ApiTasks
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -605,8 +608,8 @@ func (a *AssigneesAPIService) TasksTaskIDAssigneesUserIDDeleteExecute(r ApiTasks
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

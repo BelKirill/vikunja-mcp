@@ -21,9 +21,9 @@ type ModelsReminderRelation string
 
 // List of models.ReminderRelation
 const (
-	ReminderRelationDueDate ModelsReminderRelation = "due_date"
+	ReminderRelationDueDate   ModelsReminderRelation = "due_date"
 	ReminderRelationStartDate ModelsReminderRelation = "start_date"
-	ReminderRelationEndDate ModelsReminderRelation = "end_date"
+	ReminderRelationEndDate   ModelsReminderRelation = "end_date"
 )
 
 // All allowed values of ModelsReminderRelation enum
@@ -111,4 +111,3 @@ func (v *NullableModelsReminderRelation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

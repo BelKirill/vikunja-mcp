@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_TaskAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService KindIdReactionsDeletePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var kind int32
@@ -39,7 +40,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService KindIdReactionsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var kind int32
@@ -54,7 +55,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService KindIdReactionsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var kind int32
@@ -69,7 +70,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService ProjectsIdTasksPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -83,7 +84,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService ProjectsIdViewsViewTasksGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var view int32
@@ -98,7 +99,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService ProjectsProjectViewsViewBucketsBucketTasksPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 		var view int32
@@ -114,7 +115,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksAllGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.TaskAPI.TasksAllGet(context.Background()).Execute()
 
@@ -126,7 +127,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksBulkPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.TaskAPI.TasksBulkPost(context.Background()).Execute()
 
@@ -138,7 +139,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdAttachmentsAttachmentIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var attachmentID int32
@@ -153,7 +154,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdAttachmentsAttachmentIDGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var attachmentID int32
@@ -168,7 +169,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdAttachmentsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -182,7 +183,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdAttachmentsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -196,7 +197,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -210,7 +211,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -224,7 +225,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdPositionPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -238,7 +239,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksIdPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -252,7 +253,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksTaskIDCommentsCommentIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 		var commentID int32
@@ -267,7 +268,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksTaskIDCommentsCommentIDGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 		var commentID int32
@@ -282,7 +283,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksTaskIDCommentsCommentIDPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 		var commentID int32
@@ -297,7 +298,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksTaskIDCommentsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 
@@ -311,7 +312,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksTaskIDCommentsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 
@@ -325,7 +326,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksTaskIDRelationsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 
@@ -339,7 +340,7 @@ func Test_openapi_TaskAPIService(t *testing.T) {
 
 	t.Run("Test TaskAPIService TasksTaskIDRelationsRelationKindOtherTaskIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 		var relationKind string

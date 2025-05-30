@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_ProjectAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService BackgroundsUnsplashImageImageGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var image int32
 
@@ -38,7 +39,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService BackgroundsUnsplashImageImageThumbGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var image int32
 
@@ -52,7 +53,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService BackgroundsUnsplashSearchGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.ProjectAPI.BackgroundsUnsplashSearchGet(context.Background()).Execute()
 
@@ -64,7 +65,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.ProjectAPI.ProjectsGet(context.Background()).Execute()
 
@@ -76,7 +77,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdBackgroundDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -90,7 +91,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdBackgroundGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -104,7 +105,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdBackgroundsUnsplashPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -118,7 +119,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdBackgroundsUploadPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -132,7 +133,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -146,7 +147,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -160,7 +161,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -174,7 +175,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdProjectusersGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -188,7 +189,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdViewsViewBucketsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var view int32
@@ -203,7 +204,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsIdViewsViewBucketsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var view int32
@@ -218,7 +219,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectIDDuplicatePut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var projectID int32
 
@@ -232,7 +233,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectIDViewsViewBucketsBucketIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var projectID int32
 		var bucketID int32
@@ -248,7 +249,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectIDViewsViewBucketsBucketIDPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var projectID int32
 		var bucketID int32
@@ -264,7 +265,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectViewsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 
@@ -278,7 +279,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectViewsIdDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 		var id int32
@@ -293,7 +294,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectViewsIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 		var id int32
@@ -308,7 +309,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectViewsIdPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 		var id int32
@@ -323,7 +324,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsProjectViewsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 
@@ -337,7 +338,7 @@ func Test_openapi_ProjectAPIService(t *testing.T) {
 
 	t.Run("Test ProjectAPIService ProjectsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.ProjectAPI.ProjectsPut(context.Background()).Execute()
 

@@ -22,7 +22,7 @@ var _ MappedNullable = &ModelsSubscription{}
 type ModelsSubscription struct {
 	// A timestamp when this subscription was created. You cannot change this value.
 	Created *string `json:"created,omitempty"`
-	Entity *int32 `json:"entity,omitempty"`
+	Entity  *int32  `json:"entity,omitempty"`
 	// The id of the entity to subscribe to.
 	EntityId *int32 `json:"entity_id,omitempty"`
 	// The numeric ID of the subscription
@@ -175,7 +175,7 @@ func (o *ModelsSubscription) SetId(v int32) {
 }
 
 func (o ModelsSubscription) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -234,5 +234,3 @@ func (v *NullableModelsSubscription) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

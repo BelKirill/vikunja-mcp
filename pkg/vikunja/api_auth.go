@@ -20,15 +20,14 @@ import (
 	"strings"
 )
 
-
 // AuthAPIService AuthAPI service
 type AuthAPIService service
 
 type ApiGetTokenOpenidRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *AuthAPIService
-	provider int32
-	callback *OpenidCallback
+	provider   int32
+	callback   *OpenidCallback
 }
 
 // The openid callback
@@ -46,26 +45,27 @@ GetTokenOpenid Authenticate a user with OpenID Connect
 
 After a redirect from the OpenID Connect provider to the frontend has been made with the authentication `code`, this endpoint can be used to obtain a jwt token for that user and thus log them in.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param provider The OpenID Connect provider key as returned by the /info endpoint
- @return ApiGetTokenOpenidRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param provider The OpenID Connect provider key as returned by the /info endpoint
+	@return ApiGetTokenOpenidRequest
 */
 func (a *AuthAPIService) GetTokenOpenid(ctx context.Context, provider int32) ApiGetTokenOpenidRequest {
 	return ApiGetTokenOpenidRequest{
 		ApiService: a,
-		ctx: ctx,
-		provider: provider,
+		ctx:        ctx,
+		provider:   provider,
 	}
 }
 
 // Execute executes the request
-//  @return AuthToken
+//
+//	@return AuthToken
 func (a *AuthAPIService) GetTokenOpenidExecute(r ApiGetTokenOpenidRequest) (*AuthToken, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuthToken
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuthToken
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthAPIService.GetTokenOpenid")
@@ -145,8 +145,8 @@ func (a *AuthAPIService) GetTokenOpenidExecute(r ApiGetTokenOpenidRequest) (*Aut
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -164,8 +164,8 @@ func (a *AuthAPIService) GetTokenOpenidExecute(r ApiGetTokenOpenidRequest) (*Aut
 }
 
 type ApiLoginPostRequest struct {
-	ctx context.Context
-	ApiService *AuthAPIService
+	ctx         context.Context
+	ApiService  *AuthAPIService
 	credentials *UserLogin
 }
 
@@ -184,24 +184,25 @@ LoginPost Login
 
 Logs a user in. Returns a JWT-Token to authenticate further requests.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiLoginPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiLoginPostRequest
 */
 func (a *AuthAPIService) LoginPost(ctx context.Context) ApiLoginPostRequest {
 	return ApiLoginPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return AuthToken
+//
+//	@return AuthToken
 func (a *AuthAPIService) LoginPostExecute(r ApiLoginPostRequest) (*AuthToken, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuthToken
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuthToken
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthAPIService.LoginPost")
@@ -266,8 +267,8 @@ func (a *AuthAPIService) LoginPostExecute(r ApiLoginPostRequest) (*AuthToken, *h
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -277,8 +278,8 @@ func (a *AuthAPIService) LoginPostExecute(r ApiLoginPostRequest) (*AuthToken, *h
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 412 {
@@ -288,8 +289,8 @@ func (a *AuthAPIService) LoginPostExecute(r ApiLoginPostRequest) (*AuthToken, *h
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -307,8 +308,8 @@ func (a *AuthAPIService) LoginPostExecute(r ApiLoginPostRequest) (*AuthToken, *h
 }
 
 type ApiRegisterPostRequest struct {
-	ctx context.Context
-	ApiService *AuthAPIService
+	ctx         context.Context
+	ApiService  *AuthAPIService
 	credentials *UserAPIUserPassword
 }
 
@@ -327,24 +328,25 @@ RegisterPost Register
 
 Creates a new user account.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRegisterPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiRegisterPostRequest
 */
 func (a *AuthAPIService) RegisterPost(ctx context.Context) ApiRegisterPostRequest {
 	return ApiRegisterPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return UserUser
+//
+//	@return UserUser
 func (a *AuthAPIService) RegisterPostExecute(r ApiRegisterPostRequest) (*UserUser, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *UserUser
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *UserUser
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthAPIService.RegisterPost")
@@ -409,8 +411,8 @@ func (a *AuthAPIService) RegisterPostExecute(r ApiRegisterPostRequest) (*UserUse
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -420,8 +422,8 @@ func (a *AuthAPIService) RegisterPostExecute(r ApiRegisterPostRequest) (*UserUse
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

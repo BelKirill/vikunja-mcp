@@ -21,10 +21,10 @@ var _ MappedNullable = &FilesFile{}
 // FilesFile struct for FilesFile
 type FilesFile struct {
 	Created *string `json:"created,omitempty"`
-	Id *int32 `json:"id,omitempty"`
-	Mime *string `json:"mime,omitempty"`
-	Name *string `json:"name,omitempty"`
-	Size *int32 `json:"size,omitempty"`
+	Id      *int32  `json:"id,omitempty"`
+	Mime    *string `json:"mime,omitempty"`
+	Name    *string `json:"name,omitempty"`
+	Size    *int32  `json:"size,omitempty"`
 }
 
 // NewFilesFile instantiates a new FilesFile object
@@ -205,7 +205,7 @@ func (o *FilesFile) SetSize(v int32) {
 }
 
 func (o FilesFile) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -267,5 +267,3 @@ func (v *NullableFilesFile) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

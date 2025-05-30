@@ -20,16 +20,15 @@ import (
 	"strings"
 )
 
-
 // LabelsAPIService LabelsAPI service
 type LabelsAPIService service
 
 type ApiLabelsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	page *int32
-	perPage *int32
-	s *string
+	page       *int32
+	perPage    *int32
+	s          *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -59,24 +58,25 @@ LabelsGet Get all labels a user has access to
 
 Returns all labels which are either created by the user or associated with a task the user has at least read-access to.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiLabelsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiLabelsGetRequest
 */
 func (a *LabelsAPIService) LabelsGet(ctx context.Context) ApiLabelsGetRequest {
 	return ApiLabelsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsLabel
+//
+//	@return []ModelsLabel
 func (a *LabelsAPIService) LabelsGetExecute(r ApiLabelsGetRequest) ([]ModelsLabel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsLabel
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsLabel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.LabelsGet")
@@ -159,8 +159,8 @@ func (a *LabelsAPIService) LabelsGetExecute(r ApiLabelsGetRequest) ([]ModelsLabe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -178,9 +178,9 @@ func (a *LabelsAPIService) LabelsGetExecute(r ApiLabelsGetRequest) ([]ModelsLabe
 }
 
 type ApiLabelsIdDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiLabelsIdDeleteRequest) Execute() (*ModelsLabel, *http.Response, error) {
@@ -192,26 +192,27 @@ LabelsIdDelete Delete a label
 
 Delete an existing label. The user needs to be the creator of the label to be able to do this.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Label ID
- @return ApiLabelsIdDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Label ID
+	@return ApiLabelsIdDeleteRequest
 */
 func (a *LabelsAPIService) LabelsIdDelete(ctx context.Context, id int32) ApiLabelsIdDeleteRequest {
 	return ApiLabelsIdDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLabel
+//
+//	@return ModelsLabel
 func (a *LabelsAPIService) LabelsIdDeleteExecute(r ApiLabelsIdDeleteRequest) (*ModelsLabel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLabel
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLabel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.LabelsIdDelete")
@@ -286,8 +287,8 @@ func (a *LabelsAPIService) LabelsIdDeleteExecute(r ApiLabelsIdDeleteRequest) (*M
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -297,8 +298,8 @@ func (a *LabelsAPIService) LabelsIdDeleteExecute(r ApiLabelsIdDeleteRequest) (*M
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -308,8 +309,8 @@ func (a *LabelsAPIService) LabelsIdDeleteExecute(r ApiLabelsIdDeleteRequest) (*M
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -327,9 +328,9 @@ func (a *LabelsAPIService) LabelsIdDeleteExecute(r ApiLabelsIdDeleteRequest) (*M
 }
 
 type ApiLabelsIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiLabelsIdGetRequest) Execute() (*ModelsLabel, *http.Response, error) {
@@ -341,26 +342,27 @@ LabelsIdGet Gets one label
 
 Returns one label by its ID.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Label ID
- @return ApiLabelsIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Label ID
+	@return ApiLabelsIdGetRequest
 */
 func (a *LabelsAPIService) LabelsIdGet(ctx context.Context, id int32) ApiLabelsIdGetRequest {
 	return ApiLabelsIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLabel
+//
+//	@return ModelsLabel
 func (a *LabelsAPIService) LabelsIdGetExecute(r ApiLabelsIdGetRequest) (*ModelsLabel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLabel
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLabel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.LabelsIdGet")
@@ -435,8 +437,8 @@ func (a *LabelsAPIService) LabelsIdGetExecute(r ApiLabelsIdGetRequest) (*ModelsL
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -446,8 +448,8 @@ func (a *LabelsAPIService) LabelsIdGetExecute(r ApiLabelsIdGetRequest) (*ModelsL
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -457,8 +459,8 @@ func (a *LabelsAPIService) LabelsIdGetExecute(r ApiLabelsIdGetRequest) (*ModelsL
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -476,10 +478,10 @@ func (a *LabelsAPIService) LabelsIdGetExecute(r ApiLabelsIdGetRequest) (*ModelsL
 }
 
 type ApiLabelsIdPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	id int32
-	label *ModelsLabel
+	id         int32
+	label      *ModelsLabel
 }
 
 // The label object
@@ -497,26 +499,27 @@ LabelsIdPut Update a label
 
 Update an existing label. The user needs to be the creator of the label to be able to do this.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Label ID
- @return ApiLabelsIdPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Label ID
+	@return ApiLabelsIdPutRequest
 */
 func (a *LabelsAPIService) LabelsIdPut(ctx context.Context, id int32) ApiLabelsIdPutRequest {
 	return ApiLabelsIdPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLabel
+//
+//	@return ModelsLabel
 func (a *LabelsAPIService) LabelsIdPutExecute(r ApiLabelsIdPutRequest) (*ModelsLabel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLabel
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLabel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.LabelsIdPut")
@@ -596,8 +599,8 @@ func (a *LabelsAPIService) LabelsIdPutExecute(r ApiLabelsIdPutRequest) (*ModelsL
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -607,8 +610,8 @@ func (a *LabelsAPIService) LabelsIdPutExecute(r ApiLabelsIdPutRequest) (*ModelsL
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -618,8 +621,8 @@ func (a *LabelsAPIService) LabelsIdPutExecute(r ApiLabelsIdPutRequest) (*ModelsL
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -629,8 +632,8 @@ func (a *LabelsAPIService) LabelsIdPutExecute(r ApiLabelsIdPutRequest) (*ModelsL
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -648,9 +651,9 @@ func (a *LabelsAPIService) LabelsIdPutExecute(r ApiLabelsIdPutRequest) (*ModelsL
 }
 
 type ApiLabelsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	label *ModelsLabel
+	label      *ModelsLabel
 }
 
 // The label object
@@ -668,24 +671,25 @@ LabelsPut Create a label
 
 Creates a new label.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiLabelsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiLabelsPutRequest
 */
 func (a *LabelsAPIService) LabelsPut(ctx context.Context) ApiLabelsPutRequest {
 	return ApiLabelsPutRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLabel
+//
+//	@return ModelsLabel
 func (a *LabelsAPIService) LabelsPutExecute(r ApiLabelsPutRequest) (*ModelsLabel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLabel
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLabel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.LabelsPut")
@@ -764,8 +768,8 @@ func (a *LabelsAPIService) LabelsPutExecute(r ApiLabelsPutRequest) (*ModelsLabel
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -775,8 +779,8 @@ func (a *LabelsAPIService) LabelsPutExecute(r ApiLabelsPutRequest) (*ModelsLabel
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -794,10 +798,10 @@ func (a *LabelsAPIService) LabelsPutExecute(r ApiLabelsPutRequest) (*ModelsLabel
 }
 
 type ApiTasksTaskIDLabelsBulkPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	taskID int32
-	label *ModelsLabelTaskBulk
+	taskID     int32
+	label      *ModelsLabelTaskBulk
 }
 
 // The array of labels
@@ -815,26 +819,27 @@ TasksTaskIDLabelsBulkPost Update all labels on a task.
 
 Updates all labels on a task. Every label which is not passed but exists on the task will be deleted. Every label which does not exist on the task will be added. All labels which are passed and already exist on the task won't be touched.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @return ApiTasksTaskIDLabelsBulkPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@return ApiTasksTaskIDLabelsBulkPostRequest
 */
 func (a *LabelsAPIService) TasksTaskIDLabelsBulkPost(ctx context.Context, taskID int32) ApiTasksTaskIDLabelsBulkPostRequest {
 	return ApiTasksTaskIDLabelsBulkPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ctx:        ctx,
+		taskID:     taskID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLabelTaskBulk
+//
+//	@return ModelsLabelTaskBulk
 func (a *LabelsAPIService) TasksTaskIDLabelsBulkPostExecute(r ApiTasksTaskIDLabelsBulkPostRequest) (*ModelsLabelTaskBulk, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLabelTaskBulk
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLabelTaskBulk
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.TasksTaskIDLabelsBulkPost")
@@ -914,8 +919,8 @@ func (a *LabelsAPIService) TasksTaskIDLabelsBulkPostExecute(r ApiTasksTaskIDLabe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -925,8 +930,8 @@ func (a *LabelsAPIService) TasksTaskIDLabelsBulkPostExecute(r ApiTasksTaskIDLabe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -944,12 +949,12 @@ func (a *LabelsAPIService) TasksTaskIDLabelsBulkPostExecute(r ApiTasksTaskIDLabe
 }
 
 type ApiTasksTaskLabelsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	task int32
-	page *int32
-	perPage *int32
-	s *string
+	task       int32
+	page       *int32
+	perPage    *int32
+	s          *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -979,26 +984,27 @@ TasksTaskLabelsGet Get all labels on a task
 
 Returns all labels which are assicociated with a given task.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param task Task ID
- @return ApiTasksTaskLabelsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param task Task ID
+	@return ApiTasksTaskLabelsGetRequest
 */
 func (a *LabelsAPIService) TasksTaskLabelsGet(ctx context.Context, task int32) ApiTasksTaskLabelsGetRequest {
 	return ApiTasksTaskLabelsGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		task: task,
+		ctx:        ctx,
+		task:       task,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsLabel
+//
+//	@return []ModelsLabel
 func (a *LabelsAPIService) TasksTaskLabelsGetExecute(r ApiTasksTaskLabelsGetRequest) ([]ModelsLabel, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsLabel
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsLabel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.TasksTaskLabelsGet")
@@ -1082,8 +1088,8 @@ func (a *LabelsAPIService) TasksTaskLabelsGetExecute(r ApiTasksTaskLabelsGetRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1101,10 +1107,10 @@ func (a *LabelsAPIService) TasksTaskLabelsGetExecute(r ApiTasksTaskLabelsGetRequ
 }
 
 type ApiTasksTaskLabelsLabelDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	task int32
-	label int32
+	task       int32
+	label      int32
 }
 
 func (r ApiTasksTaskLabelsLabelDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -1116,28 +1122,29 @@ TasksTaskLabelsLabelDelete Remove a label from a task
 
 Remove a label from a task. The user needs to have write-access to the project to be able do this.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param task Task ID
- @param label Label ID
- @return ApiTasksTaskLabelsLabelDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param task Task ID
+	@param label Label ID
+	@return ApiTasksTaskLabelsLabelDeleteRequest
 */
 func (a *LabelsAPIService) TasksTaskLabelsLabelDelete(ctx context.Context, task int32, label int32) ApiTasksTaskLabelsLabelDeleteRequest {
 	return ApiTasksTaskLabelsLabelDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		task: task,
-		label: label,
+		ctx:        ctx,
+		task:       task,
+		label:      label,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *LabelsAPIService) TasksTaskLabelsLabelDeleteExecute(r ApiTasksTaskLabelsLabelDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.TasksTaskLabelsLabelDelete")
@@ -1213,8 +1220,8 @@ func (a *LabelsAPIService) TasksTaskLabelsLabelDeleteExecute(r ApiTasksTaskLabel
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1224,8 +1231,8 @@ func (a *LabelsAPIService) TasksTaskLabelsLabelDeleteExecute(r ApiTasksTaskLabel
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1235,8 +1242,8 @@ func (a *LabelsAPIService) TasksTaskLabelsLabelDeleteExecute(r ApiTasksTaskLabel
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1254,10 +1261,10 @@ func (a *LabelsAPIService) TasksTaskLabelsLabelDeleteExecute(r ApiTasksTaskLabel
 }
 
 type ApiTasksTaskLabelsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *LabelsAPIService
-	task int32
-	label *ModelsLabelTask
+	task       int32
+	label      *ModelsLabelTask
 }
 
 // The label object
@@ -1275,26 +1282,27 @@ TasksTaskLabelsPut Add a label to a task
 
 Add a label to a task. The user needs to have write-access to the project to be able do this.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param task Task ID
- @return ApiTasksTaskLabelsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param task Task ID
+	@return ApiTasksTaskLabelsPutRequest
 */
 func (a *LabelsAPIService) TasksTaskLabelsPut(ctx context.Context, task int32) ApiTasksTaskLabelsPutRequest {
 	return ApiTasksTaskLabelsPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		task: task,
+		ctx:        ctx,
+		task:       task,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLabelTask
+//
+//	@return ModelsLabelTask
 func (a *LabelsAPIService) TasksTaskLabelsPutExecute(r ApiTasksTaskLabelsPutRequest) (*ModelsLabelTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLabelTask
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLabelTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LabelsAPIService.TasksTaskLabelsPut")
@@ -1374,8 +1382,8 @@ func (a *LabelsAPIService) TasksTaskLabelsPutExecute(r ApiTasksTaskLabelsPutRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1385,8 +1393,8 @@ func (a *LabelsAPIService) TasksTaskLabelsPutExecute(r ApiTasksTaskLabelsPutRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1396,8 +1404,8 @@ func (a *LabelsAPIService) TasksTaskLabelsPutExecute(r ApiTasksTaskLabelsPutRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1407,8 +1415,8 @@ func (a *LabelsAPIService) TasksTaskLabelsPutExecute(r ApiTasksTaskLabelsPutRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

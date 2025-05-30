@@ -20,12 +20,12 @@ var _ MappedNullable = &ModelsTaskComment{}
 
 // ModelsTaskComment struct for ModelsTaskComment
 type ModelsTaskComment struct {
-	Author *UserUser `json:"author,omitempty"`
-	Comment *string `json:"comment,omitempty"`
-	Created *string `json:"created,omitempty"`
-	Id *int32 `json:"id,omitempty"`
+	Author    *UserUser              `json:"author,omitempty"`
+	Comment   *string                `json:"comment,omitempty"`
+	Created   *string                `json:"created,omitempty"`
+	Id        *int32                 `json:"id,omitempty"`
 	Reactions *map[string][]UserUser `json:"reactions,omitempty"`
-	Updated *string `json:"updated,omitempty"`
+	Updated   *string                `json:"updated,omitempty"`
 }
 
 // NewModelsTaskComment instantiates a new ModelsTaskComment object
@@ -238,7 +238,7 @@ func (o *ModelsTaskComment) SetUpdated(v string) {
 }
 
 func (o ModelsTaskComment) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -303,5 +303,3 @@ func (v *NullableModelsTaskComment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

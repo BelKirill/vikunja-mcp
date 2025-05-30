@@ -20,7 +20,7 @@ var _ MappedNullable = &V1LegalInfo{}
 
 // V1LegalInfo struct for V1LegalInfo
 type V1LegalInfo struct {
-	ImprintUrl *string `json:"imprint_url,omitempty"`
+	ImprintUrl       *string `json:"imprint_url,omitempty"`
 	PrivacyPolicyUrl *string `json:"privacy_policy_url,omitempty"`
 }
 
@@ -106,7 +106,7 @@ func (o *V1LegalInfo) SetPrivacyPolicyUrl(v string) {
 }
 
 func (o V1LegalInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -159,5 +159,3 @@ func (v *NullableV1LegalInfo) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

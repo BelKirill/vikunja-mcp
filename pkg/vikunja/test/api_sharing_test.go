@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_SharingAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService NotificationsPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.SharingAPI.NotificationsPost(context.Background()).Execute()
 
@@ -36,7 +37,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsIdTeamsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -50,7 +51,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsIdTeamsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -64,7 +65,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsIdUsersGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -78,7 +79,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsIdUsersPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -92,7 +93,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectIDTeamsTeamIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var projectID int32
 		var teamID int32
@@ -107,7 +108,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectIDTeamsTeamIDPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var projectID int32
 		var teamID int32
@@ -122,7 +123,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectIDUsersUserIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var projectID int32
 		var userID int32
@@ -137,7 +138,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectIDUsersUserIDPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var projectID int32
 		var userID int32
@@ -152,7 +153,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectSharesGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 
@@ -166,7 +167,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectSharesPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 
@@ -180,7 +181,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectSharesShareDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 		var share int32
@@ -195,7 +196,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService ProjectsProjectSharesShareGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var project int32
 		var share int32
@@ -210,7 +211,7 @@ func Test_openapi_SharingAPIService(t *testing.T) {
 
 	t.Run("Test SharingAPIService SharesShareAuthPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var share string
 

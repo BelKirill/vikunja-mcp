@@ -20,10 +20,10 @@ var _ MappedNullable = &MigrationStatus{}
 
 // MigrationStatus struct for MigrationStatus
 type MigrationStatus struct {
-	FinishedAt *string `json:"finished_at,omitempty"`
-	Id *int32 `json:"id,omitempty"`
+	FinishedAt   *string `json:"finished_at,omitempty"`
+	Id           *int32  `json:"id,omitempty"`
 	MigratorName *string `json:"migrator_name,omitempty"`
-	StartedAt *string `json:"started_at,omitempty"`
+	StartedAt    *string `json:"started_at,omitempty"`
 }
 
 // NewMigrationStatus instantiates a new MigrationStatus object
@@ -172,7 +172,7 @@ func (o *MigrationStatus) SetStartedAt(v string) {
 }
 
 func (o MigrationStatus) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -231,5 +231,3 @@ func (v *NullableMigrationStatus) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

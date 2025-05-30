@@ -20,10 +20,10 @@ var _ MappedNullable = &ModelsTaskBucket{}
 
 // ModelsTaskBucket struct for ModelsTaskBucket
 type ModelsTaskBucket struct {
-	BucketId *int32 `json:"bucket_id,omitempty"`
+	BucketId      *int32 `json:"bucket_id,omitempty"`
 	ProjectViewId *int32 `json:"project_view_id,omitempty"`
-	TaskDone *bool `json:"task_done,omitempty"`
-	TaskId *int32 `json:"task_id,omitempty"`
+	TaskDone      *bool  `json:"task_done,omitempty"`
+	TaskId        *int32 `json:"task_id,omitempty"`
 }
 
 // NewModelsTaskBucket instantiates a new ModelsTaskBucket object
@@ -172,7 +172,7 @@ func (o *ModelsTaskBucket) SetTaskId(v int32) {
 }
 
 func (o ModelsTaskBucket) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -231,5 +231,3 @@ func (v *NullableModelsTaskBucket) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

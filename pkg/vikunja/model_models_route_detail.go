@@ -21,7 +21,7 @@ var _ MappedNullable = &ModelsRouteDetail{}
 // ModelsRouteDetail struct for ModelsRouteDetail
 type ModelsRouteDetail struct {
 	Method *string `json:"method,omitempty"`
-	Path *string `json:"path,omitempty"`
+	Path   *string `json:"path,omitempty"`
 }
 
 // NewModelsRouteDetail instantiates a new ModelsRouteDetail object
@@ -106,7 +106,7 @@ func (o *ModelsRouteDetail) SetPath(v string) {
 }
 
 func (o ModelsRouteDetail) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -159,5 +159,3 @@ func (v *NullableModelsRouteDetail) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

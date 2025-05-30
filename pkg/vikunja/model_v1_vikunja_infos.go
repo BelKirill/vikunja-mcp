@@ -20,25 +20,25 @@ var _ MappedNullable = &V1VikunjaInfos{}
 
 // V1VikunjaInfos struct for V1VikunjaInfos
 type V1VikunjaInfos struct {
-	Auth *V1AuthInfo `json:"auth,omitempty"`
-	AvailableMigrators []string `json:"available_migrators,omitempty"`
-	CaldavEnabled *bool `json:"caldav_enabled,omitempty"`
-	DemoModeEnabled *bool `json:"demo_mode_enabled,omitempty"`
-	EmailRemindersEnabled *bool `json:"email_reminders_enabled,omitempty"`
-	EnabledBackgroundProviders []string `json:"enabled_background_providers,omitempty"`
-	FrontendUrl *string `json:"frontend_url,omitempty"`
-	Legal *V1LegalInfo `json:"legal,omitempty"`
-	LinkSharingEnabled *bool `json:"link_sharing_enabled,omitempty"`
-	MaxFileSize *string `json:"max_file_size,omitempty"`
-	Motd *string `json:"motd,omitempty"`
-	PublicTeamsEnabled *bool `json:"public_teams_enabled,omitempty"`
-	RegistrationEnabled *bool `json:"registration_enabled,omitempty"`
-	TaskAttachmentsEnabled *bool `json:"task_attachments_enabled,omitempty"`
-	TaskCommentsEnabled *bool `json:"task_comments_enabled,omitempty"`
-	TotpEnabled *bool `json:"totp_enabled,omitempty"`
-	UserDeletionEnabled *bool `json:"user_deletion_enabled,omitempty"`
-	Version *string `json:"version,omitempty"`
-	WebhooksEnabled *bool `json:"webhooks_enabled,omitempty"`
+	Auth                       *V1AuthInfo  `json:"auth,omitempty"`
+	AvailableMigrators         []string     `json:"available_migrators,omitempty"`
+	CaldavEnabled              *bool        `json:"caldav_enabled,omitempty"`
+	DemoModeEnabled            *bool        `json:"demo_mode_enabled,omitempty"`
+	EmailRemindersEnabled      *bool        `json:"email_reminders_enabled,omitempty"`
+	EnabledBackgroundProviders []string     `json:"enabled_background_providers,omitempty"`
+	FrontendUrl                *string      `json:"frontend_url,omitempty"`
+	Legal                      *V1LegalInfo `json:"legal,omitempty"`
+	LinkSharingEnabled         *bool        `json:"link_sharing_enabled,omitempty"`
+	MaxFileSize                *string      `json:"max_file_size,omitempty"`
+	Motd                       *string      `json:"motd,omitempty"`
+	PublicTeamsEnabled         *bool        `json:"public_teams_enabled,omitempty"`
+	RegistrationEnabled        *bool        `json:"registration_enabled,omitempty"`
+	TaskAttachmentsEnabled     *bool        `json:"task_attachments_enabled,omitempty"`
+	TaskCommentsEnabled        *bool        `json:"task_comments_enabled,omitempty"`
+	TotpEnabled                *bool        `json:"totp_enabled,omitempty"`
+	UserDeletionEnabled        *bool        `json:"user_deletion_enabled,omitempty"`
+	Version                    *string      `json:"version,omitempty"`
+	WebhooksEnabled            *bool        `json:"webhooks_enabled,omitempty"`
 }
 
 // NewV1VikunjaInfos instantiates a new V1VikunjaInfos object
@@ -667,7 +667,7 @@ func (o *V1VikunjaInfos) SetWebhooksEnabled(v bool) {
 }
 
 func (o V1VikunjaInfos) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -771,5 +771,3 @@ func (v *NullableV1VikunjaInfos) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

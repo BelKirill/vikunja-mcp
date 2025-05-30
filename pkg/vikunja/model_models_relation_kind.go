@@ -21,18 +21,18 @@ type ModelsRelationKind string
 
 // List of models.RelationKind
 const (
-	RelationKindUnknown ModelsRelationKind = "unknown"
-	RelationKindSubtask ModelsRelationKind = "subtask"
-	RelationKindParenttask ModelsRelationKind = "parenttask"
-	RelationKindRelated ModelsRelationKind = "related"
+	RelationKindUnknown     ModelsRelationKind = "unknown"
+	RelationKindSubtask     ModelsRelationKind = "subtask"
+	RelationKindParenttask  ModelsRelationKind = "parenttask"
+	RelationKindRelated     ModelsRelationKind = "related"
 	RelationKindDuplicateOf ModelsRelationKind = "duplicateof"
-	RelationKindDuplicates ModelsRelationKind = "duplicates"
-	RelationKindBlocking ModelsRelationKind = "blocking"
-	RelationKindBlocked ModelsRelationKind = "blocked"
-	RelationKindPreceeds ModelsRelationKind = "precedes"
-	RelationKindFollows ModelsRelationKind = "follows"
-	RelationKindCopiedFrom ModelsRelationKind = "copiedfrom"
-	RelationKindCopiedTo ModelsRelationKind = "copiedto"
+	RelationKindDuplicates  ModelsRelationKind = "duplicates"
+	RelationKindBlocking    ModelsRelationKind = "blocking"
+	RelationKindBlocked     ModelsRelationKind = "blocked"
+	RelationKindPreceeds    ModelsRelationKind = "precedes"
+	RelationKindFollows     ModelsRelationKind = "follows"
+	RelationKindCopiedFrom  ModelsRelationKind = "copiedfrom"
+	RelationKindCopiedTo    ModelsRelationKind = "copiedto"
 )
 
 // All allowed values of ModelsRelationKind enum
@@ -129,4 +129,3 @@ func (v *NullableModelsRelationKind) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

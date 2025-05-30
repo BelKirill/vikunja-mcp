@@ -20,11 +20,11 @@ var _ MappedNullable = &ModelsTaskAttachment{}
 
 // ModelsTaskAttachment struct for ModelsTaskAttachment
 type ModelsTaskAttachment struct {
-	Created *string `json:"created,omitempty"`
-	CreatedBy *UserUser `json:"created_by,omitempty"`
-	File *FilesFile `json:"file,omitempty"`
-	Id *int32 `json:"id,omitempty"`
-	TaskId *int32 `json:"task_id,omitempty"`
+	Created   *string    `json:"created,omitempty"`
+	CreatedBy *UserUser  `json:"created_by,omitempty"`
+	File      *FilesFile `json:"file,omitempty"`
+	Id        *int32     `json:"id,omitempty"`
+	TaskId    *int32     `json:"task_id,omitempty"`
 }
 
 // NewModelsTaskAttachment instantiates a new ModelsTaskAttachment object
@@ -205,7 +205,7 @@ func (o *ModelsTaskAttachment) SetTaskId(v int32) {
 }
 
 func (o ModelsTaskAttachment) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -267,5 +267,3 @@ func (v *NullableModelsTaskAttachment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

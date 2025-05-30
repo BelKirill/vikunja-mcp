@@ -20,15 +20,14 @@ import (
 	"strings"
 )
 
-
 // SubscriptionsAPIService SubscriptionsAPI service
 type SubscriptionsAPIService service
 
 type ApiNotificationsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SubscriptionsAPIService
-	page *int32
-	perPage *int32
+	page       *int32
+	perPage    *int32
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -52,24 +51,25 @@ NotificationsGet Get all notifications for the current user
 
 Returns an array with all notifications for the current user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiNotificationsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiNotificationsGetRequest
 */
 func (a *SubscriptionsAPIService) NotificationsGet(ctx context.Context) ApiNotificationsGetRequest {
 	return ApiNotificationsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []NotificationsDatabaseNotification
+//
+//	@return []NotificationsDatabaseNotification
 func (a *SubscriptionsAPIService) NotificationsGetExecute(r ApiNotificationsGetRequest) ([]NotificationsDatabaseNotification, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []NotificationsDatabaseNotification
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []NotificationsDatabaseNotification
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SubscriptionsAPIService.NotificationsGet")
@@ -149,8 +149,8 @@ func (a *SubscriptionsAPIService) NotificationsGetExecute(r ApiNotificationsGetR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -160,8 +160,8 @@ func (a *SubscriptionsAPIService) NotificationsGetExecute(r ApiNotificationsGetR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -179,9 +179,9 @@ func (a *SubscriptionsAPIService) NotificationsGetExecute(r ApiNotificationsGetR
 }
 
 type ApiNotificationsIdPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SubscriptionsAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiNotificationsIdPostRequest) Execute() (*ModelsDatabaseNotifications, *http.Response, error) {
@@ -193,26 +193,27 @@ NotificationsIdPost Mark a notification as (un-)read
 
 Marks a notification as either read or unread. A user can only mark their own notifications as read.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Notification ID
- @return ApiNotificationsIdPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Notification ID
+	@return ApiNotificationsIdPostRequest
 */
 func (a *SubscriptionsAPIService) NotificationsIdPost(ctx context.Context, id int32) ApiNotificationsIdPostRequest {
 	return ApiNotificationsIdPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsDatabaseNotifications
+//
+//	@return ModelsDatabaseNotifications
 func (a *SubscriptionsAPIService) NotificationsIdPostExecute(r ApiNotificationsIdPostRequest) (*ModelsDatabaseNotifications, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsDatabaseNotifications
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsDatabaseNotifications
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SubscriptionsAPIService.NotificationsIdPost")
@@ -287,8 +288,8 @@ func (a *SubscriptionsAPIService) NotificationsIdPostExecute(r ApiNotificationsI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -298,8 +299,8 @@ func (a *SubscriptionsAPIService) NotificationsIdPostExecute(r ApiNotificationsI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -309,8 +310,8 @@ func (a *SubscriptionsAPIService) NotificationsIdPostExecute(r ApiNotificationsI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -328,10 +329,10 @@ func (a *SubscriptionsAPIService) NotificationsIdPostExecute(r ApiNotificationsI
 }
 
 type ApiSubscriptionsEntityEntityIDDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SubscriptionsAPIService
-	entity string
-	entityID string
+	entity     string
+	entityID   string
 }
 
 func (r ApiSubscriptionsEntityEntityIDDeleteRequest) Execute() (*ModelsSubscription, *http.Response, error) {
@@ -343,28 +344,29 @@ SubscriptionsEntityEntityIDDelete Unsubscribe the current user from an entity.
 
 Unsubscribes the current user to an entity.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param entity The entity the user subscribed to. Can be either `project` or `task`.
- @param entityID The numeric id of the subscribed entity to.
- @return ApiSubscriptionsEntityEntityIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param entity The entity the user subscribed to. Can be either `project` or `task`.
+	@param entityID The numeric id of the subscribed entity to.
+	@return ApiSubscriptionsEntityEntityIDDeleteRequest
 */
 func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDDelete(ctx context.Context, entity string, entityID string) ApiSubscriptionsEntityEntityIDDeleteRequest {
 	return ApiSubscriptionsEntityEntityIDDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		entity: entity,
-		entityID: entityID,
+		ctx:        ctx,
+		entity:     entity,
+		entityID:   entityID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsSubscription
+//
+//	@return ModelsSubscription
 func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDDeleteExecute(r ApiSubscriptionsEntityEntityIDDeleteRequest) (*ModelsSubscription, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsSubscription
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsSubscription
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SubscriptionsAPIService.SubscriptionsEntityEntityIDDelete")
@@ -440,8 +442,8 @@ func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDDeleteExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -451,8 +453,8 @@ func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDDeleteExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -462,8 +464,8 @@ func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDDeleteExecute(r Api
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -481,10 +483,10 @@ func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDDeleteExecute(r Api
 }
 
 type ApiSubscriptionsEntityEntityIDPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SubscriptionsAPIService
-	entity string
-	entityID string
+	entity     string
+	entityID   string
 }
 
 func (r ApiSubscriptionsEntityEntityIDPutRequest) Execute() (*ModelsSubscription, *http.Response, error) {
@@ -496,28 +498,29 @@ SubscriptionsEntityEntityIDPut Subscribes the current user to an entity.
 
 Subscribes the current user to an entity.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param entity The entity the user subscribes to. Can be either `project` or `task`.
- @param entityID The numeric id of the entity to subscribe to.
- @return ApiSubscriptionsEntityEntityIDPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param entity The entity the user subscribes to. Can be either `project` or `task`.
+	@param entityID The numeric id of the entity to subscribe to.
+	@return ApiSubscriptionsEntityEntityIDPutRequest
 */
 func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDPut(ctx context.Context, entity string, entityID string) ApiSubscriptionsEntityEntityIDPutRequest {
 	return ApiSubscriptionsEntityEntityIDPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		entity: entity,
-		entityID: entityID,
+		ctx:        ctx,
+		entity:     entity,
+		entityID:   entityID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsSubscription
+//
+//	@return ModelsSubscription
 func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDPutExecute(r ApiSubscriptionsEntityEntityIDPutRequest) (*ModelsSubscription, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsSubscription
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsSubscription
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SubscriptionsAPIService.SubscriptionsEntityEntityIDPut")
@@ -593,8 +596,8 @@ func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDPutExecute(r ApiSub
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 412 {
@@ -604,8 +607,8 @@ func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDPutExecute(r ApiSub
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -615,8 +618,8 @@ func (a *SubscriptionsAPIService) SubscriptionsEntityEntityIDPutExecute(r ApiSub
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
