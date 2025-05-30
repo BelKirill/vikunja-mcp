@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_SubscriptionsAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_SubscriptionsAPIService(t *testing.T) {
 
 	t.Run("Test SubscriptionsAPIService NotificationsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.SubscriptionsAPI.NotificationsGet(context.Background()).Execute()
 
@@ -36,7 +37,7 @@ func Test_openapi_SubscriptionsAPIService(t *testing.T) {
 
 	t.Run("Test SubscriptionsAPIService NotificationsIdPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -50,7 +51,7 @@ func Test_openapi_SubscriptionsAPIService(t *testing.T) {
 
 	t.Run("Test SubscriptionsAPIService SubscriptionsEntityEntityIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var entity string
 		var entityID string
@@ -65,7 +66,7 @@ func Test_openapi_SubscriptionsAPIService(t *testing.T) {
 
 	t.Run("Test SubscriptionsAPIService SubscriptionsEntityEntityIDPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var entity string
 		var entityID string

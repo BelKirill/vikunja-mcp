@@ -21,8 +21,8 @@ type ModelsTaskRepeatMode int32
 
 // List of models.TaskRepeatMode
 const (
-	TaskRepeatModeDefault ModelsTaskRepeatMode = 0
-	TaskRepeatModeMonth ModelsTaskRepeatMode = 1
+	TaskRepeatModeDefault         ModelsTaskRepeatMode = 0
+	TaskRepeatModeMonth           ModelsTaskRepeatMode = 1
 	TaskRepeatModeFromCurrentDate ModelsTaskRepeatMode = 2
 )
 
@@ -111,4 +111,3 @@ func (v *NullableModelsTaskRepeatMode) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

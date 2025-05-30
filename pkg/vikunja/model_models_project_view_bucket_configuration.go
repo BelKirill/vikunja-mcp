@@ -21,7 +21,7 @@ var _ MappedNullable = &ModelsProjectViewBucketConfiguration{}
 // ModelsProjectViewBucketConfiguration struct for ModelsProjectViewBucketConfiguration
 type ModelsProjectViewBucketConfiguration struct {
 	Filter *string `json:"filter,omitempty"`
-	Title *string `json:"title,omitempty"`
+	Title  *string `json:"title,omitempty"`
 }
 
 // NewModelsProjectViewBucketConfiguration instantiates a new ModelsProjectViewBucketConfiguration object
@@ -106,7 +106,7 @@ func (o *ModelsProjectViewBucketConfiguration) SetTitle(v string) {
 }
 
 func (o ModelsProjectViewBucketConfiguration) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -159,5 +159,3 @@ func (v *NullableModelsProjectViewBucketConfiguration) UnmarshalJSON(src []byte)
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

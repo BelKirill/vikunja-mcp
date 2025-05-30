@@ -20,12 +20,11 @@ import (
 	"strings"
 )
 
-
 // SharingAPIService SharingAPI service
 type SharingAPIService service
 
 type ApiNotificationsPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
 }
 
@@ -36,24 +35,25 @@ func (r ApiNotificationsPostRequest) Execute() (*ModelsMessage, *http.Response, 
 /*
 NotificationsPost Mark all notifications of a user as read
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiNotificationsPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiNotificationsPostRequest
 */
 func (a *SharingAPIService) NotificationsPost(ctx context.Context) ApiNotificationsPostRequest {
 	return ApiNotificationsPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *SharingAPIService) NotificationsPostExecute(r ApiNotificationsPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.NotificationsPost")
@@ -113,8 +113,8 @@ func (a *SharingAPIService) NotificationsPostExecute(r ApiNotificationsPostReque
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -132,12 +132,12 @@ func (a *SharingAPIService) NotificationsPostExecute(r ApiNotificationsPostReque
 }
 
 type ApiProjectsIdTeamsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	id int32
-	page *int32
-	perPage *int32
-	s *string
+	id         int32
+	page       *int32
+	perPage    *int32
+	s          *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -167,26 +167,27 @@ ProjectsIdTeamsGet Get teams on a project
 
 Returns a project with all teams which have access on a given project.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Project ID
- @return ApiProjectsIdTeamsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Project ID
+	@return ApiProjectsIdTeamsGetRequest
 */
 func (a *SharingAPIService) ProjectsIdTeamsGet(ctx context.Context, id int32) ApiProjectsIdTeamsGetRequest {
 	return ApiProjectsIdTeamsGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsTeamWithRight
+//
+//	@return []ModelsTeamWithRight
 func (a *SharingAPIService) ProjectsIdTeamsGetExecute(r ApiProjectsIdTeamsGetRequest) ([]ModelsTeamWithRight, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsTeamWithRight
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsTeamWithRight
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsIdTeamsGet")
@@ -270,8 +271,8 @@ func (a *SharingAPIService) ProjectsIdTeamsGetExecute(r ApiProjectsIdTeamsGetReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -281,8 +282,8 @@ func (a *SharingAPIService) ProjectsIdTeamsGetExecute(r ApiProjectsIdTeamsGetReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -300,10 +301,10 @@ func (a *SharingAPIService) ProjectsIdTeamsGetExecute(r ApiProjectsIdTeamsGetReq
 }
 
 type ApiProjectsIdTeamsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	id int32
-	project *ModelsTeamProject
+	id         int32
+	project    *ModelsTeamProject
 }
 
 // The team you want to add to the project.
@@ -321,26 +322,27 @@ ProjectsIdTeamsPut Add a team to a project
 
 Gives a team access to a project.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Project ID
- @return ApiProjectsIdTeamsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Project ID
+	@return ApiProjectsIdTeamsPutRequest
 */
 func (a *SharingAPIService) ProjectsIdTeamsPut(ctx context.Context, id int32) ApiProjectsIdTeamsPutRequest {
 	return ApiProjectsIdTeamsPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTeamProject
+//
+//	@return ModelsTeamProject
 func (a *SharingAPIService) ProjectsIdTeamsPutExecute(r ApiProjectsIdTeamsPutRequest) (*ModelsTeamProject, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTeamProject
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTeamProject
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsIdTeamsPut")
@@ -420,8 +422,8 @@ func (a *SharingAPIService) ProjectsIdTeamsPutExecute(r ApiProjectsIdTeamsPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -431,8 +433,8 @@ func (a *SharingAPIService) ProjectsIdTeamsPutExecute(r ApiProjectsIdTeamsPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -442,8 +444,8 @@ func (a *SharingAPIService) ProjectsIdTeamsPutExecute(r ApiProjectsIdTeamsPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -453,8 +455,8 @@ func (a *SharingAPIService) ProjectsIdTeamsPutExecute(r ApiProjectsIdTeamsPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -472,12 +474,12 @@ func (a *SharingAPIService) ProjectsIdTeamsPutExecute(r ApiProjectsIdTeamsPutReq
 }
 
 type ApiProjectsIdUsersGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	id int32
-	page *int32
-	perPage *int32
-	s *string
+	id         int32
+	page       *int32
+	perPage    *int32
+	s          *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -507,26 +509,27 @@ ProjectsIdUsersGet Get users on a project
 
 Returns a project with all users which have access on a given project.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Project ID
- @return ApiProjectsIdUsersGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Project ID
+	@return ApiProjectsIdUsersGetRequest
 */
 func (a *SharingAPIService) ProjectsIdUsersGet(ctx context.Context, id int32) ApiProjectsIdUsersGetRequest {
 	return ApiProjectsIdUsersGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsUserWithRight
+//
+//	@return []ModelsUserWithRight
 func (a *SharingAPIService) ProjectsIdUsersGetExecute(r ApiProjectsIdUsersGetRequest) ([]ModelsUserWithRight, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsUserWithRight
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsUserWithRight
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsIdUsersGet")
@@ -610,8 +613,8 @@ func (a *SharingAPIService) ProjectsIdUsersGetExecute(r ApiProjectsIdUsersGetReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -621,8 +624,8 @@ func (a *SharingAPIService) ProjectsIdUsersGetExecute(r ApiProjectsIdUsersGetReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -640,10 +643,10 @@ func (a *SharingAPIService) ProjectsIdUsersGetExecute(r ApiProjectsIdUsersGetReq
 }
 
 type ApiProjectsIdUsersPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	id int32
-	project *ModelsProjectUser
+	id         int32
+	project    *ModelsProjectUser
 }
 
 // The user you want to add to the project.
@@ -661,26 +664,27 @@ ProjectsIdUsersPut Add a user to a project
 
 Gives a user access to a project.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Project ID
- @return ApiProjectsIdUsersPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Project ID
+	@return ApiProjectsIdUsersPutRequest
 */
 func (a *SharingAPIService) ProjectsIdUsersPut(ctx context.Context, id int32) ApiProjectsIdUsersPutRequest {
 	return ApiProjectsIdUsersPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsProjectUser
+//
+//	@return ModelsProjectUser
 func (a *SharingAPIService) ProjectsIdUsersPutExecute(r ApiProjectsIdUsersPutRequest) (*ModelsProjectUser, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsProjectUser
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsProjectUser
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsIdUsersPut")
@@ -760,8 +764,8 @@ func (a *SharingAPIService) ProjectsIdUsersPutExecute(r ApiProjectsIdUsersPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -771,8 +775,8 @@ func (a *SharingAPIService) ProjectsIdUsersPutExecute(r ApiProjectsIdUsersPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -782,8 +786,8 @@ func (a *SharingAPIService) ProjectsIdUsersPutExecute(r ApiProjectsIdUsersPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -793,8 +797,8 @@ func (a *SharingAPIService) ProjectsIdUsersPutExecute(r ApiProjectsIdUsersPutReq
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -812,10 +816,10 @@ func (a *SharingAPIService) ProjectsIdUsersPutExecute(r ApiProjectsIdUsersPutReq
 }
 
 type ApiProjectsProjectIDTeamsTeamIDDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	projectID int32
-	teamID int32
+	projectID  int32
+	teamID     int32
 }
 
 func (r ApiProjectsProjectIDTeamsTeamIDDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -827,28 +831,29 @@ ProjectsProjectIDTeamsTeamIDDelete Delete a team from a project
 
 Delets a team from a project. The team won't have access to the project anymore.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectID Project ID
- @param teamID Team ID
- @return ApiProjectsProjectIDTeamsTeamIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectID Project ID
+	@param teamID Team ID
+	@return ApiProjectsProjectIDTeamsTeamIDDeleteRequest
 */
 func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDDelete(ctx context.Context, projectID int32, teamID int32) ApiProjectsProjectIDTeamsTeamIDDeleteRequest {
 	return ApiProjectsProjectIDTeamsTeamIDDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectID: projectID,
-		teamID: teamID,
+		ctx:        ctx,
+		projectID:  projectID,
+		teamID:     teamID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDDeleteExecute(r ApiProjectsProjectIDTeamsTeamIDDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectIDTeamsTeamIDDelete")
@@ -924,8 +929,8 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDDeleteExecute(r ApiProje
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -935,8 +940,8 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDDeleteExecute(r ApiProje
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -946,8 +951,8 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDDeleteExecute(r ApiProje
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -965,11 +970,11 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDDeleteExecute(r ApiProje
 }
 
 type ApiProjectsProjectIDTeamsTeamIDPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	projectID int32
-	teamID int32
-	project *ModelsTeamProject
+	projectID  int32
+	teamID     int32
+	project    *ModelsTeamProject
 }
 
 // The team you want to update.
@@ -987,28 +992,29 @@ ProjectsProjectIDTeamsTeamIDPost Update a team <-> project relation
 
 Update a team <-> project relation. Mostly used to update the right that team has.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectID Project ID
- @param teamID Team ID
- @return ApiProjectsProjectIDTeamsTeamIDPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectID Project ID
+	@param teamID Team ID
+	@return ApiProjectsProjectIDTeamsTeamIDPostRequest
 */
 func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDPost(ctx context.Context, projectID int32, teamID int32) ApiProjectsProjectIDTeamsTeamIDPostRequest {
 	return ApiProjectsProjectIDTeamsTeamIDPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectID: projectID,
-		teamID: teamID,
+		ctx:        ctx,
+		projectID:  projectID,
+		teamID:     teamID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTeamProject
+//
+//	@return ModelsTeamProject
 func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDPostExecute(r ApiProjectsProjectIDTeamsTeamIDPostRequest) (*ModelsTeamProject, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTeamProject
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTeamProject
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectIDTeamsTeamIDPost")
@@ -1089,8 +1095,8 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDPostExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1100,8 +1106,8 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDPostExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1111,8 +1117,8 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDPostExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1130,10 +1136,10 @@ func (a *SharingAPIService) ProjectsProjectIDTeamsTeamIDPostExecute(r ApiProject
 }
 
 type ApiProjectsProjectIDUsersUserIDDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	projectID int32
-	userID int32
+	projectID  int32
+	userID     int32
 }
 
 func (r ApiProjectsProjectIDUsersUserIDDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -1145,28 +1151,29 @@ ProjectsProjectIDUsersUserIDDelete Delete a user from a project
 
 Delets a user from a project. The user won't have access to the project anymore.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectID Project ID
- @param userID User ID
- @return ApiProjectsProjectIDUsersUserIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectID Project ID
+	@param userID User ID
+	@return ApiProjectsProjectIDUsersUserIDDeleteRequest
 */
 func (a *SharingAPIService) ProjectsProjectIDUsersUserIDDelete(ctx context.Context, projectID int32, userID int32) ApiProjectsProjectIDUsersUserIDDeleteRequest {
 	return ApiProjectsProjectIDUsersUserIDDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectID: projectID,
-		userID: userID,
+		ctx:        ctx,
+		projectID:  projectID,
+		userID:     userID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *SharingAPIService) ProjectsProjectIDUsersUserIDDeleteExecute(r ApiProjectsProjectIDUsersUserIDDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectIDUsersUserIDDelete")
@@ -1242,8 +1249,8 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDDeleteExecute(r ApiProje
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1253,8 +1260,8 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDDeleteExecute(r ApiProje
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1264,8 +1271,8 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDDeleteExecute(r ApiProje
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1283,11 +1290,11 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDDeleteExecute(r ApiProje
 }
 
 type ApiProjectsProjectIDUsersUserIDPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	projectID int32
-	userID int32
-	project *ModelsProjectUser
+	projectID  int32
+	userID     int32
+	project    *ModelsProjectUser
 }
 
 // The user you want to update.
@@ -1305,28 +1312,29 @@ ProjectsProjectIDUsersUserIDPost Update a user <-> project relation
 
 Update a user <-> project relation. Mostly used to update the right that user has.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param projectID Project ID
- @param userID User ID
- @return ApiProjectsProjectIDUsersUserIDPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param projectID Project ID
+	@param userID User ID
+	@return ApiProjectsProjectIDUsersUserIDPostRequest
 */
 func (a *SharingAPIService) ProjectsProjectIDUsersUserIDPost(ctx context.Context, projectID int32, userID int32) ApiProjectsProjectIDUsersUserIDPostRequest {
 	return ApiProjectsProjectIDUsersUserIDPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		projectID: projectID,
-		userID: userID,
+		ctx:        ctx,
+		projectID:  projectID,
+		userID:     userID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsProjectUser
+//
+//	@return ModelsProjectUser
 func (a *SharingAPIService) ProjectsProjectIDUsersUserIDPostExecute(r ApiProjectsProjectIDUsersUserIDPostRequest) (*ModelsProjectUser, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsProjectUser
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsProjectUser
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectIDUsersUserIDPost")
@@ -1407,8 +1415,8 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDPostExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1418,8 +1426,8 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDPostExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1429,8 +1437,8 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDPostExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1448,12 +1456,12 @@ func (a *SharingAPIService) ProjectsProjectIDUsersUserIDPostExecute(r ApiProject
 }
 
 type ApiProjectsProjectSharesGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	project int32
-	page *int32
-	perPage *int32
-	s *string
+	project    int32
+	page       *int32
+	perPage    *int32
+	s          *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -1483,26 +1491,27 @@ ProjectsProjectSharesGet Get all link shares for a project
 
 Returns all link shares which exist for a given project
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param project Project ID
- @return ApiProjectsProjectSharesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param project Project ID
+	@return ApiProjectsProjectSharesGetRequest
 */
 func (a *SharingAPIService) ProjectsProjectSharesGet(ctx context.Context, project int32) ApiProjectsProjectSharesGetRequest {
 	return ApiProjectsProjectSharesGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		project: project,
+		ctx:        ctx,
+		project:    project,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsLinkSharing
+//
+//	@return []ModelsLinkSharing
 func (a *SharingAPIService) ProjectsProjectSharesGetExecute(r ApiProjectsProjectSharesGetRequest) ([]ModelsLinkSharing, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsLinkSharing
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsLinkSharing
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectSharesGet")
@@ -1586,8 +1595,8 @@ func (a *SharingAPIService) ProjectsProjectSharesGetExecute(r ApiProjectsProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1605,10 +1614,10 @@ func (a *SharingAPIService) ProjectsProjectSharesGetExecute(r ApiProjectsProject
 }
 
 type ApiProjectsProjectSharesPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	project int32
-	label *ModelsLinkSharing
+	project    int32
+	label      *ModelsLinkSharing
 }
 
 // The new link share object
@@ -1626,26 +1635,27 @@ ProjectsProjectSharesPut Share a project via link
 
 Share a project via link. The user needs to have write-access to the project to be able do this.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param project Project ID
- @return ApiProjectsProjectSharesPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param project Project ID
+	@return ApiProjectsProjectSharesPutRequest
 */
 func (a *SharingAPIService) ProjectsProjectSharesPut(ctx context.Context, project int32) ApiProjectsProjectSharesPutRequest {
 	return ApiProjectsProjectSharesPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		project: project,
+		ctx:        ctx,
+		project:    project,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLinkSharing
+//
+//	@return ModelsLinkSharing
 func (a *SharingAPIService) ProjectsProjectSharesPutExecute(r ApiProjectsProjectSharesPutRequest) (*ModelsLinkSharing, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLinkSharing
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLinkSharing
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectSharesPut")
@@ -1725,8 +1735,8 @@ func (a *SharingAPIService) ProjectsProjectSharesPutExecute(r ApiProjectsProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1736,8 +1746,8 @@ func (a *SharingAPIService) ProjectsProjectSharesPutExecute(r ApiProjectsProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1747,8 +1757,8 @@ func (a *SharingAPIService) ProjectsProjectSharesPutExecute(r ApiProjectsProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1758,8 +1768,8 @@ func (a *SharingAPIService) ProjectsProjectSharesPutExecute(r ApiProjectsProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1777,10 +1787,10 @@ func (a *SharingAPIService) ProjectsProjectSharesPutExecute(r ApiProjectsProject
 }
 
 type ApiProjectsProjectSharesShareDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	project int32
-	share int32
+	project    int32
+	share      int32
 }
 
 func (r ApiProjectsProjectSharesShareDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -1792,28 +1802,29 @@ ProjectsProjectSharesShareDelete Remove a link share
 
 Remove a link share. The user needs to have write-access to the project to be able do this.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param project Project ID
- @param share Share Link ID
- @return ApiProjectsProjectSharesShareDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param project Project ID
+	@param share Share Link ID
+	@return ApiProjectsProjectSharesShareDeleteRequest
 */
 func (a *SharingAPIService) ProjectsProjectSharesShareDelete(ctx context.Context, project int32, share int32) ApiProjectsProjectSharesShareDeleteRequest {
 	return ApiProjectsProjectSharesShareDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		project: project,
-		share: share,
+		ctx:        ctx,
+		project:    project,
+		share:      share,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *SharingAPIService) ProjectsProjectSharesShareDeleteExecute(r ApiProjectsProjectSharesShareDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectSharesShareDelete")
@@ -1889,8 +1900,8 @@ func (a *SharingAPIService) ProjectsProjectSharesShareDeleteExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1900,8 +1911,8 @@ func (a *SharingAPIService) ProjectsProjectSharesShareDeleteExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1911,8 +1922,8 @@ func (a *SharingAPIService) ProjectsProjectSharesShareDeleteExecute(r ApiProject
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1930,10 +1941,10 @@ func (a *SharingAPIService) ProjectsProjectSharesShareDeleteExecute(r ApiProject
 }
 
 type ApiProjectsProjectSharesShareGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	project int32
-	share int32
+	project    int32
+	share      int32
 }
 
 func (r ApiProjectsProjectSharesShareGetRequest) Execute() (*ModelsLinkSharing, *http.Response, error) {
@@ -1945,28 +1956,29 @@ ProjectsProjectSharesShareGet Get one link shares for a project
 
 Returns one link share by its ID.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param project Project ID
- @param share Share ID
- @return ApiProjectsProjectSharesShareGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param project Project ID
+	@param share Share ID
+	@return ApiProjectsProjectSharesShareGetRequest
 */
 func (a *SharingAPIService) ProjectsProjectSharesShareGet(ctx context.Context, project int32, share int32) ApiProjectsProjectSharesShareGetRequest {
 	return ApiProjectsProjectSharesShareGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		project: project,
-		share: share,
+		ctx:        ctx,
+		project:    project,
+		share:      share,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsLinkSharing
+//
+//	@return ModelsLinkSharing
 func (a *SharingAPIService) ProjectsProjectSharesShareGetExecute(r ApiProjectsProjectSharesShareGetRequest) (*ModelsLinkSharing, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsLinkSharing
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsLinkSharing
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.ProjectsProjectSharesShareGet")
@@ -2042,8 +2054,8 @@ func (a *SharingAPIService) ProjectsProjectSharesShareGetExecute(r ApiProjectsPr
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2053,8 +2065,8 @@ func (a *SharingAPIService) ProjectsProjectSharesShareGetExecute(r ApiProjectsPr
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2064,8 +2076,8 @@ func (a *SharingAPIService) ProjectsProjectSharesShareGetExecute(r ApiProjectsPr
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2083,10 +2095,10 @@ func (a *SharingAPIService) ProjectsProjectSharesShareGetExecute(r ApiProjectsPr
 }
 
 type ApiSharesShareAuthPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *SharingAPIService
-	share string
-	password *V1LinkShareAuth
+	share      string
+	password   *V1LinkShareAuth
 }
 
 // The password for link shares which require one.
@@ -2104,26 +2116,27 @@ SharesShareAuthPost Get an auth token for a share
 
 Get a jwt auth token for a shared project from a share hash.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param share The share hash
- @return ApiSharesShareAuthPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param share The share hash
+	@return ApiSharesShareAuthPostRequest
 */
 func (a *SharingAPIService) SharesShareAuthPost(ctx context.Context, share string) ApiSharesShareAuthPostRequest {
 	return ApiSharesShareAuthPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		share: share,
+		ctx:        ctx,
+		share:      share,
 	}
 }
 
 // Execute executes the request
-//  @return AuthToken
+//
+//	@return AuthToken
 func (a *SharingAPIService) SharesShareAuthPostExecute(r ApiSharesShareAuthPostRequest) (*AuthToken, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuthToken
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuthToken
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SharingAPIService.SharesShareAuthPost")
@@ -2189,8 +2202,8 @@ func (a *SharingAPIService) SharesShareAuthPostExecute(r ApiSharesShareAuthPostR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2200,8 +2213,8 @@ func (a *SharingAPIService) SharesShareAuthPostExecute(r ApiSharesShareAuthPostR
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

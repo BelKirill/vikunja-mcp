@@ -20,14 +20,13 @@ import (
 	"strings"
 )
 
-
 // FilterAPIService FilterAPI service
 type FilterAPIService service
 
 type ApiFiltersIdDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *FilterAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiFiltersIdDeleteRequest) Execute() (*ModelsSavedFilter, *http.Response, error) {
@@ -39,26 +38,27 @@ FiltersIdDelete Removes a saved filter
 
 Removes a saved filter by its ID.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Filter ID
- @return ApiFiltersIdDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Filter ID
+	@return ApiFiltersIdDeleteRequest
 */
 func (a *FilterAPIService) FiltersIdDelete(ctx context.Context, id int32) ApiFiltersIdDeleteRequest {
 	return ApiFiltersIdDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsSavedFilter
+//
+//	@return ModelsSavedFilter
 func (a *FilterAPIService) FiltersIdDeleteExecute(r ApiFiltersIdDeleteRequest) (*ModelsSavedFilter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsSavedFilter
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsSavedFilter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilterAPIService.FiltersIdDelete")
@@ -133,8 +133,8 @@ func (a *FilterAPIService) FiltersIdDeleteExecute(r ApiFiltersIdDeleteRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -144,8 +144,8 @@ func (a *FilterAPIService) FiltersIdDeleteExecute(r ApiFiltersIdDeleteRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -155,8 +155,8 @@ func (a *FilterAPIService) FiltersIdDeleteExecute(r ApiFiltersIdDeleteRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -174,9 +174,9 @@ func (a *FilterAPIService) FiltersIdDeleteExecute(r ApiFiltersIdDeleteRequest) (
 }
 
 type ApiFiltersIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *FilterAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiFiltersIdGetRequest) Execute() (*ModelsSavedFilter, *http.Response, error) {
@@ -188,26 +188,27 @@ FiltersIdGet Gets one saved filter
 
 Returns a saved filter by its ID.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Filter ID
- @return ApiFiltersIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Filter ID
+	@return ApiFiltersIdGetRequest
 */
 func (a *FilterAPIService) FiltersIdGet(ctx context.Context, id int32) ApiFiltersIdGetRequest {
 	return ApiFiltersIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsSavedFilter
+//
+//	@return ModelsSavedFilter
 func (a *FilterAPIService) FiltersIdGetExecute(r ApiFiltersIdGetRequest) (*ModelsSavedFilter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsSavedFilter
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsSavedFilter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilterAPIService.FiltersIdGet")
@@ -282,8 +283,8 @@ func (a *FilterAPIService) FiltersIdGetExecute(r ApiFiltersIdGetRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -293,8 +294,8 @@ func (a *FilterAPIService) FiltersIdGetExecute(r ApiFiltersIdGetRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -312,9 +313,9 @@ func (a *FilterAPIService) FiltersIdGetExecute(r ApiFiltersIdGetRequest) (*Model
 }
 
 type ApiFiltersIdPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *FilterAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiFiltersIdPostRequest) Execute() (*ModelsSavedFilter, *http.Response, error) {
@@ -326,26 +327,27 @@ FiltersIdPost Updates a saved filter
 
 Updates a saved filter by its ID.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Filter ID
- @return ApiFiltersIdPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Filter ID
+	@return ApiFiltersIdPostRequest
 */
 func (a *FilterAPIService) FiltersIdPost(ctx context.Context, id int32) ApiFiltersIdPostRequest {
 	return ApiFiltersIdPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsSavedFilter
+//
+//	@return ModelsSavedFilter
 func (a *FilterAPIService) FiltersIdPostExecute(r ApiFiltersIdPostRequest) (*ModelsSavedFilter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsSavedFilter
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsSavedFilter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilterAPIService.FiltersIdPost")
@@ -420,8 +422,8 @@ func (a *FilterAPIService) FiltersIdPostExecute(r ApiFiltersIdPostRequest) (*Mod
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -431,8 +433,8 @@ func (a *FilterAPIService) FiltersIdPostExecute(r ApiFiltersIdPostRequest) (*Mod
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -442,8 +444,8 @@ func (a *FilterAPIService) FiltersIdPostExecute(r ApiFiltersIdPostRequest) (*Mod
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -461,7 +463,7 @@ func (a *FilterAPIService) FiltersIdPostExecute(r ApiFiltersIdPostRequest) (*Mod
 }
 
 type ApiFiltersPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *FilterAPIService
 }
 
@@ -474,24 +476,25 @@ FiltersPut Creates a new saved filter
 
 Creates a new saved filter
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiFiltersPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiFiltersPutRequest
 */
 func (a *FilterAPIService) FiltersPut(ctx context.Context) ApiFiltersPutRequest {
 	return ApiFiltersPutRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsSavedFilter
+//
+//	@return ModelsSavedFilter
 func (a *FilterAPIService) FiltersPutExecute(r ApiFiltersPutRequest) (*ModelsSavedFilter, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsSavedFilter
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsSavedFilter
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilterAPIService.FiltersPut")
@@ -565,8 +568,8 @@ func (a *FilterAPIService) FiltersPutExecute(r ApiFiltersPutRequest) (*ModelsSav
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -576,8 +579,8 @@ func (a *FilterAPIService) FiltersPutExecute(r ApiFiltersPutRequest) (*ModelsSav
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

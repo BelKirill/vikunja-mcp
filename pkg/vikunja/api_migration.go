@@ -19,12 +19,11 @@ import (
 	"net/url"
 )
 
-
 // MigrationAPIService MigrationAPI service
 type MigrationAPIService service
 
 type ApiMigrationMicrosoftTodoAuthGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -37,24 +36,25 @@ MigrationMicrosoftTodoAuthGet Get the auth url from Microsoft Todo
 
 Returns the auth url where the user needs to get its auth code. This code can then be used to migrate everything from Microsoft Todo to Vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationMicrosoftTodoAuthGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationMicrosoftTodoAuthGetRequest
 */
 func (a *MigrationAPIService) MigrationMicrosoftTodoAuthGet(ctx context.Context) ApiMigrationMicrosoftTodoAuthGetRequest {
 	return ApiMigrationMicrosoftTodoAuthGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return HandlerAuthURL
+//
+//	@return HandlerAuthURL
 func (a *MigrationAPIService) MigrationMicrosoftTodoAuthGetExecute(r ApiMigrationMicrosoftTodoAuthGetRequest) (*HandlerAuthURL, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *HandlerAuthURL
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *HandlerAuthURL
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationMicrosoftTodoAuthGet")
@@ -128,8 +128,8 @@ func (a *MigrationAPIService) MigrationMicrosoftTodoAuthGetExecute(r ApiMigratio
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -147,8 +147,8 @@ func (a *MigrationAPIService) MigrationMicrosoftTodoAuthGetExecute(r ApiMigratio
 }
 
 type ApiMigrationMicrosoftTodoMigratePostRequest struct {
-	ctx context.Context
-	ApiService *MigrationAPIService
+	ctx           context.Context
+	ApiService    *MigrationAPIService
 	migrationCode *MicrosofttodoMigration
 }
 
@@ -167,24 +167,25 @@ MigrationMicrosoftTodoMigratePost Migrate all projects, tasks etc. from Microsof
 
 Migrates all tasklinsts, tasks, notes and reminders from Microsoft Todo to Vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationMicrosoftTodoMigratePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationMicrosoftTodoMigratePostRequest
 */
 func (a *MigrationAPIService) MigrationMicrosoftTodoMigratePost(ctx context.Context) ApiMigrationMicrosoftTodoMigratePostRequest {
 	return ApiMigrationMicrosoftTodoMigratePostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *MigrationAPIService) MigrationMicrosoftTodoMigratePostExecute(r ApiMigrationMicrosoftTodoMigratePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationMicrosoftTodoMigratePost")
@@ -263,8 +264,8 @@ func (a *MigrationAPIService) MigrationMicrosoftTodoMigratePostExecute(r ApiMigr
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -282,7 +283,7 @@ func (a *MigrationAPIService) MigrationMicrosoftTodoMigratePostExecute(r ApiMigr
 }
 
 type ApiMigrationMicrosoftTodoStatusGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -295,24 +296,25 @@ MigrationMicrosoftTodoStatusGet Get migration status
 
 Returns if the current user already did the migation or not. This is useful to show a confirmation message in the frontend if the user is trying to do the same migration again.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationMicrosoftTodoStatusGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationMicrosoftTodoStatusGetRequest
 */
 func (a *MigrationAPIService) MigrationMicrosoftTodoStatusGet(ctx context.Context) ApiMigrationMicrosoftTodoStatusGetRequest {
 	return ApiMigrationMicrosoftTodoStatusGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return MigrationStatus
+//
+//	@return MigrationStatus
 func (a *MigrationAPIService) MigrationMicrosoftTodoStatusGetExecute(r ApiMigrationMicrosoftTodoStatusGetRequest) (*MigrationStatus, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *MigrationStatus
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *MigrationStatus
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationMicrosoftTodoStatusGet")
@@ -386,8 +388,8 @@ func (a *MigrationAPIService) MigrationMicrosoftTodoStatusGetExecute(r ApiMigrat
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -405,9 +407,9 @@ func (a *MigrationAPIService) MigrationMicrosoftTodoStatusGetExecute(r ApiMigrat
 }
 
 type ApiMigrationTicktickMigratePostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
-	import_ *string
+	import_    *string
 }
 
 // The TickTick backup csv file.
@@ -425,24 +427,25 @@ MigrationTicktickMigratePost Import all projects, tasks etc. from a TickTick bac
 
 Imports all projects, tasks, notes, reminders, subtasks and files from a TickTick backup export into Vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTicktickMigratePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTicktickMigratePostRequest
 */
 func (a *MigrationAPIService) MigrationTicktickMigratePost(ctx context.Context) ApiMigrationTicktickMigratePostRequest {
 	return ApiMigrationTicktickMigratePostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *MigrationAPIService) MigrationTicktickMigratePostExecute(r ApiMigrationTicktickMigratePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTicktickMigratePost")
@@ -520,8 +523,8 @@ func (a *MigrationAPIService) MigrationTicktickMigratePostExecute(r ApiMigration
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -539,7 +542,7 @@ func (a *MigrationAPIService) MigrationTicktickMigratePostExecute(r ApiMigration
 }
 
 type ApiMigrationTicktickStatusGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -552,24 +555,25 @@ MigrationTicktickStatusGet Get migration status
 
 Returns if the current user already did the migation or not. This is useful to show a confirmation message in the frontend if the user is trying to do the same migration again.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTicktickStatusGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTicktickStatusGetRequest
 */
 func (a *MigrationAPIService) MigrationTicktickStatusGet(ctx context.Context) ApiMigrationTicktickStatusGetRequest {
 	return ApiMigrationTicktickStatusGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return MigrationStatus
+//
+//	@return MigrationStatus
 func (a *MigrationAPIService) MigrationTicktickStatusGetExecute(r ApiMigrationTicktickStatusGetRequest) (*MigrationStatus, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *MigrationStatus
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *MigrationStatus
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTicktickStatusGet")
@@ -643,8 +647,8 @@ func (a *MigrationAPIService) MigrationTicktickStatusGetExecute(r ApiMigrationTi
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -662,7 +666,7 @@ func (a *MigrationAPIService) MigrationTicktickStatusGetExecute(r ApiMigrationTi
 }
 
 type ApiMigrationTodoistAuthGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -675,24 +679,25 @@ MigrationTodoistAuthGet Get the auth url from todoist
 
 Returns the auth url where the user needs to get its auth code. This code can then be used to migrate everything from todoist to Vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTodoistAuthGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTodoistAuthGetRequest
 */
 func (a *MigrationAPIService) MigrationTodoistAuthGet(ctx context.Context) ApiMigrationTodoistAuthGetRequest {
 	return ApiMigrationTodoistAuthGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return HandlerAuthURL
+//
+//	@return HandlerAuthURL
 func (a *MigrationAPIService) MigrationTodoistAuthGetExecute(r ApiMigrationTodoistAuthGetRequest) (*HandlerAuthURL, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *HandlerAuthURL
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *HandlerAuthURL
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTodoistAuthGet")
@@ -766,8 +771,8 @@ func (a *MigrationAPIService) MigrationTodoistAuthGetExecute(r ApiMigrationTodoi
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -785,8 +790,8 @@ func (a *MigrationAPIService) MigrationTodoistAuthGetExecute(r ApiMigrationTodoi
 }
 
 type ApiMigrationTodoistMigratePostRequest struct {
-	ctx context.Context
-	ApiService *MigrationAPIService
+	ctx           context.Context
+	ApiService    *MigrationAPIService
 	migrationCode *TodoistMigration
 }
 
@@ -805,24 +810,25 @@ MigrationTodoistMigratePost Migrate all lists, tasks etc. from todoist
 
 Migrates all projects, tasks, notes, reminders, subtasks and files from todoist to vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTodoistMigratePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTodoistMigratePostRequest
 */
 func (a *MigrationAPIService) MigrationTodoistMigratePost(ctx context.Context) ApiMigrationTodoistMigratePostRequest {
 	return ApiMigrationTodoistMigratePostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *MigrationAPIService) MigrationTodoistMigratePostExecute(r ApiMigrationTodoistMigratePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTodoistMigratePost")
@@ -901,8 +907,8 @@ func (a *MigrationAPIService) MigrationTodoistMigratePostExecute(r ApiMigrationT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -920,7 +926,7 @@ func (a *MigrationAPIService) MigrationTodoistMigratePostExecute(r ApiMigrationT
 }
 
 type ApiMigrationTodoistStatusGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -933,24 +939,25 @@ MigrationTodoistStatusGet Get migration status
 
 Returns if the current user already did the migation or not. This is useful to show a confirmation message in the frontend if the user is trying to do the same migration again.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTodoistStatusGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTodoistStatusGetRequest
 */
 func (a *MigrationAPIService) MigrationTodoistStatusGet(ctx context.Context) ApiMigrationTodoistStatusGetRequest {
 	return ApiMigrationTodoistStatusGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return MigrationStatus
+//
+//	@return MigrationStatus
 func (a *MigrationAPIService) MigrationTodoistStatusGetExecute(r ApiMigrationTodoistStatusGetRequest) (*MigrationStatus, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *MigrationStatus
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *MigrationStatus
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTodoistStatusGet")
@@ -1024,8 +1031,8 @@ func (a *MigrationAPIService) MigrationTodoistStatusGetExecute(r ApiMigrationTod
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1043,7 +1050,7 @@ func (a *MigrationAPIService) MigrationTodoistStatusGetExecute(r ApiMigrationTod
 }
 
 type ApiMigrationTrelloAuthGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -1056,24 +1063,25 @@ MigrationTrelloAuthGet Get the auth url from trello
 
 Returns the auth url where the user needs to get its auth code. This code can then be used to migrate everything from trello to Vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTrelloAuthGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTrelloAuthGetRequest
 */
 func (a *MigrationAPIService) MigrationTrelloAuthGet(ctx context.Context) ApiMigrationTrelloAuthGetRequest {
 	return ApiMigrationTrelloAuthGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return HandlerAuthURL
+//
+//	@return HandlerAuthURL
 func (a *MigrationAPIService) MigrationTrelloAuthGetExecute(r ApiMigrationTrelloAuthGetRequest) (*HandlerAuthURL, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *HandlerAuthURL
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *HandlerAuthURL
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTrelloAuthGet")
@@ -1147,8 +1155,8 @@ func (a *MigrationAPIService) MigrationTrelloAuthGetExecute(r ApiMigrationTrello
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1166,8 +1174,8 @@ func (a *MigrationAPIService) MigrationTrelloAuthGetExecute(r ApiMigrationTrello
 }
 
 type ApiMigrationTrelloMigratePostRequest struct {
-	ctx context.Context
-	ApiService *MigrationAPIService
+	ctx           context.Context
+	ApiService    *MigrationAPIService
 	migrationCode *TrelloMigration
 }
 
@@ -1186,24 +1194,25 @@ MigrationTrelloMigratePost Migrate all projects, tasks etc. from trello
 
 Migrates all projects, tasks, notes, reminders, subtasks and files from trello to vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTrelloMigratePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTrelloMigratePostRequest
 */
 func (a *MigrationAPIService) MigrationTrelloMigratePost(ctx context.Context) ApiMigrationTrelloMigratePostRequest {
 	return ApiMigrationTrelloMigratePostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *MigrationAPIService) MigrationTrelloMigratePostExecute(r ApiMigrationTrelloMigratePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTrelloMigratePost")
@@ -1282,8 +1291,8 @@ func (a *MigrationAPIService) MigrationTrelloMigratePostExecute(r ApiMigrationTr
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1301,7 +1310,7 @@ func (a *MigrationAPIService) MigrationTrelloMigratePostExecute(r ApiMigrationTr
 }
 
 type ApiMigrationTrelloStatusGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -1314,24 +1323,25 @@ MigrationTrelloStatusGet Get migration status
 
 Returns if the current user already did the migation or not. This is useful to show a confirmation message in the frontend if the user is trying to do the same migration again.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationTrelloStatusGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationTrelloStatusGetRequest
 */
 func (a *MigrationAPIService) MigrationTrelloStatusGet(ctx context.Context) ApiMigrationTrelloStatusGetRequest {
 	return ApiMigrationTrelloStatusGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return MigrationStatus
+//
+//	@return MigrationStatus
 func (a *MigrationAPIService) MigrationTrelloStatusGetExecute(r ApiMigrationTrelloStatusGetRequest) (*MigrationStatus, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *MigrationStatus
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *MigrationStatus
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationTrelloStatusGet")
@@ -1405,8 +1415,8 @@ func (a *MigrationAPIService) MigrationTrelloStatusGetExecute(r ApiMigrationTrel
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1424,9 +1434,9 @@ func (a *MigrationAPIService) MigrationTrelloStatusGetExecute(r ApiMigrationTrel
 }
 
 type ApiMigrationVikunjaFileMigratePostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
-	import_ *string
+	import_    *string
 }
 
 // The Vikunja export zip file.
@@ -1444,24 +1454,25 @@ MigrationVikunjaFileMigratePost Import all projects, tasks etc. from a Vikunja d
 
 Imports all projects, tasks, notes, reminders, subtasks and files from a Vikunjda data export into Vikunja.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationVikunjaFileMigratePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationVikunjaFileMigratePostRequest
 */
 func (a *MigrationAPIService) MigrationVikunjaFileMigratePost(ctx context.Context) ApiMigrationVikunjaFileMigratePostRequest {
 	return ApiMigrationVikunjaFileMigratePostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *MigrationAPIService) MigrationVikunjaFileMigratePostExecute(r ApiMigrationVikunjaFileMigratePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationVikunjaFileMigratePost")
@@ -1539,8 +1550,8 @@ func (a *MigrationAPIService) MigrationVikunjaFileMigratePostExecute(r ApiMigrat
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1558,7 +1569,7 @@ func (a *MigrationAPIService) MigrationVikunjaFileMigratePostExecute(r ApiMigrat
 }
 
 type ApiMigrationVikunjaFileStatusGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *MigrationAPIService
 }
 
@@ -1571,24 +1582,25 @@ MigrationVikunjaFileStatusGet Get migration status
 
 Returns if the current user already did the migation or not. This is useful to show a confirmation message in the frontend if the user is trying to do the same migration again.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMigrationVikunjaFileStatusGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMigrationVikunjaFileStatusGetRequest
 */
 func (a *MigrationAPIService) MigrationVikunjaFileStatusGet(ctx context.Context) ApiMigrationVikunjaFileStatusGetRequest {
 	return ApiMigrationVikunjaFileStatusGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return MigrationStatus
+//
+//	@return MigrationStatus
 func (a *MigrationAPIService) MigrationVikunjaFileStatusGetExecute(r ApiMigrationVikunjaFileStatusGetRequest) (*MigrationStatus, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *MigrationStatus
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *MigrationStatus
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MigrationAPIService.MigrationVikunjaFileStatusGet")
@@ -1662,8 +1674,8 @@ func (a *MigrationAPIService) MigrationVikunjaFileStatusGetExecute(r ApiMigratio
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

@@ -21,8 +21,8 @@ var _ MappedNullable = &UserTOTP{}
 // UserTOTP struct for UserTOTP
 type UserTOTP struct {
 	// The totp entry will only be enabled after the user verified they have a working totp setup.
-	Enabled *bool `json:"enabled,omitempty"`
-	Secret *string `json:"secret,omitempty"`
+	Enabled *bool   `json:"enabled,omitempty"`
+	Secret  *string `json:"secret,omitempty"`
 	// The totp url used to be able to enroll the user later
 	Url *string `json:"url,omitempty"`
 }
@@ -141,7 +141,7 @@ func (o *UserTOTP) SetUrl(v string) {
 }
 
 func (o UserTOTP) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -197,5 +197,3 @@ func (v *NullableUserTOTP) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

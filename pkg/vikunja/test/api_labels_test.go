@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_LabelsAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService LabelsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.LabelsAPI.LabelsGet(context.Background()).Execute()
 
@@ -36,7 +37,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService LabelsIdDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -50,7 +51,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService LabelsIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -64,7 +65,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService LabelsIdPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -78,7 +79,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService LabelsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.LabelsAPI.LabelsPut(context.Background()).Execute()
 
@@ -90,7 +91,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService TasksTaskIDLabelsBulkPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var taskID int32
 
@@ -104,7 +105,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService TasksTaskLabelsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var task int32
 
@@ -118,7 +119,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService TasksTaskLabelsLabelDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var task int32
 		var label int32
@@ -133,7 +134,7 @@ func Test_openapi_LabelsAPIService(t *testing.T) {
 
 	t.Run("Test LabelsAPIService TasksTaskLabelsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var task int32
 

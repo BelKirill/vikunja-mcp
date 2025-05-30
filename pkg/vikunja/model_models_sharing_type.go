@@ -21,9 +21,9 @@ type ModelsSharingType int32
 
 // List of models.SharingType
 const (
-	SharingTypeUnknown ModelsSharingType = 0
+	SharingTypeUnknown         ModelsSharingType = 0
 	SharingTypeWithoutPassword ModelsSharingType = 1
-	SharingTypeWithPassword ModelsSharingType = 2
+	SharingTypeWithPassword    ModelsSharingType = 2
 )
 
 // All allowed values of ModelsSharingType enum
@@ -111,4 +111,3 @@ func (v *NullableModelsSharingType) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

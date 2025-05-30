@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_TeamAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.TeamAPI.TeamsGet(context.Background()).Execute()
 
@@ -36,7 +37,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsIdDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -50,7 +51,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -64,7 +65,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsIdMembersPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -78,7 +79,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsIdMembersUserIDAdminPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var userID int32
@@ -93,7 +94,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsIdMembersUserIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var userID int32
@@ -108,7 +109,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsIdPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -122,7 +123,7 @@ func Test_openapi_TeamAPIService(t *testing.T) {
 
 	t.Run("Test TeamAPIService TeamsPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.TeamAPI.TeamsPut(context.Background()).Execute()
 

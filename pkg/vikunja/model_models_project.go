@@ -39,8 +39,8 @@ type ModelsProject struct {
 	// True if a project is a favorite. Favorite projects show up in a separate parent project. This value depends on the user making the call to the api.
 	IsFavorite *bool `json:"is_favorite,omitempty"`
 	// The user who created this project.
-	Owner *UserUser `json:"owner,omitempty"`
-	ParentProjectId *int32 `json:"parent_project_id,omitempty"`
+	Owner           *UserUser `json:"owner,omitempty"`
+	ParentProjectId *int32    `json:"parent_project_id,omitempty"`
 	// The position this project has when querying all projects. See the tasks.position property on how to use this.
 	Position *float32 `json:"position,omitempty"`
 	// The subscription status for the user reading this project. You can only read this property, use the subscription endpoints to modify it. Will only returned when retreiving one project.
@@ -48,8 +48,8 @@ type ModelsProject struct {
 	// The title of the project. You'll see this in the overview.
 	Title *string `json:"title,omitempty"`
 	// A timestamp when this project was last updated. You cannot change this value.
-	Updated *string `json:"updated,omitempty"`
-	Views []ModelsProjectView `json:"views,omitempty"`
+	Updated *string             `json:"updated,omitempty"`
+	Views   []ModelsProjectView `json:"views,omitempty"`
 }
 
 // NewModelsProject instantiates a new ModelsProject object
@@ -582,7 +582,7 @@ func (o *ModelsProject) SetViews(v []ModelsProjectView) {
 }
 
 func (o ModelsProject) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -677,5 +677,3 @@ func (v *NullableModelsProject) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

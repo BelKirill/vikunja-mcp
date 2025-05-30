@@ -21,7 +21,7 @@ type ModelsRight int32
 
 // List of models.Right
 const (
-	RightRead ModelsRight = 0
+	RightRead  ModelsRight = 0
 	RightWrite ModelsRight = 1
 	RightAdmin ModelsRight = 2
 )
@@ -111,4 +111,3 @@ func (v *NullableModelsRight) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

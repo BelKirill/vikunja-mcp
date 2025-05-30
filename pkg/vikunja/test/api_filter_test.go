@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_FilterAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_FilterAPIService(t *testing.T) {
 
 	t.Run("Test FilterAPIService FiltersIdDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -38,7 +39,7 @@ func Test_openapi_FilterAPIService(t *testing.T) {
 
 	t.Run("Test FilterAPIService FiltersIdGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -52,7 +53,7 @@ func Test_openapi_FilterAPIService(t *testing.T) {
 
 	t.Run("Test FilterAPIService FiltersIdPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -66,7 +67,7 @@ func Test_openapi_FilterAPIService(t *testing.T) {
 
 	t.Run("Test FilterAPIService FiltersPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.FilterAPI.FiltersPut(context.Background()).Execute()
 

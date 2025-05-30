@@ -20,7 +20,7 @@ var _ MappedNullable = &V1AuthInfo{}
 
 // V1AuthInfo struct for V1AuthInfo
 type V1AuthInfo struct {
-	Local *V1LocalAuthInfo `json:"local,omitempty"`
+	Local         *V1LocalAuthInfo  `json:"local,omitempty"`
 	OpenidConnect *V1OpenIDAuthInfo `json:"openid_connect,omitempty"`
 }
 
@@ -106,7 +106,7 @@ func (o *V1AuthInfo) SetOpenidConnect(v V1OpenIDAuthInfo) {
 }
 
 func (o V1AuthInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -159,5 +159,3 @@ func (v *NullableV1AuthInfo) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

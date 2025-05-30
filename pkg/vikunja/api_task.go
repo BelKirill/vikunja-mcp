@@ -17,20 +17,19 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
 	"os"
+	"strings"
 )
-
 
 // TaskAPIService TaskAPI service
 type TaskAPIService service
 
 type ApiKindIdReactionsDeletePostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	kind int32
-	project *ModelsReaction
+	id         int32
+	kind       int32
+	project    *ModelsReaction
 }
 
 // The reaction you want to add to the entity.
@@ -48,28 +47,29 @@ KindIdReactionsDeletePost Removes the user's reaction
 
 Removes the reaction of that user on that entity.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Entity ID
- @param kind The kind of the entity. Can be either `tasks` or `comments` for task comments
- @return ApiKindIdReactionsDeletePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Entity ID
+	@param kind The kind of the entity. Can be either `tasks` or `comments` for task comments
+	@return ApiKindIdReactionsDeletePostRequest
 */
 func (a *TaskAPIService) KindIdReactionsDeletePost(ctx context.Context, id int32, kind int32) ApiKindIdReactionsDeletePostRequest {
 	return ApiKindIdReactionsDeletePostRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		kind: kind,
+		ctx:        ctx,
+		id:         id,
+		kind:       kind,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TaskAPIService) KindIdReactionsDeletePostExecute(r ApiKindIdReactionsDeletePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.KindIdReactionsDeletePost")
@@ -150,8 +150,8 @@ func (a *TaskAPIService) KindIdReactionsDeletePostExecute(r ApiKindIdReactionsDe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -161,8 +161,8 @@ func (a *TaskAPIService) KindIdReactionsDeletePostExecute(r ApiKindIdReactionsDe
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -180,10 +180,10 @@ func (a *TaskAPIService) KindIdReactionsDeletePostExecute(r ApiKindIdReactionsDe
 }
 
 type ApiKindIdReactionsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	kind int32
+	id         int32
+	kind       int32
 }
 
 func (r ApiKindIdReactionsGetRequest) Execute() ([]map[string][]UserUser, *http.Response, error) {
@@ -195,28 +195,29 @@ KindIdReactionsGet Get all reactions for an entity
 
 Returns all reactions for an entity
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Entity ID
- @param kind The kind of the entity. Can be either `tasks` or `comments` for task comments
- @return ApiKindIdReactionsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Entity ID
+	@param kind The kind of the entity. Can be either `tasks` or `comments` for task comments
+	@return ApiKindIdReactionsGetRequest
 */
 func (a *TaskAPIService) KindIdReactionsGet(ctx context.Context, id int32, kind int32) ApiKindIdReactionsGetRequest {
 	return ApiKindIdReactionsGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		kind: kind,
+		ctx:        ctx,
+		id:         id,
+		kind:       kind,
 	}
 }
 
 // Execute executes the request
-//  @return []map[string][]UserUser
+//
+//	@return []map[string][]UserUser
 func (a *TaskAPIService) KindIdReactionsGetExecute(r ApiKindIdReactionsGetRequest) ([]map[string][]UserUser, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []map[string][]UserUser
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []map[string][]UserUser
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.KindIdReactionsGet")
@@ -292,8 +293,8 @@ func (a *TaskAPIService) KindIdReactionsGetExecute(r ApiKindIdReactionsGetReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -303,8 +304,8 @@ func (a *TaskAPIService) KindIdReactionsGetExecute(r ApiKindIdReactionsGetReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -322,11 +323,11 @@ func (a *TaskAPIService) KindIdReactionsGetExecute(r ApiKindIdReactionsGetReques
 }
 
 type ApiKindIdReactionsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	kind int32
-	project *ModelsReaction
+	id         int32
+	kind       int32
+	project    *ModelsReaction
 }
 
 // The reaction you want to add to the entity.
@@ -344,28 +345,29 @@ KindIdReactionsPut Add a reaction to an entity
 
 Add a reaction to an entity. Will do nothing if the reaction already exists.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Entity ID
- @param kind The kind of the entity. Can be either `tasks` or `comments` for task comments
- @return ApiKindIdReactionsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Entity ID
+	@param kind The kind of the entity. Can be either `tasks` or `comments` for task comments
+	@return ApiKindIdReactionsPutRequest
 */
 func (a *TaskAPIService) KindIdReactionsPut(ctx context.Context, id int32, kind int32) ApiKindIdReactionsPutRequest {
 	return ApiKindIdReactionsPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		kind: kind,
+		ctx:        ctx,
+		id:         id,
+		kind:       kind,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsReaction
+//
+//	@return ModelsReaction
 func (a *TaskAPIService) KindIdReactionsPutExecute(r ApiKindIdReactionsPutRequest) (*ModelsReaction, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsReaction
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsReaction
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.KindIdReactionsPut")
@@ -446,8 +448,8 @@ func (a *TaskAPIService) KindIdReactionsPutExecute(r ApiKindIdReactionsPutReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -457,8 +459,8 @@ func (a *TaskAPIService) KindIdReactionsPutExecute(r ApiKindIdReactionsPutReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -476,10 +478,10 @@ func (a *TaskAPIService) KindIdReactionsPutExecute(r ApiKindIdReactionsPutReques
 }
 
 type ApiProjectsIdTasksPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	task *ModelsTask
+	id         int32
+	task       *ModelsTask
 }
 
 // The task object
@@ -497,26 +499,27 @@ ProjectsIdTasksPut Create a task
 
 Inserts a task into a project.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Project ID
- @return ApiProjectsIdTasksPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Project ID
+	@return ApiProjectsIdTasksPutRequest
 */
 func (a *TaskAPIService) ProjectsIdTasksPut(ctx context.Context, id int32) ApiProjectsIdTasksPutRequest {
 	return ApiProjectsIdTasksPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTask
+//
+//	@return ModelsTask
 func (a *TaskAPIService) ProjectsIdTasksPutExecute(r ApiProjectsIdTasksPutRequest) (*ModelsTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTask
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.ProjectsIdTasksPut")
@@ -596,8 +599,8 @@ func (a *TaskAPIService) ProjectsIdTasksPutExecute(r ApiProjectsIdTasksPutReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -607,8 +610,8 @@ func (a *TaskAPIService) ProjectsIdTasksPutExecute(r ApiProjectsIdTasksPutReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -618,8 +621,8 @@ func (a *TaskAPIService) ProjectsIdTasksPutExecute(r ApiProjectsIdTasksPutReques
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -637,19 +640,19 @@ func (a *TaskAPIService) ProjectsIdTasksPutExecute(r ApiProjectsIdTasksPutReques
 }
 
 type ApiProjectsIdViewsViewTasksGetRequest struct {
-	ctx context.Context
-	ApiService *TaskAPIService
-	id int32
-	view int32
-	page *int32
-	perPage *int32
-	s *string
-	sortBy *string
-	orderBy *string
-	filter *string
-	filterTimezone *string
+	ctx                context.Context
+	ApiService         *TaskAPIService
+	id                 int32
+	view               int32
+	page               *int32
+	perPage            *int32
+	s                  *string
+	sortBy             *string
+	orderBy            *string
+	filter             *string
+	filterTimezone     *string
 	filterIncludeNulls *string
-	expand *string
+	expand             *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -688,7 +691,7 @@ func (r ApiProjectsIdViewsViewTasksGetRequest) Filter(filter string) ApiProjects
 	return r
 }
 
-// The time zone which should be used for date match (statements like 
+// The time zone which should be used for date match (statements like
 func (r ApiProjectsIdViewsViewTasksGetRequest) FilterTimezone(filterTimezone string) ApiProjectsIdViewsViewTasksGetRequest {
 	r.filterTimezone = &filterTimezone
 	return r
@@ -715,28 +718,29 @@ ProjectsIdViewsViewTasksGet Get tasks in a project
 
 Returns all tasks for the current project.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The project ID.
- @param view The project view ID.
- @return ApiProjectsIdViewsViewTasksGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The project ID.
+	@param view The project view ID.
+	@return ApiProjectsIdViewsViewTasksGetRequest
 */
 func (a *TaskAPIService) ProjectsIdViewsViewTasksGet(ctx context.Context, id int32, view int32) ApiProjectsIdViewsViewTasksGetRequest {
 	return ApiProjectsIdViewsViewTasksGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		view: view,
+		ctx:        ctx,
+		id:         id,
+		view:       view,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsTask
+//
+//	@return []ModelsTask
 func (a *TaskAPIService) ProjectsIdViewsViewTasksGetExecute(r ApiProjectsIdViewsViewTasksGetRequest) ([]ModelsTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.ProjectsIdViewsViewTasksGet")
@@ -839,8 +843,8 @@ func (a *TaskAPIService) ProjectsIdViewsViewTasksGetExecute(r ApiProjectsIdViews
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -858,11 +862,11 @@ func (a *TaskAPIService) ProjectsIdViewsViewTasksGetExecute(r ApiProjectsIdViews
 }
 
 type ApiProjectsProjectViewsViewBucketsBucketTasksPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	project int32
-	view int32
-	bucket int32
+	project    int32
+	view       int32
+	bucket     int32
 	taskBucket *ModelsTaskBucket
 }
 
@@ -881,30 +885,31 @@ ProjectsProjectViewsViewBucketsBucketTasksPost Update a task bucket
 
 Updates a task in a bucket
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param project Project ID
- @param view Project View ID
- @param bucket Bucket ID
- @return ApiProjectsProjectViewsViewBucketsBucketTasksPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param project Project ID
+	@param view Project View ID
+	@param bucket Bucket ID
+	@return ApiProjectsProjectViewsViewBucketsBucketTasksPostRequest
 */
 func (a *TaskAPIService) ProjectsProjectViewsViewBucketsBucketTasksPost(ctx context.Context, project int32, view int32, bucket int32) ApiProjectsProjectViewsViewBucketsBucketTasksPostRequest {
 	return ApiProjectsProjectViewsViewBucketsBucketTasksPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		project: project,
-		view: view,
-		bucket: bucket,
+		ctx:        ctx,
+		project:    project,
+		view:       view,
+		bucket:     bucket,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskBucket
+//
+//	@return ModelsTaskBucket
 func (a *TaskAPIService) ProjectsProjectViewsViewBucketsBucketTasksPostExecute(r ApiProjectsProjectViewsViewBucketsBucketTasksPostRequest) (*ModelsTaskBucket, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskBucket
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskBucket
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.ProjectsProjectViewsViewBucketsBucketTasksPost")
@@ -986,8 +991,8 @@ func (a *TaskAPIService) ProjectsProjectViewsViewBucketsBucketTasksPostExecute(r
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -997,8 +1002,8 @@ func (a *TaskAPIService) ProjectsProjectViewsViewBucketsBucketTasksPostExecute(r
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1016,17 +1021,17 @@ func (a *TaskAPIService) ProjectsProjectViewsViewBucketsBucketTasksPostExecute(r
 }
 
 type ApiTasksAllGetRequest struct {
-	ctx context.Context
-	ApiService *TaskAPIService
-	page *int32
-	perPage *int32
-	s *string
-	sortBy *string
-	orderBy *string
-	filter *string
-	filterTimezone *string
+	ctx                context.Context
+	ApiService         *TaskAPIService
+	page               *int32
+	perPage            *int32
+	s                  *string
+	sortBy             *string
+	orderBy            *string
+	filter             *string
+	filterTimezone     *string
 	filterIncludeNulls *string
-	expand *string
+	expand             *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -1065,7 +1070,7 @@ func (r ApiTasksAllGetRequest) Filter(filter string) ApiTasksAllGetRequest {
 	return r
 }
 
-// The time zone which should be used for date match (statements like 
+// The time zone which should be used for date match (statements like
 func (r ApiTasksAllGetRequest) FilterTimezone(filterTimezone string) ApiTasksAllGetRequest {
 	r.filterTimezone = &filterTimezone
 	return r
@@ -1092,24 +1097,25 @@ TasksAllGet Get tasks
 
 Returns all tasks on any project the user has access to.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTasksAllGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTasksAllGetRequest
 */
 func (a *TaskAPIService) TasksAllGet(ctx context.Context) ApiTasksAllGetRequest {
 	return ApiTasksAllGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsTask
+//
+//	@return []ModelsTask
 func (a *TaskAPIService) TasksAllGetExecute(r ApiTasksAllGetRequest) ([]ModelsTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksAllGet")
@@ -1210,8 +1216,8 @@ func (a *TaskAPIService) TasksAllGetExecute(r ApiTasksAllGetRequest) ([]ModelsTa
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1229,9 +1235,9 @@ func (a *TaskAPIService) TasksAllGetExecute(r ApiTasksAllGetRequest) ([]ModelsTa
 }
 
 type ApiTasksBulkPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	task *ModelsBulkTask
+	task       *ModelsBulkTask
 }
 
 // The task object. Looks like a normal task, the only difference is it uses an array of project_ids to update.
@@ -1249,24 +1255,25 @@ TasksBulkPost Update a bunch of tasks at once
 
 Updates a bunch of tasks at once. This includes marking them as done. Note: although you could supply another ID, it will be ignored. Use task_ids instead.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTasksBulkPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTasksBulkPostRequest
 */
 func (a *TaskAPIService) TasksBulkPost(ctx context.Context) ApiTasksBulkPostRequest {
 	return ApiTasksBulkPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTask
+//
+//	@return ModelsTask
 func (a *TaskAPIService) TasksBulkPostExecute(r ApiTasksBulkPostRequest) (*ModelsTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTask
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksBulkPost")
@@ -1345,8 +1352,8 @@ func (a *TaskAPIService) TasksBulkPostExecute(r ApiTasksBulkPostRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1356,8 +1363,8 @@ func (a *TaskAPIService) TasksBulkPostExecute(r ApiTasksBulkPostRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1367,8 +1374,8 @@ func (a *TaskAPIService) TasksBulkPostExecute(r ApiTasksBulkPostRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1386,9 +1393,9 @@ func (a *TaskAPIService) TasksBulkPostExecute(r ApiTasksBulkPostRequest) (*Model
 }
 
 type ApiTasksIdAttachmentsAttachmentIDDeleteRequest struct {
-	ctx context.Context
-	ApiService *TaskAPIService
-	id int32
+	ctx          context.Context
+	ApiService   *TaskAPIService
+	id           int32
 	attachmentID int32
 }
 
@@ -1401,28 +1408,29 @@ TasksIdAttachmentsAttachmentIDDelete Delete an attachment
 
 Delete an attachment.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Task ID
- @param attachmentID Attachment ID
- @return ApiTasksIdAttachmentsAttachmentIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Task ID
+	@param attachmentID Attachment ID
+	@return ApiTasksIdAttachmentsAttachmentIDDeleteRequest
 */
 func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDDelete(ctx context.Context, id int32, attachmentID int32) ApiTasksIdAttachmentsAttachmentIDDeleteRequest {
 	return ApiTasksIdAttachmentsAttachmentIDDeleteRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:   a,
+		ctx:          ctx,
+		id:           id,
 		attachmentID: attachmentID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDDeleteExecute(r ApiTasksIdAttachmentsAttachmentIDDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdAttachmentsAttachmentIDDelete")
@@ -1498,8 +1506,8 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDDeleteExecute(r ApiTasksI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1509,8 +1517,8 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDDeleteExecute(r ApiTasksI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1520,8 +1528,8 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDDeleteExecute(r ApiTasksI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1539,11 +1547,11 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDDeleteExecute(r ApiTasksI
 }
 
 type ApiTasksIdAttachmentsAttachmentIDGetRequest struct {
-	ctx context.Context
-	ApiService *TaskAPIService
-	id int32
+	ctx          context.Context
+	ApiService   *TaskAPIService
+	id           int32
 	attachmentID int32
-	previewSize *string
+	previewSize  *string
 }
 
 // The size of the preview image. Can be sm &#x3D; 100px, md &#x3D; 200px, lg &#x3D; 400px or xl &#x3D; 800px. If provided, a preview image will be returned if the attachment is an image.
@@ -1561,28 +1569,29 @@ TasksIdAttachmentsAttachmentIDGet Get one attachment.
 
 Get one attachment for download. **Returns json on error.**
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Task ID
- @param attachmentID Attachment ID
- @return ApiTasksIdAttachmentsAttachmentIDGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Task ID
+	@param attachmentID Attachment ID
+	@return ApiTasksIdAttachmentsAttachmentIDGetRequest
 */
 func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDGet(ctx context.Context, id int32, attachmentID int32) ApiTasksIdAttachmentsAttachmentIDGetRequest {
 	return ApiTasksIdAttachmentsAttachmentIDGetRequest{
-		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ApiService:   a,
+		ctx:          ctx,
+		id:           id,
 		attachmentID: attachmentID,
 	}
 }
 
 // Execute executes the request
-//  @return *os.File
+//
+//	@return *os.File
 func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDGetExecute(r ApiTasksIdAttachmentsAttachmentIDGetRequest) (*os.File, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *os.File
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *os.File
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdAttachmentsAttachmentIDGet")
@@ -1661,8 +1670,8 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDGetExecute(r ApiTasksIdAt
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1672,8 +1681,8 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDGetExecute(r ApiTasksIdAt
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1683,8 +1692,8 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDGetExecute(r ApiTasksIdAt
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1702,11 +1711,11 @@ func (a *TaskAPIService) TasksIdAttachmentsAttachmentIDGetExecute(r ApiTasksIdAt
 }
 
 type ApiTasksIdAttachmentsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	page *int32
-	perPage *int32
+	id         int32
+	page       *int32
+	perPage    *int32
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -1730,26 +1739,27 @@ TasksIdAttachmentsGet Get  all attachments for one task.
 
 Get all task attachments for one task.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Task ID
- @return ApiTasksIdAttachmentsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Task ID
+	@return ApiTasksIdAttachmentsGetRequest
 */
 func (a *TaskAPIService) TasksIdAttachmentsGet(ctx context.Context, id int32) ApiTasksIdAttachmentsGetRequest {
 	return ApiTasksIdAttachmentsGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsTaskAttachment
+//
+//	@return []ModelsTaskAttachment
 func (a *TaskAPIService) TasksIdAttachmentsGetExecute(r ApiTasksIdAttachmentsGetRequest) ([]ModelsTaskAttachment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsTaskAttachment
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsTaskAttachment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdAttachmentsGet")
@@ -1830,8 +1840,8 @@ func (a *TaskAPIService) TasksIdAttachmentsGetExecute(r ApiTasksIdAttachmentsGet
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1841,8 +1851,8 @@ func (a *TaskAPIService) TasksIdAttachmentsGetExecute(r ApiTasksIdAttachmentsGet
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1852,8 +1862,8 @@ func (a *TaskAPIService) TasksIdAttachmentsGetExecute(r ApiTasksIdAttachmentsGet
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1871,10 +1881,10 @@ func (a *TaskAPIService) TasksIdAttachmentsGetExecute(r ApiTasksIdAttachmentsGet
 }
 
 type ApiTasksIdAttachmentsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	files *string
+	id         int32
+	files      *string
 }
 
 // The file, as multipart form file. You can pass multiple.
@@ -1892,26 +1902,27 @@ TasksIdAttachmentsPut Upload a task attachment
 
 Upload a task attachment. You can pass multiple files with the files form param.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Task ID
- @return ApiTasksIdAttachmentsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Task ID
+	@return ApiTasksIdAttachmentsPutRequest
 */
 func (a *TaskAPIService) TasksIdAttachmentsPut(ctx context.Context, id int32) ApiTasksIdAttachmentsPutRequest {
 	return ApiTasksIdAttachmentsPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TaskAPIService) TasksIdAttachmentsPutExecute(r ApiTasksIdAttachmentsPutRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdAttachmentsPut")
@@ -1990,8 +2001,8 @@ func (a *TaskAPIService) TasksIdAttachmentsPutExecute(r ApiTasksIdAttachmentsPut
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2001,8 +2012,8 @@ func (a *TaskAPIService) TasksIdAttachmentsPutExecute(r ApiTasksIdAttachmentsPut
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2012,8 +2023,8 @@ func (a *TaskAPIService) TasksIdAttachmentsPutExecute(r ApiTasksIdAttachmentsPut
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2031,9 +2042,9 @@ func (a *TaskAPIService) TasksIdAttachmentsPutExecute(r ApiTasksIdAttachmentsPut
 }
 
 type ApiTasksIdDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiTasksIdDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -2045,26 +2056,27 @@ TasksIdDelete Delete a task
 
 Deletes a task from a project. This does not mean "mark it done".
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Task ID
- @return ApiTasksIdDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Task ID
+	@return ApiTasksIdDeleteRequest
 */
 func (a *TaskAPIService) TasksIdDelete(ctx context.Context, id int32) ApiTasksIdDeleteRequest {
 	return ApiTasksIdDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TaskAPIService) TasksIdDeleteExecute(r ApiTasksIdDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdDelete")
@@ -2139,8 +2151,8 @@ func (a *TaskAPIService) TasksIdDeleteExecute(r ApiTasksIdDeleteRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -2150,8 +2162,8 @@ func (a *TaskAPIService) TasksIdDeleteExecute(r ApiTasksIdDeleteRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2161,8 +2173,8 @@ func (a *TaskAPIService) TasksIdDeleteExecute(r ApiTasksIdDeleteRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2180,9 +2192,9 @@ func (a *TaskAPIService) TasksIdDeleteExecute(r ApiTasksIdDeleteRequest) (*Model
 }
 
 type ApiTasksIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiTasksIdGetRequest) Execute() (*ModelsTask, *http.Response, error) {
@@ -2194,26 +2206,27 @@ TasksIdGet Get one task
 
 Returns one task by its ID
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The task ID
- @return ApiTasksIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The task ID
+	@return ApiTasksIdGetRequest
 */
 func (a *TaskAPIService) TasksIdGet(ctx context.Context, id int32) ApiTasksIdGetRequest {
 	return ApiTasksIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTask
+//
+//	@return ModelsTask
 func (a *TaskAPIService) TasksIdGetExecute(r ApiTasksIdGetRequest) (*ModelsTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTask
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdGet")
@@ -2288,8 +2301,8 @@ func (a *TaskAPIService) TasksIdGetExecute(r ApiTasksIdGetRequest) (*ModelsTask,
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2299,8 +2312,8 @@ func (a *TaskAPIService) TasksIdGetExecute(r ApiTasksIdGetRequest) (*ModelsTask,
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2318,10 +2331,10 @@ func (a *TaskAPIService) TasksIdGetExecute(r ApiTasksIdGetRequest) (*ModelsTask,
 }
 
 type ApiTasksIdPositionPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	view *ModelsTaskPosition
+	id         int32
+	view       *ModelsTaskPosition
 }
 
 // The task position with updated values you want to change.
@@ -2339,26 +2352,27 @@ TasksIdPositionPost Updates a task position
 
 Updates a task position.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Task ID
- @return ApiTasksIdPositionPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Task ID
+	@return ApiTasksIdPositionPostRequest
 */
 func (a *TaskAPIService) TasksIdPositionPost(ctx context.Context, id int32) ApiTasksIdPositionPostRequest {
 	return ApiTasksIdPositionPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskPosition
+//
+//	@return ModelsTaskPosition
 func (a *TaskAPIService) TasksIdPositionPostExecute(r ApiTasksIdPositionPostRequest) (*ModelsTaskPosition, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskPosition
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskPosition
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdPositionPost")
@@ -2438,8 +2452,8 @@ func (a *TaskAPIService) TasksIdPositionPostExecute(r ApiTasksIdPositionPostRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2449,8 +2463,8 @@ func (a *TaskAPIService) TasksIdPositionPostExecute(r ApiTasksIdPositionPostRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2468,10 +2482,10 @@ func (a *TaskAPIService) TasksIdPositionPostExecute(r ApiTasksIdPositionPostRequ
 }
 
 type ApiTasksIdPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	id int32
-	task *ModelsTask
+	id         int32
+	task       *ModelsTask
 }
 
 // The task object
@@ -2489,26 +2503,27 @@ TasksIdPost Update a task
 
 Updates a task. This includes marking it as done. Assignees you pass will be updated, see their individual endpoints for more details on how this is done. To update labels, see the description of the endpoint.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id The Task ID
- @return ApiTasksIdPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id The Task ID
+	@return ApiTasksIdPostRequest
 */
 func (a *TaskAPIService) TasksIdPost(ctx context.Context, id int32) ApiTasksIdPostRequest {
 	return ApiTasksIdPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTask
+//
+//	@return ModelsTask
 func (a *TaskAPIService) TasksIdPostExecute(r ApiTasksIdPostRequest) (*ModelsTask, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTask
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTask
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksIdPost")
@@ -2588,8 +2603,8 @@ func (a *TaskAPIService) TasksIdPostExecute(r ApiTasksIdPostRequest) (*ModelsTas
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -2599,8 +2614,8 @@ func (a *TaskAPIService) TasksIdPostExecute(r ApiTasksIdPostRequest) (*ModelsTas
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2610,8 +2625,8 @@ func (a *TaskAPIService) TasksIdPostExecute(r ApiTasksIdPostRequest) (*ModelsTas
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2629,10 +2644,10 @@ func (a *TaskAPIService) TasksIdPostExecute(r ApiTasksIdPostRequest) (*ModelsTas
 }
 
 type ApiTasksTaskIDCommentsCommentIDDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	taskID int32
-	commentID int32
+	taskID     int32
+	commentID  int32
 }
 
 func (r ApiTasksTaskIDCommentsCommentIDDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -2644,28 +2659,29 @@ TasksTaskIDCommentsCommentIDDelete Remove a task comment
 
 Remove a task comment. The user doing this need to have at least write access to the task this comment belongs to.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @param commentID Comment ID
- @return ApiTasksTaskIDCommentsCommentIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@param commentID Comment ID
+	@return ApiTasksTaskIDCommentsCommentIDDeleteRequest
 */
 func (a *TaskAPIService) TasksTaskIDCommentsCommentIDDelete(ctx context.Context, taskID int32, commentID int32) ApiTasksTaskIDCommentsCommentIDDeleteRequest {
 	return ApiTasksTaskIDCommentsCommentIDDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
-		commentID: commentID,
+		ctx:        ctx,
+		taskID:     taskID,
+		commentID:  commentID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TaskAPIService) TasksTaskIDCommentsCommentIDDeleteExecute(r ApiTasksTaskIDCommentsCommentIDDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksTaskIDCommentsCommentIDDelete")
@@ -2741,8 +2757,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDDeleteExecute(r ApiTasksTas
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2752,8 +2768,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDDeleteExecute(r ApiTasksTas
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2763,8 +2779,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDDeleteExecute(r ApiTasksTas
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2782,10 +2798,10 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDDeleteExecute(r ApiTasksTas
 }
 
 type ApiTasksTaskIDCommentsCommentIDGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	taskID int32
-	commentID int32
+	taskID     int32
+	commentID  int32
 }
 
 func (r ApiTasksTaskIDCommentsCommentIDGetRequest) Execute() (*ModelsTaskComment, *http.Response, error) {
@@ -2797,28 +2813,29 @@ TasksTaskIDCommentsCommentIDGet Remove a task comment
 
 Remove a task comment. The user doing this need to have at least read access to the task this comment belongs to.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @param commentID Comment ID
- @return ApiTasksTaskIDCommentsCommentIDGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@param commentID Comment ID
+	@return ApiTasksTaskIDCommentsCommentIDGetRequest
 */
 func (a *TaskAPIService) TasksTaskIDCommentsCommentIDGet(ctx context.Context, taskID int32, commentID int32) ApiTasksTaskIDCommentsCommentIDGetRequest {
 	return ApiTasksTaskIDCommentsCommentIDGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
-		commentID: commentID,
+		ctx:        ctx,
+		taskID:     taskID,
+		commentID:  commentID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskComment
+//
+//	@return ModelsTaskComment
 func (a *TaskAPIService) TasksTaskIDCommentsCommentIDGetExecute(r ApiTasksTaskIDCommentsCommentIDGetRequest) (*ModelsTaskComment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskComment
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskComment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksTaskIDCommentsCommentIDGet")
@@ -2894,8 +2911,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDGetExecute(r ApiTasksTaskID
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2905,8 +2922,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDGetExecute(r ApiTasksTaskID
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2916,8 +2933,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDGetExecute(r ApiTasksTaskID
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2935,10 +2952,10 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDGetExecute(r ApiTasksTaskID
 }
 
 type ApiTasksTaskIDCommentsCommentIDPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	taskID int32
-	commentID int32
+	taskID     int32
+	commentID  int32
 }
 
 func (r ApiTasksTaskIDCommentsCommentIDPostRequest) Execute() (*ModelsTaskComment, *http.Response, error) {
@@ -2950,28 +2967,29 @@ TasksTaskIDCommentsCommentIDPost Update an existing task comment
 
 Update an existing task comment. The user doing this need to have at least write access to the task this comment belongs to.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @param commentID Comment ID
- @return ApiTasksTaskIDCommentsCommentIDPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@param commentID Comment ID
+	@return ApiTasksTaskIDCommentsCommentIDPostRequest
 */
 func (a *TaskAPIService) TasksTaskIDCommentsCommentIDPost(ctx context.Context, taskID int32, commentID int32) ApiTasksTaskIDCommentsCommentIDPostRequest {
 	return ApiTasksTaskIDCommentsCommentIDPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
-		commentID: commentID,
+		ctx:        ctx,
+		taskID:     taskID,
+		commentID:  commentID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskComment
+//
+//	@return ModelsTaskComment
 func (a *TaskAPIService) TasksTaskIDCommentsCommentIDPostExecute(r ApiTasksTaskIDCommentsCommentIDPostRequest) (*ModelsTaskComment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskComment
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskComment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksTaskIDCommentsCommentIDPost")
@@ -3047,8 +3065,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDPostExecute(r ApiTasksTaskI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -3058,8 +3076,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDPostExecute(r ApiTasksTaskI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3069,8 +3087,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDPostExecute(r ApiTasksTaskI
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3088,9 +3106,9 @@ func (a *TaskAPIService) TasksTaskIDCommentsCommentIDPostExecute(r ApiTasksTaskI
 }
 
 type ApiTasksTaskIDCommentsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	taskID int32
+	taskID     int32
 }
 
 func (r ApiTasksTaskIDCommentsGetRequest) Execute() ([]ModelsTaskComment, *http.Response, error) {
@@ -3102,26 +3120,27 @@ TasksTaskIDCommentsGet Get all task comments
 
 Get all task comments. The user doing this need to have at least read access to the task.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @return ApiTasksTaskIDCommentsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@return ApiTasksTaskIDCommentsGetRequest
 */
 func (a *TaskAPIService) TasksTaskIDCommentsGet(ctx context.Context, taskID int32) ApiTasksTaskIDCommentsGetRequest {
 	return ApiTasksTaskIDCommentsGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ctx:        ctx,
+		taskID:     taskID,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsTaskComment
+//
+//	@return []ModelsTaskComment
 func (a *TaskAPIService) TasksTaskIDCommentsGetExecute(r ApiTasksTaskIDCommentsGetRequest) ([]ModelsTaskComment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsTaskComment
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsTaskComment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksTaskIDCommentsGet")
@@ -3196,8 +3215,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsGetExecute(r ApiTasksTaskIDCommentsG
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3215,10 +3234,10 @@ func (a *TaskAPIService) TasksTaskIDCommentsGetExecute(r ApiTasksTaskIDCommentsG
 }
 
 type ApiTasksTaskIDCommentsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	taskID int32
-	relation *ModelsTaskComment
+	taskID     int32
+	relation   *ModelsTaskComment
 }
 
 // The task comment object
@@ -3236,26 +3255,27 @@ TasksTaskIDCommentsPut Create a new task comment
 
 Create a new task comment. The user doing this need to have at least write access to the task this comment should belong to.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @return ApiTasksTaskIDCommentsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@return ApiTasksTaskIDCommentsPutRequest
 */
 func (a *TaskAPIService) TasksTaskIDCommentsPut(ctx context.Context, taskID int32) ApiTasksTaskIDCommentsPutRequest {
 	return ApiTasksTaskIDCommentsPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ctx:        ctx,
+		taskID:     taskID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskComment
+//
+//	@return ModelsTaskComment
 func (a *TaskAPIService) TasksTaskIDCommentsPutExecute(r ApiTasksTaskIDCommentsPutRequest) (*ModelsTaskComment, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskComment
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskComment
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksTaskIDCommentsPut")
@@ -3335,8 +3355,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsPutExecute(r ApiTasksTaskIDCommentsP
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3346,8 +3366,8 @@ func (a *TaskAPIService) TasksTaskIDCommentsPutExecute(r ApiTasksTaskIDCommentsP
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3365,10 +3385,10 @@ func (a *TaskAPIService) TasksTaskIDCommentsPutExecute(r ApiTasksTaskIDCommentsP
 }
 
 type ApiTasksTaskIDRelationsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TaskAPIService
-	taskID int32
-	relation *ModelsTaskRelation
+	taskID     int32
+	relation   *ModelsTaskRelation
 }
 
 // The relation object
@@ -3386,26 +3406,27 @@ TasksTaskIDRelationsPut Create a new relation between two tasks
 
 Creates a new relation between two tasks. The user needs to have update rights on the base task and at least read rights on the other task. Both tasks do not need to be on the same project. Take a look at the docs for available task relation kinds.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @return ApiTasksTaskIDRelationsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@return ApiTasksTaskIDRelationsPutRequest
 */
 func (a *TaskAPIService) TasksTaskIDRelationsPut(ctx context.Context, taskID int32) ApiTasksTaskIDRelationsPutRequest {
 	return ApiTasksTaskIDRelationsPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ctx:        ctx,
+		taskID:     taskID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTaskRelation
+//
+//	@return ModelsTaskRelation
 func (a *TaskAPIService) TasksTaskIDRelationsPutExecute(r ApiTasksTaskIDRelationsPutRequest) (*ModelsTaskRelation, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTaskRelation
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTaskRelation
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksTaskIDRelationsPut")
@@ -3485,8 +3506,8 @@ func (a *TaskAPIService) TasksTaskIDRelationsPutExecute(r ApiTasksTaskIDRelation
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3496,8 +3517,8 @@ func (a *TaskAPIService) TasksTaskIDRelationsPutExecute(r ApiTasksTaskIDRelation
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3515,12 +3536,12 @@ func (a *TaskAPIService) TasksTaskIDRelationsPutExecute(r ApiTasksTaskIDRelation
 }
 
 type ApiTasksTaskIDRelationsRelationKindOtherTaskIDDeleteRequest struct {
-	ctx context.Context
-	ApiService *TaskAPIService
-	taskID int32
+	ctx          context.Context
+	ApiService   *TaskAPIService
+	taskID       int32
 	relationKind string
-	otherTaskID int32
-	relation *ModelsTaskRelation
+	otherTaskID  int32
+	relation     *ModelsTaskRelation
 }
 
 // The relation object
@@ -3536,30 +3557,31 @@ func (r ApiTasksTaskIDRelationsRelationKindOtherTaskIDDeleteRequest) Execute() (
 /*
 TasksTaskIDRelationsRelationKindOtherTaskIDDelete Remove a task relation
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param taskID Task ID
- @param relationKind The kind of the relation. See the TaskRelation type for more info.
- @param otherTaskID The id of the other task.
- @return ApiTasksTaskIDRelationsRelationKindOtherTaskIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param taskID Task ID
+	@param relationKind The kind of the relation. See the TaskRelation type for more info.
+	@param otherTaskID The id of the other task.
+	@return ApiTasksTaskIDRelationsRelationKindOtherTaskIDDeleteRequest
 */
 func (a *TaskAPIService) TasksTaskIDRelationsRelationKindOtherTaskIDDelete(ctx context.Context, taskID int32, relationKind string, otherTaskID int32) ApiTasksTaskIDRelationsRelationKindOtherTaskIDDeleteRequest {
 	return ApiTasksTaskIDRelationsRelationKindOtherTaskIDDeleteRequest{
-		ApiService: a,
-		ctx: ctx,
-		taskID: taskID,
+		ApiService:   a,
+		ctx:          ctx,
+		taskID:       taskID,
 		relationKind: relationKind,
-		otherTaskID: otherTaskID,
+		otherTaskID:  otherTaskID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TaskAPIService) TasksTaskIDRelationsRelationKindOtherTaskIDDeleteExecute(r ApiTasksTaskIDRelationsRelationKindOtherTaskIDDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TaskAPIService.TasksTaskIDRelationsRelationKindOtherTaskIDDelete")
@@ -3641,8 +3663,8 @@ func (a *TaskAPIService) TasksTaskIDRelationsRelationKindOtherTaskIDDeleteExecut
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -3652,8 +3674,8 @@ func (a *TaskAPIService) TasksTaskIDRelationsRelationKindOtherTaskIDDeleteExecut
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3663,8 +3685,8 @@ func (a *TaskAPIService) TasksTaskIDRelationsRelationKindOtherTaskIDDeleteExecut
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

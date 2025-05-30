@@ -27,7 +27,7 @@ type ModelsUserWithRight struct {
 	// The unique, numeric id of this user.
 	Id *int32 `json:"id,omitempty"`
 	// The full name of the user.
-	Name *string `json:"name,omitempty"`
+	Name  *string      `json:"name,omitempty"`
 	Right *ModelsRight `json:"right,omitempty"`
 	// A timestamp when this task was last updated. You cannot change this value.
 	Updated *string `json:"updated,omitempty"`
@@ -277,7 +277,7 @@ func (o *ModelsUserWithRight) SetUsername(v string) {
 }
 
 func (o ModelsUserWithRight) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -345,5 +345,3 @@ func (v *NullableModelsUserWithRight) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

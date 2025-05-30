@@ -21,11 +21,11 @@ var _ MappedNullable = &BackgroundImage{}
 // BackgroundImage struct for BackgroundImage
 type BackgroundImage struct {
 	BlurHash *string `json:"blur_hash,omitempty"`
-	Id *string `json:"id,omitempty"`
+	Id       *string `json:"id,omitempty"`
 	// This can be used to supply extra information from an image provider to clients
-	Info map[string]interface{} `json:"info,omitempty"`
-	Thumb *string `json:"thumb,omitempty"`
-	Url *string `json:"url,omitempty"`
+	Info  map[string]interface{} `json:"info,omitempty"`
+	Thumb *string                `json:"thumb,omitempty"`
+	Url   *string                `json:"url,omitempty"`
 }
 
 // NewBackgroundImage instantiates a new BackgroundImage object
@@ -206,7 +206,7 @@ func (o *BackgroundImage) SetUrl(v string) {
 }
 
 func (o BackgroundImage) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -268,5 +268,3 @@ func (v *NullableBackgroundImage) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

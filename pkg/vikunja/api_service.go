@@ -19,12 +19,11 @@ import (
 	"net/url"
 )
 
-
 // ServiceAPIService ServiceAPI service
 type ServiceAPIService service
 
 type ApiInfoGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *ServiceAPIService
 }
 
@@ -37,24 +36,25 @@ InfoGet Info
 
 Returns the version, frontendurl, motd and various settings of Vikunja
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiInfoGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiInfoGetRequest
 */
 func (a *ServiceAPIService) InfoGet(ctx context.Context) ApiInfoGetRequest {
 	return ApiInfoGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return V1VikunjaInfos
+//
+//	@return V1VikunjaInfos
 func (a *ServiceAPIService) InfoGetExecute(r ApiInfoGetRequest) (*V1VikunjaInfos, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *V1VikunjaInfos
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *V1VikunjaInfos
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ServiceAPIService.InfoGet")

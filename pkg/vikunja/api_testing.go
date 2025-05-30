@@ -20,14 +20,13 @@ import (
 	"strings"
 )
 
-
 // TestingAPIService TestingAPI service
 type TestingAPIService service
 
 type ApiTestTablePatchRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TestingAPIService
-	table string
+	table      string
 }
 
 func (r ApiTestTablePatchRequest) Execute() ([]UserUser, *http.Response, error) {
@@ -39,26 +38,27 @@ TestTablePatch Reset the db to a defined state
 
 Fills the specified table with the content provided in the payload. You need to enable the testing endpoint before doing this and provide the `Authorization: <token>` secret when making requests to this endpoint. See docs for more details.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param table The table to reset
- @return ApiTestTablePatchRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param table The table to reset
+	@return ApiTestTablePatchRequest
 */
 func (a *TestingAPIService) TestTablePatch(ctx context.Context, table string) ApiTestTablePatchRequest {
 	return ApiTestTablePatchRequest{
 		ApiService: a,
-		ctx: ctx,
-		table: table,
+		ctx:        ctx,
+		table:      table,
 	}
 }
 
 // Execute executes the request
-//  @return []UserUser
+//
+//	@return []UserUser
 func (a *TestingAPIService) TestTablePatchExecute(r ApiTestTablePatchRequest) ([]UserUser, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPatch
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []UserUser
+		localVarHTTPMethod  = http.MethodPatch
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []UserUser
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TestingAPIService.TestTablePatch")
@@ -119,8 +119,8 @@ func (a *TestingAPIService) TestTablePatchExecute(r ApiTestTablePatchRequest) ([
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

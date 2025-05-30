@@ -20,16 +20,15 @@ import (
 	"strings"
 )
 
-
 // TeamAPIService TeamAPI service
 type TeamAPIService service
 
 type ApiTeamsGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	page *int32
-	perPage *int32
-	s *string
+	page       *int32
+	perPage    *int32
+	s          *string
 }
 
 // The page number. Used for pagination. If not provided, the first page of results is returned.
@@ -59,24 +58,25 @@ TeamsGet Get teams
 
 Returns all teams the current user is part of.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTeamsGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTeamsGetRequest
 */
 func (a *TeamAPIService) TeamsGet(ctx context.Context) ApiTeamsGetRequest {
 	return ApiTeamsGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []ModelsTeam
+//
+//	@return []ModelsTeam
 func (a *TeamAPIService) TeamsGetExecute(r ApiTeamsGetRequest) ([]ModelsTeam, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []ModelsTeam
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ModelsTeam
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsGet")
@@ -159,8 +159,8 @@ func (a *TeamAPIService) TeamsGetExecute(r ApiTeamsGetRequest) ([]ModelsTeam, *h
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -178,9 +178,9 @@ func (a *TeamAPIService) TeamsGetExecute(r ApiTeamsGetRequest) ([]ModelsTeam, *h
 }
 
 type ApiTeamsIdDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiTeamsIdDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -192,26 +192,27 @@ TeamsIdDelete Deletes a team
 
 Delets a team. This will also remove the access for all users in that team.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Team ID
- @return ApiTeamsIdDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Team ID
+	@return ApiTeamsIdDeleteRequest
 */
 func (a *TeamAPIService) TeamsIdDelete(ctx context.Context, id int32) ApiTeamsIdDeleteRequest {
 	return ApiTeamsIdDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TeamAPIService) TeamsIdDeleteExecute(r ApiTeamsIdDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsIdDelete")
@@ -286,8 +287,8 @@ func (a *TeamAPIService) TeamsIdDeleteExecute(r ApiTeamsIdDeleteRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -297,8 +298,8 @@ func (a *TeamAPIService) TeamsIdDeleteExecute(r ApiTeamsIdDeleteRequest) (*Model
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -316,9 +317,9 @@ func (a *TeamAPIService) TeamsIdDeleteExecute(r ApiTeamsIdDeleteRequest) (*Model
 }
 
 type ApiTeamsIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiTeamsIdGetRequest) Execute() (*ModelsTeam, *http.Response, error) {
@@ -330,26 +331,27 @@ TeamsIdGet Gets one team
 
 Returns a team by its ID.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Team ID
- @return ApiTeamsIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Team ID
+	@return ApiTeamsIdGetRequest
 */
 func (a *TeamAPIService) TeamsIdGet(ctx context.Context, id int32) ApiTeamsIdGetRequest {
 	return ApiTeamsIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTeam
+//
+//	@return ModelsTeam
 func (a *TeamAPIService) TeamsIdGetExecute(r ApiTeamsIdGetRequest) (*ModelsTeam, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTeam
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTeam
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsIdGet")
@@ -424,8 +426,8 @@ func (a *TeamAPIService) TeamsIdGetExecute(r ApiTeamsIdGetRequest) (*ModelsTeam,
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -435,8 +437,8 @@ func (a *TeamAPIService) TeamsIdGetExecute(r ApiTeamsIdGetRequest) (*ModelsTeam,
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -454,10 +456,10 @@ func (a *TeamAPIService) TeamsIdGetExecute(r ApiTeamsIdGetRequest) (*ModelsTeam,
 }
 
 type ApiTeamsIdMembersPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	id int32
-	team *ModelsTeamMember
+	id         int32
+	team       *ModelsTeamMember
 }
 
 // The user to be added to a team.
@@ -475,26 +477,27 @@ TeamsIdMembersPut Add a user to a team
 
 Add a user to a team.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Team ID
- @return ApiTeamsIdMembersPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Team ID
+	@return ApiTeamsIdMembersPutRequest
 */
 func (a *TeamAPIService) TeamsIdMembersPut(ctx context.Context, id int32) ApiTeamsIdMembersPutRequest {
 	return ApiTeamsIdMembersPutRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTeamMember
+//
+//	@return ModelsTeamMember
 func (a *TeamAPIService) TeamsIdMembersPutExecute(r ApiTeamsIdMembersPutRequest) (*ModelsTeamMember, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTeamMember
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTeamMember
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsIdMembersPut")
@@ -574,8 +577,8 @@ func (a *TeamAPIService) TeamsIdMembersPutExecute(r ApiTeamsIdMembersPutRequest)
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -585,8 +588,8 @@ func (a *TeamAPIService) TeamsIdMembersPutExecute(r ApiTeamsIdMembersPutRequest)
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -596,8 +599,8 @@ func (a *TeamAPIService) TeamsIdMembersPutExecute(r ApiTeamsIdMembersPutRequest)
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -615,10 +618,10 @@ func (a *TeamAPIService) TeamsIdMembersPutExecute(r ApiTeamsIdMembersPutRequest)
 }
 
 type ApiTeamsIdMembersUserIDAdminPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	id int32
-	userID int32
+	id         int32
+	userID     int32
 }
 
 func (r ApiTeamsIdMembersUserIDAdminPostRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -630,28 +633,29 @@ TeamsIdMembersUserIDAdminPost Toggle a team member's admin status
 
 If a user is team admin, this will make them member and vise-versa.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Team ID
- @param userID User ID
- @return ApiTeamsIdMembersUserIDAdminPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Team ID
+	@param userID User ID
+	@return ApiTeamsIdMembersUserIDAdminPostRequest
 */
 func (a *TeamAPIService) TeamsIdMembersUserIDAdminPost(ctx context.Context, id int32, userID int32) ApiTeamsIdMembersUserIDAdminPostRequest {
 	return ApiTeamsIdMembersUserIDAdminPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		userID: userID,
+		ctx:        ctx,
+		id:         id,
+		userID:     userID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TeamAPIService) TeamsIdMembersUserIDAdminPostExecute(r ApiTeamsIdMembersUserIDAdminPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsIdMembersUserIDAdminPost")
@@ -727,8 +731,8 @@ func (a *TeamAPIService) TeamsIdMembersUserIDAdminPostExecute(r ApiTeamsIdMember
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -746,10 +750,10 @@ func (a *TeamAPIService) TeamsIdMembersUserIDAdminPostExecute(r ApiTeamsIdMember
 }
 
 type ApiTeamsIdMembersUserIDDeleteRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	id int32
-	userID int32
+	id         int32
+	userID     int32
 }
 
 func (r ApiTeamsIdMembersUserIDDeleteRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -761,28 +765,29 @@ TeamsIdMembersUserIDDelete Remove a user from a team
 
 Remove a user from a team. This will also revoke any access this user might have via that team. A user can remove themselves from the team if they are not the last user in the team.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Team ID
- @param userID User ID
- @return ApiTeamsIdMembersUserIDDeleteRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Team ID
+	@param userID User ID
+	@return ApiTeamsIdMembersUserIDDeleteRequest
 */
 func (a *TeamAPIService) TeamsIdMembersUserIDDelete(ctx context.Context, id int32, userID int32) ApiTeamsIdMembersUserIDDeleteRequest {
 	return ApiTeamsIdMembersUserIDDeleteRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
-		userID: userID,
+		ctx:        ctx,
+		id:         id,
+		userID:     userID,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *TeamAPIService) TeamsIdMembersUserIDDeleteExecute(r ApiTeamsIdMembersUserIDDeleteRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodDelete
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsIdMembersUserIDDelete")
@@ -858,8 +863,8 @@ func (a *TeamAPIService) TeamsIdMembersUserIDDeleteExecute(r ApiTeamsIdMembersUs
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -877,10 +882,10 @@ func (a *TeamAPIService) TeamsIdMembersUserIDDeleteExecute(r ApiTeamsIdMembersUs
 }
 
 type ApiTeamsIdPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	id int32
-	team *ModelsTeam
+	id         int32
+	team       *ModelsTeam
 }
 
 // The team with updated values you want to update.
@@ -898,26 +903,27 @@ TeamsIdPost Updates a team
 
 Updates a team.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Team ID
- @return ApiTeamsIdPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Team ID
+	@return ApiTeamsIdPostRequest
 */
 func (a *TeamAPIService) TeamsIdPost(ctx context.Context, id int32) ApiTeamsIdPostRequest {
 	return ApiTeamsIdPostRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTeam
+//
+//	@return ModelsTeam
 func (a *TeamAPIService) TeamsIdPostExecute(r ApiTeamsIdPostRequest) (*ModelsTeam, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTeam
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTeam
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsIdPost")
@@ -997,8 +1003,8 @@ func (a *TeamAPIService) TeamsIdPostExecute(r ApiTeamsIdPostRequest) (*ModelsTea
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1008,8 +1014,8 @@ func (a *TeamAPIService) TeamsIdPostExecute(r ApiTeamsIdPostRequest) (*ModelsTea
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1027,9 +1033,9 @@ func (a *TeamAPIService) TeamsIdPostExecute(r ApiTeamsIdPostRequest) (*ModelsTea
 }
 
 type ApiTeamsPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *TeamAPIService
-	team *ModelsTeam
+	team       *ModelsTeam
 }
 
 // The team you want to create.
@@ -1047,24 +1053,25 @@ TeamsPut Creates a new team
 
 Creates a new team.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTeamsPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTeamsPutRequest
 */
 func (a *TeamAPIService) TeamsPut(ctx context.Context) ApiTeamsPutRequest {
 	return ApiTeamsPutRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsTeam
+//
+//	@return ModelsTeam
 func (a *TeamAPIService) TeamsPutExecute(r ApiTeamsPutRequest) (*ModelsTeam, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsTeam
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsTeam
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TeamAPIService.TeamsPut")
@@ -1143,8 +1150,8 @@ func (a *TeamAPIService) TeamsPutExecute(r ApiTeamsPutRequest) (*ModelsTeam, *ht
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1154,8 +1161,8 @@ func (a *TeamAPIService) TeamsPutExecute(r ApiTeamsPutRequest) (*ModelsTeam, *ht
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

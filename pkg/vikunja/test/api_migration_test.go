@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_MigrationAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationMicrosoftTodoAuthGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationMicrosoftTodoAuthGet(context.Background()).Execute()
 
@@ -36,7 +37,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationMicrosoftTodoMigratePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationMicrosoftTodoMigratePost(context.Background()).Execute()
 
@@ -48,7 +49,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationMicrosoftTodoStatusGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationMicrosoftTodoStatusGet(context.Background()).Execute()
 
@@ -60,7 +61,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTicktickMigratePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTicktickMigratePost(context.Background()).Execute()
 
@@ -72,7 +73,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTicktickStatusGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTicktickStatusGet(context.Background()).Execute()
 
@@ -84,7 +85,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTodoistAuthGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTodoistAuthGet(context.Background()).Execute()
 
@@ -96,7 +97,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTodoistMigratePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTodoistMigratePost(context.Background()).Execute()
 
@@ -108,7 +109,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTodoistStatusGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTodoistStatusGet(context.Background()).Execute()
 
@@ -120,7 +121,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTrelloAuthGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTrelloAuthGet(context.Background()).Execute()
 
@@ -132,7 +133,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTrelloMigratePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTrelloMigratePost(context.Background()).Execute()
 
@@ -144,7 +145,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationTrelloStatusGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationTrelloStatusGet(context.Background()).Execute()
 
@@ -156,7 +157,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationVikunjaFileMigratePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationVikunjaFileMigratePost(context.Background()).Execute()
 
@@ -168,7 +169,7 @@ func Test_openapi_MigrationAPIService(t *testing.T) {
 
 	t.Run("Test MigrationAPIService MigrationVikunjaFileStatusGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.MigrationAPI.MigrationVikunjaFileStatusGet(context.Background()).Execute()
 

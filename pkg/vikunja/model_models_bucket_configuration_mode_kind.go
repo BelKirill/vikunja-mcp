@@ -21,7 +21,7 @@ type ModelsBucketConfigurationModeKind int32
 
 // List of models.BucketConfigurationModeKind
 const (
-	BucketConfigurationModeNone ModelsBucketConfigurationModeKind = 0
+	BucketConfigurationModeNone   ModelsBucketConfigurationModeKind = 0
 	BucketConfigurationModeManual ModelsBucketConfigurationModeKind = 1
 	BucketConfigurationModeFilter ModelsBucketConfigurationModeKind = 2
 )
@@ -111,4 +111,3 @@ func (v *NullableModelsBucketConfigurationModeKind) UnmarshalJSON(src []byte) er
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

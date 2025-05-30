@@ -17,17 +17,16 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
 	"os"
+	"strings"
 )
-
 
 // UserAPIService UserAPI service
 type UserAPIService service
 
 type ApiUserConfirmPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx         context.Context
+	ApiService  *UserAPIService
 	credentials *UserEmailConfirm
 }
 
@@ -46,24 +45,25 @@ UserConfirmPost Confirm the email of a new user
 
 Confirms the email of a newly registered user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserConfirmPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserConfirmPostRequest
 */
 func (a *UserAPIService) UserConfirmPost(ctx context.Context) ApiUserConfirmPostRequest {
 	return ApiUserConfirmPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserConfirmPostExecute(r ApiUserConfirmPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserConfirmPost")
@@ -128,8 +128,8 @@ func (a *UserAPIService) UserConfirmPostExecute(r ApiUserConfirmPostRequest) (*M
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -139,8 +139,8 @@ func (a *UserAPIService) UserConfirmPostExecute(r ApiUserConfirmPostRequest) (*M
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -158,8 +158,8 @@ func (a *UserAPIService) UserConfirmPostExecute(r ApiUserConfirmPostRequest) (*M
 }
 
 type ApiUserDeletionCancelPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx         context.Context
+	ApiService  *UserAPIService
 	credentials *V1UserPasswordConfirmation
 }
 
@@ -178,24 +178,25 @@ UserDeletionCancelPost Abort a user deletion request
 
 Aborts an in-progress user deletion.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserDeletionCancelPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserDeletionCancelPostRequest
 */
 func (a *UserAPIService) UserDeletionCancelPost(ctx context.Context) ApiUserDeletionCancelPostRequest {
 	return ApiUserDeletionCancelPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserDeletionCancelPostExecute(r ApiUserDeletionCancelPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserDeletionCancelPost")
@@ -260,8 +261,8 @@ func (a *UserAPIService) UserDeletionCancelPostExecute(r ApiUserDeletionCancelPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -271,8 +272,8 @@ func (a *UserAPIService) UserDeletionCancelPostExecute(r ApiUserDeletionCancelPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -290,8 +291,8 @@ func (a *UserAPIService) UserDeletionCancelPostExecute(r ApiUserDeletionCancelPo
 }
 
 type ApiUserDeletionConfirmPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx         context.Context
+	ApiService  *UserAPIService
 	credentials *V1UserDeletionRequestConfirm
 }
 
@@ -310,24 +311,25 @@ UserDeletionConfirmPost Confirm a user deletion request
 
 Confirms the deletion request of a user sent via email.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserDeletionConfirmPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserDeletionConfirmPostRequest
 */
 func (a *UserAPIService) UserDeletionConfirmPost(ctx context.Context) ApiUserDeletionConfirmPostRequest {
 	return ApiUserDeletionConfirmPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserDeletionConfirmPostExecute(r ApiUserDeletionConfirmPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserDeletionConfirmPost")
@@ -392,8 +394,8 @@ func (a *UserAPIService) UserDeletionConfirmPostExecute(r ApiUserDeletionConfirm
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -403,8 +405,8 @@ func (a *UserAPIService) UserDeletionConfirmPostExecute(r ApiUserDeletionConfirm
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -422,8 +424,8 @@ func (a *UserAPIService) UserDeletionConfirmPostExecute(r ApiUserDeletionConfirm
 }
 
 type ApiUserDeletionRequestPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx         context.Context
+	ApiService  *UserAPIService
 	credentials *V1UserPasswordConfirmation
 }
 
@@ -442,24 +444,25 @@ UserDeletionRequestPost Request the deletion of the user
 
 Requests the deletion of the current user. It will trigger an email which has to be confirmed to start the deletion.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserDeletionRequestPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserDeletionRequestPostRequest
 */
 func (a *UserAPIService) UserDeletionRequestPost(ctx context.Context) ApiUserDeletionRequestPostRequest {
 	return ApiUserDeletionRequestPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserDeletionRequestPostExecute(r ApiUserDeletionRequestPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserDeletionRequestPost")
@@ -524,8 +527,8 @@ func (a *UserAPIService) UserDeletionRequestPostExecute(r ApiUserDeletionRequest
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -535,8 +538,8 @@ func (a *UserAPIService) UserDeletionRequestPostExecute(r ApiUserDeletionRequest
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -554,9 +557,9 @@ func (a *UserAPIService) UserDeletionRequestPostExecute(r ApiUserDeletionRequest
 }
 
 type ApiUserExportDownloadPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	password *V1UserPasswordConfirmation
+	password   *V1UserPasswordConfirmation
 }
 
 // User password to confirm the download.
@@ -572,24 +575,25 @@ func (r ApiUserExportDownloadPostRequest) Execute() (*ModelsMessage, *http.Respo
 /*
 UserExportDownloadPost Download a user data export.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserExportDownloadPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserExportDownloadPostRequest
 */
 func (a *UserAPIService) UserExportDownloadPost(ctx context.Context) ApiUserExportDownloadPostRequest {
 	return ApiUserExportDownloadPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserExportDownloadPostExecute(r ApiUserExportDownloadPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserExportDownloadPost")
@@ -668,8 +672,8 @@ func (a *UserAPIService) UserExportDownloadPostExecute(r ApiUserExportDownloadPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -679,8 +683,8 @@ func (a *UserAPIService) UserExportDownloadPostExecute(r ApiUserExportDownloadPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -698,9 +702,9 @@ func (a *UserAPIService) UserExportDownloadPostExecute(r ApiUserExportDownloadPo
 }
 
 type ApiUserExportRequestPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	password *V1UserPasswordConfirmation
+	password   *V1UserPasswordConfirmation
 }
 
 // User password to confirm the data export request.
@@ -716,24 +720,25 @@ func (r ApiUserExportRequestPostRequest) Execute() (*ModelsMessage, *http.Respon
 /*
 UserExportRequestPost Request a user data export.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserExportRequestPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserExportRequestPostRequest
 */
 func (a *UserAPIService) UserExportRequestPost(ctx context.Context) ApiUserExportRequestPostRequest {
 	return ApiUserExportRequestPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserExportRequestPostExecute(r ApiUserExportRequestPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserExportRequestPost")
@@ -812,8 +817,8 @@ func (a *UserAPIService) UserExportRequestPostExecute(r ApiUserExportRequestPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -823,8 +828,8 @@ func (a *UserAPIService) UserExportRequestPostExecute(r ApiUserExportRequestPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -842,7 +847,7 @@ func (a *UserAPIService) UserExportRequestPostExecute(r ApiUserExportRequestPost
 }
 
 type ApiUserGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -855,24 +860,25 @@ UserGet Get user information
 
 Returns the current user object with their settings.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserGetRequest
 */
 func (a *UserAPIService) UserGet(ctx context.Context) ApiUserGetRequest {
 	return ApiUserGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return V1UserWithSettings
+//
+//	@return V1UserWithSettings
 func (a *UserAPIService) UserGetExecute(r ApiUserGetRequest) (*V1UserWithSettings, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *V1UserWithSettings
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *V1UserWithSettings
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserGet")
@@ -946,8 +952,8 @@ func (a *UserAPIService) UserGetExecute(r ApiUserGetRequest) (*V1UserWithSetting
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -957,8 +963,8 @@ func (a *UserAPIService) UserGetExecute(r ApiUserGetRequest) (*V1UserWithSetting
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -976,8 +982,8 @@ func (a *UserAPIService) UserGetExecute(r ApiUserGetRequest) (*V1UserWithSetting
 }
 
 type ApiUserPasswordPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx          context.Context
+	ApiService   *UserAPIService
 	userPassword *V1UserPassword
 }
 
@@ -996,24 +1002,25 @@ UserPasswordPost Change password
 
 Lets the current user change its password.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserPasswordPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserPasswordPostRequest
 */
 func (a *UserAPIService) UserPasswordPost(ctx context.Context) ApiUserPasswordPostRequest {
 	return ApiUserPasswordPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserPasswordPostExecute(r ApiUserPasswordPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserPasswordPost")
@@ -1092,8 +1099,8 @@ func (a *UserAPIService) UserPasswordPostExecute(r ApiUserPasswordPostRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1103,8 +1110,8 @@ func (a *UserAPIService) UserPasswordPostExecute(r ApiUserPasswordPostRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1114,8 +1121,8 @@ func (a *UserAPIService) UserPasswordPostExecute(r ApiUserPasswordPostRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1133,8 +1140,8 @@ func (a *UserAPIService) UserPasswordPostExecute(r ApiUserPasswordPostRequest) (
 }
 
 type ApiUserPasswordResetPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx         context.Context
+	ApiService  *UserAPIService
 	credentials *UserPasswordReset
 }
 
@@ -1153,24 +1160,25 @@ UserPasswordResetPost Resets a password
 
 Resets a user email with a previously reset token.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserPasswordResetPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserPasswordResetPostRequest
 */
 func (a *UserAPIService) UserPasswordResetPost(ctx context.Context) ApiUserPasswordResetPostRequest {
 	return ApiUserPasswordResetPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserPasswordResetPostExecute(r ApiUserPasswordResetPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserPasswordResetPost")
@@ -1235,8 +1243,8 @@ func (a *UserAPIService) UserPasswordResetPostExecute(r ApiUserPasswordResetPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1246,8 +1254,8 @@ func (a *UserAPIService) UserPasswordResetPostExecute(r ApiUserPasswordResetPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1265,8 +1273,8 @@ func (a *UserAPIService) UserPasswordResetPostExecute(r ApiUserPasswordResetPost
 }
 
 type ApiUserPasswordTokenPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx         context.Context
+	ApiService  *UserAPIService
 	credentials *UserPasswordTokenRequest
 }
 
@@ -1285,24 +1293,25 @@ UserPasswordTokenPost Request password reset token
 
 Requests a token to reset a users password. The token is sent via email.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserPasswordTokenPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserPasswordTokenPostRequest
 */
 func (a *UserAPIService) UserPasswordTokenPost(ctx context.Context) ApiUserPasswordTokenPostRequest {
 	return ApiUserPasswordTokenPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserPasswordTokenPostExecute(r ApiUserPasswordTokenPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserPasswordTokenPost")
@@ -1367,8 +1376,8 @@ func (a *UserAPIService) UserPasswordTokenPostExecute(r ApiUserPasswordTokenPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1378,8 +1387,8 @@ func (a *UserAPIService) UserPasswordTokenPostExecute(r ApiUserPasswordTokenPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1397,7 +1406,7 @@ func (a *UserAPIService) UserPasswordTokenPostExecute(r ApiUserPasswordTokenPost
 }
 
 type ApiUserSettingsAvatarGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -1410,24 +1419,25 @@ UserSettingsAvatarGet Return user avatar setting
 
 Returns the current user's avatar setting.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsAvatarGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsAvatarGetRequest
 */
 func (a *UserAPIService) UserSettingsAvatarGet(ctx context.Context) ApiUserSettingsAvatarGetRequest {
 	return ApiUserSettingsAvatarGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return V1UserAvatarProvider
+//
+//	@return V1UserAvatarProvider
 func (a *UserAPIService) UserSettingsAvatarGetExecute(r ApiUserSettingsAvatarGetRequest) (*V1UserAvatarProvider, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *V1UserAvatarProvider
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *V1UserAvatarProvider
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsAvatarGet")
@@ -1501,8 +1511,8 @@ func (a *UserAPIService) UserSettingsAvatarGetExecute(r ApiUserSettingsAvatarGet
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1512,8 +1522,8 @@ func (a *UserAPIService) UserSettingsAvatarGetExecute(r ApiUserSettingsAvatarGet
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1531,9 +1541,9 @@ func (a *UserAPIService) UserSettingsAvatarGetExecute(r ApiUserSettingsAvatarGet
 }
 
 type ApiUserSettingsAvatarPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	avatar *V1UserAvatarProvider
+	avatar     *V1UserAvatarProvider
 }
 
 // The user&#39;s avatar setting
@@ -1551,24 +1561,25 @@ UserSettingsAvatarPost Set the user's avatar
 
 Changes the user avatar. Valid types are gravatar (uses the user email), upload, initials, default.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsAvatarPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsAvatarPostRequest
 */
 func (a *UserAPIService) UserSettingsAvatarPost(ctx context.Context) ApiUserSettingsAvatarPostRequest {
 	return ApiUserSettingsAvatarPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserSettingsAvatarPostExecute(r ApiUserSettingsAvatarPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsAvatarPost")
@@ -1647,8 +1658,8 @@ func (a *UserAPIService) UserSettingsAvatarPostExecute(r ApiUserSettingsAvatarPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1658,8 +1669,8 @@ func (a *UserAPIService) UserSettingsAvatarPostExecute(r ApiUserSettingsAvatarPo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1677,9 +1688,9 @@ func (a *UserAPIService) UserSettingsAvatarPostExecute(r ApiUserSettingsAvatarPo
 }
 
 type ApiUserSettingsAvatarUploadPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	avatar *string
+	avatar     *string
 }
 
 // The avatar as single file.
@@ -1697,24 +1708,25 @@ UserSettingsAvatarUploadPut Upload a user avatar
 
 Upload a user avatar. This will also set the user's avatar provider to "upload"
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsAvatarUploadPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsAvatarUploadPutRequest
 */
 func (a *UserAPIService) UserSettingsAvatarUploadPut(ctx context.Context) ApiUserSettingsAvatarUploadPutRequest {
 	return ApiUserSettingsAvatarUploadPutRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserSettingsAvatarUploadPutExecute(r ApiUserSettingsAvatarUploadPutRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsAvatarUploadPut")
@@ -1792,8 +1804,8 @@ func (a *UserAPIService) UserSettingsAvatarUploadPutExecute(r ApiUserSettingsAva
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 403 {
@@ -1803,8 +1815,8 @@ func (a *UserAPIService) UserSettingsAvatarUploadPutExecute(r ApiUserSettingsAva
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1814,8 +1826,8 @@ func (a *UserAPIService) UserSettingsAvatarUploadPutExecute(r ApiUserSettingsAva
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1833,8 +1845,8 @@ func (a *UserAPIService) UserSettingsAvatarUploadPutExecute(r ApiUserSettingsAva
 }
 
 type ApiUserSettingsEmailPostRequest struct {
-	ctx context.Context
-	ApiService *UserAPIService
+	ctx             context.Context
+	ApiService      *UserAPIService
 	userEmailUpdate *UserEmailUpdate
 }
 
@@ -1853,24 +1865,25 @@ UserSettingsEmailPost Update email address
 
 Lets the current user change their email address.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsEmailPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsEmailPostRequest
 */
 func (a *UserAPIService) UserSettingsEmailPost(ctx context.Context) ApiUserSettingsEmailPostRequest {
 	return ApiUserSettingsEmailPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserSettingsEmailPostExecute(r ApiUserSettingsEmailPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsEmailPost")
@@ -1949,8 +1962,8 @@ func (a *UserAPIService) UserSettingsEmailPostExecute(r ApiUserSettingsEmailPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -1960,8 +1973,8 @@ func (a *UserAPIService) UserSettingsEmailPostExecute(r ApiUserSettingsEmailPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -1971,8 +1984,8 @@ func (a *UserAPIService) UserSettingsEmailPostExecute(r ApiUserSettingsEmailPost
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -1990,9 +2003,9 @@ func (a *UserAPIService) UserSettingsEmailPostExecute(r ApiUserSettingsEmailPost
 }
 
 type ApiUserSettingsGeneralPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	avatar *V1UserSettings
+	avatar     *V1UserSettings
 }
 
 // The updated user settings
@@ -2008,24 +2021,25 @@ func (r ApiUserSettingsGeneralPostRequest) Execute() (*ModelsMessage, *http.Resp
 /*
 UserSettingsGeneralPost Change general user settings of the current user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsGeneralPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsGeneralPostRequest
 */
 func (a *UserAPIService) UserSettingsGeneralPost(ctx context.Context) ApiUserSettingsGeneralPostRequest {
 	return ApiUserSettingsGeneralPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserSettingsGeneralPostExecute(r ApiUserSettingsGeneralPostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsGeneralPost")
@@ -2104,8 +2118,8 @@ func (a *UserAPIService) UserSettingsGeneralPostExecute(r ApiUserSettingsGeneral
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2115,8 +2129,8 @@ func (a *UserAPIService) UserSettingsGeneralPostExecute(r ApiUserSettingsGeneral
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2134,7 +2148,7 @@ func (a *UserAPIService) UserSettingsGeneralPostExecute(r ApiUserSettingsGeneral
 }
 
 type ApiUserSettingsTokenCaldavGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -2147,24 +2161,25 @@ UserSettingsTokenCaldavGet Returns the caldav tokens for the current user
 
 Return the IDs and created dates of all caldav tokens for the current user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsTokenCaldavGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsTokenCaldavGetRequest
 */
 func (a *UserAPIService) UserSettingsTokenCaldavGet(ctx context.Context) ApiUserSettingsTokenCaldavGetRequest {
 	return ApiUserSettingsTokenCaldavGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []UserToken
+//
+//	@return []UserToken
 func (a *UserAPIService) UserSettingsTokenCaldavGetExecute(r ApiUserSettingsTokenCaldavGetRequest) ([]UserToken, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []UserToken
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []UserToken
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTokenCaldavGet")
@@ -2238,8 +2253,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavGetExecute(r ApiUserSettingsToke
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2249,8 +2264,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavGetExecute(r ApiUserSettingsToke
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2260,8 +2275,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavGetExecute(r ApiUserSettingsToke
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2279,9 +2294,9 @@ func (a *UserAPIService) UserSettingsTokenCaldavGetExecute(r ApiUserSettingsToke
 }
 
 type ApiUserSettingsTokenCaldavIdGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	id int32
+	id         int32
 }
 
 func (r ApiUserSettingsTokenCaldavIdGetRequest) Execute() (*ModelsMessage, *http.Response, error) {
@@ -2291,26 +2306,27 @@ func (r ApiUserSettingsTokenCaldavIdGetRequest) Execute() (*ModelsMessage, *http
 /*
 UserSettingsTokenCaldavIdGet Delete a caldav token by id
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param id Token ID
- @return ApiUserSettingsTokenCaldavIdGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param id Token ID
+	@return ApiUserSettingsTokenCaldavIdGetRequest
 */
 func (a *UserAPIService) UserSettingsTokenCaldavIdGet(ctx context.Context, id int32) ApiUserSettingsTokenCaldavIdGetRequest {
 	return ApiUserSettingsTokenCaldavIdGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		id: id,
+		ctx:        ctx,
+		id:         id,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserSettingsTokenCaldavIdGetExecute(r ApiUserSettingsTokenCaldavIdGetRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTokenCaldavIdGet")
@@ -2385,8 +2401,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavIdGetExecute(r ApiUserSettingsTo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2396,8 +2412,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavIdGetExecute(r ApiUserSettingsTo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2407,8 +2423,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavIdGetExecute(r ApiUserSettingsTo
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2426,7 +2442,7 @@ func (a *UserAPIService) UserSettingsTokenCaldavIdGetExecute(r ApiUserSettingsTo
 }
 
 type ApiUserSettingsTokenCaldavPutRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -2439,24 +2455,25 @@ UserSettingsTokenCaldavPut Generate a caldav token
 
 Generates a caldav token which can be used for the caldav api. It is not possible to see the token again after it was generated.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsTokenCaldavPutRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsTokenCaldavPutRequest
 */
 func (a *UserAPIService) UserSettingsTokenCaldavPut(ctx context.Context) ApiUserSettingsTokenCaldavPutRequest {
 	return ApiUserSettingsTokenCaldavPutRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return UserToken
+//
+//	@return UserToken
 func (a *UserAPIService) UserSettingsTokenCaldavPutExecute(r ApiUserSettingsTokenCaldavPutRequest) (*UserToken, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPut
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *UserToken
+		localVarHTTPMethod  = http.MethodPut
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *UserToken
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTokenCaldavPut")
@@ -2530,8 +2547,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavPutExecute(r ApiUserSettingsToke
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2541,8 +2558,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavPutExecute(r ApiUserSettingsToke
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2552,8 +2569,8 @@ func (a *UserAPIService) UserSettingsTokenCaldavPutExecute(r ApiUserSettingsToke
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2571,9 +2588,9 @@ func (a *UserAPIService) UserSettingsTokenCaldavPutExecute(r ApiUserSettingsToke
 }
 
 type ApiUserSettingsTotpDisablePostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	totp *UserLogin
+	totp       *UserLogin
 }
 
 // The current user&#39;s password (only password is enough).
@@ -2591,24 +2608,25 @@ UserSettingsTotpDisablePost Disable totp settings
 
 Disables any totp settings for the current user.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsTotpDisablePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsTotpDisablePostRequest
 */
 func (a *UserAPIService) UserSettingsTotpDisablePost(ctx context.Context) ApiUserSettingsTotpDisablePostRequest {
 	return ApiUserSettingsTotpDisablePostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserSettingsTotpDisablePostExecute(r ApiUserSettingsTotpDisablePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTotpDisablePost")
@@ -2687,8 +2705,8 @@ func (a *UserAPIService) UserSettingsTotpDisablePostExecute(r ApiUserSettingsTot
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2698,8 +2716,8 @@ func (a *UserAPIService) UserSettingsTotpDisablePostExecute(r ApiUserSettingsTot
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2709,8 +2727,8 @@ func (a *UserAPIService) UserSettingsTotpDisablePostExecute(r ApiUserSettingsTot
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2728,9 +2746,9 @@ func (a *UserAPIService) UserSettingsTotpDisablePostExecute(r ApiUserSettingsTot
 }
 
 type ApiUserSettingsTotpEnablePostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	totp *UserTOTPPasscode
+	totp       *UserTOTPPasscode
 }
 
 // The totp passcode.
@@ -2748,24 +2766,25 @@ UserSettingsTotpEnablePost Enable a previously enrolled totp setting.
 
 Enables a previously enrolled totp setting by providing a totp passcode.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsTotpEnablePostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsTotpEnablePostRequest
 */
 func (a *UserAPIService) UserSettingsTotpEnablePost(ctx context.Context) ApiUserSettingsTotpEnablePostRequest {
 	return ApiUserSettingsTotpEnablePostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ModelsMessage
+//
+//	@return ModelsMessage
 func (a *UserAPIService) UserSettingsTotpEnablePostExecute(r ApiUserSettingsTotpEnablePostRequest) (*ModelsMessage, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ModelsMessage
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ModelsMessage
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTotpEnablePost")
@@ -2844,8 +2863,8 @@ func (a *UserAPIService) UserSettingsTotpEnablePostExecute(r ApiUserSettingsTotp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -2855,8 +2874,8 @@ func (a *UserAPIService) UserSettingsTotpEnablePostExecute(r ApiUserSettingsTotp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 412 {
@@ -2866,8 +2885,8 @@ func (a *UserAPIService) UserSettingsTotpEnablePostExecute(r ApiUserSettingsTotp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -2877,8 +2896,8 @@ func (a *UserAPIService) UserSettingsTotpEnablePostExecute(r ApiUserSettingsTotp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -2896,7 +2915,7 @@ func (a *UserAPIService) UserSettingsTotpEnablePostExecute(r ApiUserSettingsTotp
 }
 
 type ApiUserSettingsTotpEnrollPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -2909,24 +2928,25 @@ UserSettingsTotpEnrollPost Enroll a user into totp
 
 Creates an initial setup for the user in the db. After this step, the user needs to verify they have a working totp setup with the "enable totp" endpoint.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsTotpEnrollPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsTotpEnrollPostRequest
 */
 func (a *UserAPIService) UserSettingsTotpEnrollPost(ctx context.Context) ApiUserSettingsTotpEnrollPostRequest {
 	return ApiUserSettingsTotpEnrollPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return UserTOTP
+//
+//	@return UserTOTP
 func (a *UserAPIService) UserSettingsTotpEnrollPostExecute(r ApiUserSettingsTotpEnrollPostRequest) (*UserTOTP, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *UserTOTP
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *UserTOTP
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTotpEnrollPost")
@@ -3000,8 +3020,8 @@ func (a *UserAPIService) UserSettingsTotpEnrollPostExecute(r ApiUserSettingsTotp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
@@ -3011,8 +3031,8 @@ func (a *UserAPIService) UserSettingsTotpEnrollPostExecute(r ApiUserSettingsTotp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3022,8 +3042,8 @@ func (a *UserAPIService) UserSettingsTotpEnrollPostExecute(r ApiUserSettingsTotp
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3041,7 +3061,7 @@ func (a *UserAPIService) UserSettingsTotpEnrollPostExecute(r ApiUserSettingsTotp
 }
 
 type ApiUserSettingsTotpGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -3054,24 +3074,25 @@ UserSettingsTotpGet Totp setting for the current user
 
 Returns the current user totp setting or an error if it is not enabled.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsTotpGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsTotpGetRequest
 */
 func (a *UserAPIService) UserSettingsTotpGet(ctx context.Context) ApiUserSettingsTotpGetRequest {
 	return ApiUserSettingsTotpGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return UserTOTP
+//
+//	@return UserTOTP
 func (a *UserAPIService) UserSettingsTotpGetExecute(r ApiUserSettingsTotpGetRequest) (*UserTOTP, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *UserTOTP
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *UserTOTP
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTotpGet")
@@ -3145,8 +3166,8 @@ func (a *UserAPIService) UserSettingsTotpGetExecute(r ApiUserSettingsTotpGetRequ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3164,7 +3185,7 @@ func (a *UserAPIService) UserSettingsTotpGetExecute(r ApiUserSettingsTotpGetRequ
 }
 
 type ApiUserSettingsTotpQrcodeGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -3177,24 +3198,25 @@ UserSettingsTotpQrcodeGet Totp QR Code
 
 Returns a qr code for easier setup at end user's devices.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserSettingsTotpQrcodeGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserSettingsTotpQrcodeGetRequest
 */
 func (a *UserAPIService) UserSettingsTotpQrcodeGet(ctx context.Context) ApiUserSettingsTotpQrcodeGetRequest {
 	return ApiUserSettingsTotpQrcodeGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return *os.File
+//
+//	@return *os.File
 func (a *UserAPIService) UserSettingsTotpQrcodeGetExecute(r ApiUserSettingsTotpQrcodeGetRequest) (*os.File, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *os.File
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *os.File
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserSettingsTotpQrcodeGet")
@@ -3268,8 +3290,8 @@ func (a *UserAPIService) UserSettingsTotpQrcodeGetExecute(r ApiUserSettingsTotpQ
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3287,7 +3309,7 @@ func (a *UserAPIService) UserSettingsTotpQrcodeGetExecute(r ApiUserSettingsTotpQ
 }
 
 type ApiUserTimezonesGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -3300,24 +3322,25 @@ UserTimezonesGet Get all available time zones on this vikunja instance
 
 Because available time zones depend on the system Vikunja is running on, this endpoint returns a project of all valid time zones this particular Vikunja instance can handle. The project of time zones is not sorted, you should sort it on the client.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserTimezonesGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserTimezonesGetRequest
 */
 func (a *UserAPIService) UserTimezonesGet(ctx context.Context) ApiUserTimezonesGetRequest {
 	return ApiUserTimezonesGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []string
+//
+//	@return []string
 func (a *UserAPIService) UserTimezonesGetExecute(r ApiUserTimezonesGetRequest) ([]string, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []string
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []string
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserTimezonesGet")
@@ -3391,8 +3414,8 @@ func (a *UserAPIService) UserTimezonesGetExecute(r ApiUserTimezonesGetRequest) (
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3410,7 +3433,7 @@ func (a *UserAPIService) UserTimezonesGetExecute(r ApiUserTimezonesGetRequest) (
 }
 
 type ApiUserTokenPostRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
 }
 
@@ -3423,24 +3446,25 @@ UserTokenPost Renew user token
 
 Returns a new valid jwt user token with an extended length.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUserTokenPostRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUserTokenPostRequest
 */
 func (a *UserAPIService) UserTokenPost(ctx context.Context) ApiUserTokenPostRequest {
 	return ApiUserTokenPostRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return AuthToken
+//
+//	@return AuthToken
 func (a *UserAPIService) UserTokenPostExecute(r ApiUserTokenPostRequest) (*AuthToken, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *AuthToken
+		localVarHTTPMethod  = http.MethodPost
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *AuthToken
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UserTokenPost")
@@ -3500,8 +3524,8 @@ func (a *UserAPIService) UserTokenPostExecute(r ApiUserTokenPostRequest) (*AuthT
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3519,10 +3543,10 @@ func (a *UserAPIService) UserTokenPostExecute(r ApiUserTokenPostRequest) (*AuthT
 }
 
 type ApiUsernameAvatarGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	username string
-	size *int32
+	username   string
+	size       *int32
 }
 
 // The size of the avatar you want to get. If bigger than the max configured size this will be adjusted to the maximum size.
@@ -3540,26 +3564,27 @@ UsernameAvatarGet User Avatar
 
 Returns the user avatar as image.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param username The username of the user who's avatar you want to get
- @return ApiUsernameAvatarGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param username The username of the user who's avatar you want to get
+	@return ApiUsernameAvatarGetRequest
 */
 func (a *UserAPIService) UsernameAvatarGet(ctx context.Context, username string) ApiUsernameAvatarGetRequest {
 	return ApiUsernameAvatarGetRequest{
 		ApiService: a,
-		ctx: ctx,
-		username: username,
+		ctx:        ctx,
+		username:   username,
 	}
 }
 
 // Execute executes the request
-//  @return *os.File
+//
+//	@return *os.File
 func (a *UserAPIService) UsernameAvatarGetExecute(r ApiUsernameAvatarGetRequest) (*os.File, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *os.File
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *os.File
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UsernameAvatarGet")
@@ -3623,8 +3648,8 @@ func (a *UserAPIService) UsernameAvatarGetExecute(r ApiUsernameAvatarGetRequest)
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3634,8 +3659,8 @@ func (a *UserAPIService) UsernameAvatarGetExecute(r ApiUsernameAvatarGetRequest)
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -3653,9 +3678,9 @@ func (a *UserAPIService) UsernameAvatarGetExecute(r ApiUsernameAvatarGetRequest)
 }
 
 type ApiUsersGetRequest struct {
-	ctx context.Context
+	ctx        context.Context
 	ApiService *UserAPIService
-	s *string
+	s          *string
 }
 
 // The search criteria.
@@ -3673,24 +3698,25 @@ UsersGet Get users
 
 Search for a user by its username, name or full email. Name (not username) or email require that the user has enabled this in their settings.
 
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUsersGetRequest
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUsersGetRequest
 */
 func (a *UserAPIService) UsersGet(ctx context.Context) ApiUsersGetRequest {
 	return ApiUsersGetRequest{
 		ApiService: a,
-		ctx: ctx,
+		ctx:        ctx,
 	}
 }
 
 // Execute executes the request
-//  @return []UserUser
+//
+//	@return []UserUser
 func (a *UserAPIService) UsersGetExecute(r ApiUsersGetRequest) ([]UserUser, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  []UserUser
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []UserUser
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UserAPIService.UsersGet")
@@ -3767,8 +3793,8 @@ func (a *UserAPIService) UsersGetExecute(r ApiUsersGetRequest) ([]UserUser, *htt
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 500 {
@@ -3778,8 +3804,8 @@ func (a *UserAPIService) UsersGetExecute(r ApiUsersGetRequest) ([]UserUser, *htt
 				newErr.error = err.Error()
 				return localVarReturnValue, localVarHTTPResponse, newErr
 			}
-					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
-					newErr.model = v
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

@@ -11,10 +11,11 @@ package openapi
 
 import (
 	"context"
+	"testing"
+
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_openapi_WebhooksAPIService(t *testing.T) {
@@ -24,7 +25,7 @@ func Test_openapi_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService ProjectsIdWebhooksGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -38,7 +39,7 @@ func Test_openapi_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService ProjectsIdWebhooksPut", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 
@@ -52,7 +53,7 @@ func Test_openapi_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService ProjectsIdWebhooksWebhookIDDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var webhookID int32
@@ -67,7 +68,7 @@ func Test_openapi_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService ProjectsIdWebhooksWebhookIDPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var id int32
 		var webhookID int32
@@ -82,7 +83,7 @@ func Test_openapi_WebhooksAPIService(t *testing.T) {
 
 	t.Run("Test WebhooksAPIService WebhooksEventsGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.WebhooksAPI.WebhooksEventsGet(context.Background()).Execute()
 
