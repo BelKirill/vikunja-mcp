@@ -127,7 +127,12 @@ func (c *Client) do(req *http.Request, v any) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		cerr := resp.Body.Close()
+		if cerr != nil {
+			log.Error("error closing response body", "error", cerr)
+		}
+	}()
 
 	if resp.StatusCode >= 400 {
 		return fmt.Errorf("vikunja API error: %s", resp.Status)
