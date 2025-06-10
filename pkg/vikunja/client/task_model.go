@@ -18,10 +18,10 @@ type FileInfo struct {
 }
 
 type Attachment struct {
-	ID        int     `json:"id"`
-	TaskID    int     `json:"task_id"`
-	Created   string  `json:"created"`
-	CreatedBy User    `json:"created_by"`
+	ID        int      `json:"id"`
+	TaskID    int      `json:"task_id"`
+	Created   string   `json:"created"`
+	CreatedBy User     `json:"created_by"`
 	File      FileInfo `json:"file"`
 }
 
