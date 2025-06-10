@@ -41,5 +41,6 @@ func main() {
 		log.Info("Title", "title", tasks[0].Title)
 		log.Info("Description", "description", tasks[0].Description)
 		log.Info("See? Your brain still works. The magic is still there.")
+		log.Info("Full JSON", "json", tasks[0])
 	}
 }

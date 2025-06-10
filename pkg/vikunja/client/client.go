@@ -85,14 +85,6 @@ func (a authRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	return a.rt.RoundTrip(req)
 }
 
-// User represents the authenticated Vikunja user.
-type User struct {
-	ID       int64  `json:"id"`
-	Username string `json:"username"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-}
-
 // url resolves a relative API path against the base URL.
 func (c *Client) url(path string) string {
 	// Use url.Parse to join baseURL and path safely
