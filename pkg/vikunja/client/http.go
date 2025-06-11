@@ -17,13 +17,12 @@ func (c *Client) Get(ctx context.Context, endpoint string, result interface{}) e
 	log.Info("GET request", "endpoint", endpoint)
 	log.Info(c.baseURL)
 
-	// Join baseURL and endpoint correctly using url.URL
-	_, err := url.Parse(endpoint)
+	fullURL := c.baseURL + endpoint
+	log.Info("Full URL", "URL", fullURL)
+	_, err := url.Parse(fullURL)
 	if err != nil {
 		return fmt.Errorf("invalid endpoint: %w", err)
 	}
-	fullURL := c.baseURL + endpoint
-	log.Info("Full URL", "URL", fullURL)
 
 	req, err := c.newRequest(ctx, http.MethodGet, fullURL, nil)
 	if err != nil {
@@ -36,6 +35,13 @@ func (c *Client) Get(ctx context.Context, endpoint string, result interface{}) e
 func (c *Client) Post(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	log.Info("POST request", "endpoint", endpoint)
 
+	fullURL := c.baseURL + endpoint
+	log.Info("Full URL", "URL", fullURL)
+	_, err := url.Parse(fullURL)
+	if err != nil {
+		return fmt.Errorf("invalid endpoint: %w", err)
+	}
+
 	var r io.Reader
 	if body != nil {
 		b, err := json.Marshal(body)
@@ -45,7 +51,7 @@ func (c *Client) Post(ctx context.Context, endpoint string, body interface{}, re
 		r = bytes.NewReader(b)
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPost, endpoint, r)
+	req, err := c.newRequest(ctx, http.MethodPost, fullURL, r)
 	if err != nil {
 		return err
 	}
@@ -56,6 +62,13 @@ func (c *Client) Post(ctx context.Context, endpoint string, body interface{}, re
 func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	log.Info("PUT request", "endpoint", endpoint)
 
+	fullURL := c.baseURL + endpoint
+	log.Info("Full URL", "URL", fullURL)
+	_, err := url.Parse(fullURL)
+	if err != nil {
+		return fmt.Errorf("invalid endpoint: %w", err)
+	}
+
 	var r io.Reader
 	if body != nil {
 		b, err := json.Marshal(body)
@@ -65,7 +78,7 @@ func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, res
 		r = bytes.NewReader(b)
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPut, endpoint, r)
+	req, err := c.newRequest(ctx, http.MethodPut, fullURL, r)
 	if err != nil {
 		return err
 	}
@@ -76,7 +89,14 @@ func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, res
 func (c *Client) Delete(ctx context.Context, endpoint string) error {
 	log.Info("DELETE request", "endpoint", endpoint)
 
-	req, err := c.newRequest(ctx, http.MethodDelete, endpoint, nil)
+	fullURL := c.baseURL + endpoint
+	log.Info("Full URL", "URL", fullURL)
+	_, err := url.Parse(fullURL)
+	if err != nil {
+		return fmt.Errorf("invalid endpoint: %w", err)
+	}
+
+	req, err := c.newRequest(ctx, http.MethodDelete, fullURL, nil)
 	if err != nil {
 		return err
 	}

@@ -114,25 +114,42 @@ func (c *Client) newRequest(ctx context.Context, method, path string, body io.Re
 }
 
 // do executes the request and decodes JSON into v if provided.
+// Adds retry logic and improved error handling.
 func (c *Client) do(req *http.Request, v any) error {
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		cerr := resp.Body.Close()
-		if cerr != nil {
-			log.Error("error closing response body", "error", cerr)
-		}
-	}()
+	const maxRetries = 3
+	const retryDelay = 500 * time.Millisecond
 
-	if resp.StatusCode >= 400 {
-		return fmt.Errorf("vikunja API error: %s", resp.Status)
+	var lastErr error
+	for attempt := 0; attempt < maxRetries; attempt++ {
+		resp, err := c.httpClient.Do(req)
+		if err != nil {
+			lastErr = err
+			log.Warn("HTTP request failed, will retry if possible", "attempt", attempt+1, "error", err)
+			time.Sleep(retryDelay * time.Duration(attempt+1))
+			continue
+		}
+		defer func() {
+			cerr := resp.Body.Close()
+			if cerr != nil {
+				log.Error("error closing response body", "error", cerr)
+			}
+		}()
+
+		if resp.StatusCode >= 500 && resp.StatusCode < 600 {
+			lastErr = fmt.Errorf("server error: %s", resp.Status)
+			log.Warn("Server error, will retry", "status", resp.Status, "attempt", attempt+1)
+			time.Sleep(retryDelay * time.Duration(attempt+1))
+			continue
+		}
+		if resp.StatusCode >= 400 {
+			return fmt.Errorf("vikunja API error: %s", resp.Status)
+		}
+		if v == nil {
+			return nil
+		}
+		return json.NewDecoder(resp.Body).Decode(v)
 	}
-	if v == nil {
-		return nil
-	}
-	return json.NewDecoder(resp.Body).Decode(v)
+	return fmt.Errorf("request failed after %d attempts: %w", maxRetries, lastErr)
 }
 
 // Me fetches the current authenticated user.
