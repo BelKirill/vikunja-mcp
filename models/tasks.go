@@ -1,14 +1,4 @@
-package focus
-
-import "context"
-
-// handleDailyFocus processes the daily-focus tool call
-// FocusService defines the interface for focus-related service methods
-type FocusService interface {
-	GetFocusTasks(ctx context.Context, opts FocusOptions) ([]FocusResult, error)
-	parseHyperFocusMetadata(desc string) *HyperfocusMetadata
-	cleanDescription(desc string) string
-}
+package models
 
 // FocusRequest represents the daily focus request payload.
 // swagger:model FocusRequest
@@ -78,4 +68,14 @@ type FocusResult struct {
 
 type HyperfocusMetadata struct {
 	Mode string
+}
+
+type MinimalTask struct {
+	TaskID      int64
+	Project     int64
+	Metadata    *HyperfocusMetadata
+	Priority    int
+	Title       string
+	Done        bool
+	Description string
 }

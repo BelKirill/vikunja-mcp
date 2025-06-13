@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/BelKirill/vikunja-mcp/pkg/mcp"
 	"github.com/charmbracelet/log"
 )
@@ -68,12 +69,51 @@ func RegisterMCPTools(server *mcp.Server) error {
 		return handleGetTaskMetadata(vikunjaSvc, args)
 	})
 
+	// Register the upsert_task tool
+	server.RegisterTool(mcp.Tool{
+		Name:        "upsert_task",
+		Description: "Create a new task or update an existing task (including marking complete)",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"task_id": map[string]interface{}{
+					"type":        "integer",
+					"description": "Task ID to update (omit to create new task)",
+				},
+				"title": map[string]interface{}{
+					"type":        "string",
+					"description": "Task title",
+				},
+				"done": map[string]interface{}{
+					"type":        "boolean",
+					"description": "Mark task as complete",
+				},
+				"priority": map[string]interface{}{
+					"type":        "integer",
+					"minimum":     1,
+					"maximum":     5,
+					"description": "Task priority (1-5)",
+				},
+				"description": map[string]interface{}{
+					"type":        "string",
+					"description": "Task description",
+				},
+				"project_id": map[string]interface{}{
+					"type":        "integer",
+					"description": "Project ID",
+				},
+			},
+		},
+	}, func(args map[string]interface{}) (interface{}, error) {
+		return handleUpsertTask(vikunjaSvc, args)
+	})
+
 	return nil
 }
 
 // handleDailyFocus processes the daily-focus tool call
-func handleDailyFocus(service FocusService, args map[string]interface{}) (interface{}, error) {
-	opts := FocusOptions{}
+func handleDailyFocus(service models.FocusService, args map[string]interface{}) (interface{}, error) {
+	opts := models.FocusOptions{}
 
 	// Parse arguments with defaults
 	if energy, ok := args["energy"].(string); ok {
@@ -110,7 +150,7 @@ func handleDailyFocus(service FocusService, args map[string]interface{}) (interf
 }
 
 // handleGetTaskMetadata retrieves metadata for a specific task
-func handleGetTaskMetadata(service FocusService, args map[string]interface{}) (interface{}, error) {
+func handleGetTaskMetadata(service models.FocusService, args map[string]interface{}) (interface{}, error) {
 	taskIDFloat, ok := args["task_id"].(float64)
 	if !ok {
 		return nil, fmt.Errorf("task_id must be a number")
@@ -118,8 +158,8 @@ func handleGetTaskMetadata(service FocusService, args map[string]interface{}) (i
 	taskID := int64(taskIDFloat)
 
 	// For demonstration, just return a stub result
-	metadata := service.parseHyperFocusMetadata("")
-	cleanDesc := service.cleanDescription("")
+	metadata := service.ParseHyperFocusMetadata("")
+	cleanDesc := service.CleanDescription("")
 
 	return map[string]interface{}{
 		"task_id":             taskID,
@@ -129,5 +169,52 @@ func handleGetTaskMetadata(service FocusService, args map[string]interface{}) (i
 		"done":                false,
 		"metadata":            metadata,
 		"has_hyperfocus_data": metadata != nil,
+	}, nil
+}
+
+// handleUpsertTask processes the upsert_task tool call
+func handleUpsertTask(service models.FocusService, args map[string]interface{}) (interface{}, error) {
+	var task models.MinimalTask
+	if v, ok := args["task_id"].(float64); ok {
+		task.TaskID = int64(v)
+	}
+	if v, ok := args["project_id"].(float64); ok {
+		task.Project = int64(v)
+	}
+	if v, ok := args["title"].(string); ok {
+		task.Title = v
+	}
+	if v, ok := args["description"].(string); ok {
+		task.Description = v
+	}
+	if v, ok := args["priority"].(float64); ok {
+		task.Priority = int(v)
+	}
+	if v, ok := args["done"].(bool); ok {
+		task.Done = v
+	}
+
+	result, err := service.UpsertTask(context.Background(), task)
+	if err != nil {
+		return nil, err
+	}
+
+	action := "updated"
+	if task.TaskID == 0 {
+		action = "created"
+	}
+
+	return map[string]interface{}{
+		"success": true,
+		"action":  action,
+		"task": map[string]interface{}{
+			"task_id":     result.TaskID,
+			"title":       result.Title,
+			"done":        result.Done,
+			"priority":    result.Priority,
+			"description": result.Description,
+			"project_id":  result.Project,
+		},
+		"message": fmt.Sprintf("Task %s successfully", action),
 	}, nil
 }

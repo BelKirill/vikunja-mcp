@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/charmbracelet/log"
 	"github.com/gofiber/fiber/v2"
 )
@@ -26,10 +27,10 @@ func RegisterRoutes(app *fiber.App) {
 // Handler for POST /daily-focus
 func FocusHandler(service *Service) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var req FocusRequest
+		var req models.FocusRequest
 		if err := c.BodyParser(&req); err != nil {
 			log.Error("failed to parse focus request", "error", err)
-			return c.Status(fiber.StatusBadRequest).JSON(APIError{Code: fiber.StatusBadRequest, Message: "invalid JSON body"})
+			return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Code: fiber.StatusBadRequest, Message: "invalid JSON body"})
 		}
 
 		if req.Date == "" {
@@ -44,7 +45,7 @@ func FocusHandler(service *Service) fiber.Handler {
 		log.Info("processing focus request", "date", req.Date, "hours", req.Hours)
 
 		ctx := context.Background()
-		opts := FocusOptions{
+		opts := models.FocusOptions{
 			Date:     req.Date,
 			Hours:    float32(req.Hours),
 			Energy:   "medium",
@@ -54,12 +55,12 @@ func FocusHandler(service *Service) fiber.Handler {
 		items, err := service.GetFocusTasks(ctx, opts)
 		if err != nil {
 			log.Error("focus service error", "date", req.Date, "hours", req.Hours, "error", err)
-			return c.Status(fiber.StatusInternalServerError).JSON(APIError{Code: fiber.StatusInternalServerError, Message: err.Error()})
+			return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Code: fiber.StatusInternalServerError, Message: err.Error()})
 		}
 
-		resp := make([]FocusResponseItem, 0, len(items))
+		resp := make([]models.FocusResponseItem, 0, len(items))
 		for _, it := range items {
-			resp = append(resp, FocusResponseItem{
+			resp = append(resp, models.FocusResponseItem{
 				T:   it.TaskID,
 				P:   it.Project,
 				Est: 0, // TODO: map estimate if available

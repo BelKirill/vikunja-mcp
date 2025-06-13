@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +28,7 @@ func TestFocusService_Focus_Empty(t *testing.T) {
 		t.Fatalf("failed to create service: %v", err)
 	}
 	ctx := context.Background()
-	opts := FocusOptions{
+	opts := models.FocusOptions{
 		Energy:   "low",
 		Mode:     "",
 		Hours:    5,
@@ -36,7 +37,7 @@ func TestFocusService_Focus_Empty(t *testing.T) {
 	}
 
 	items, _ := s.GetFocusTasks(ctx, opts)
-	assert.IsType(t, FocusResult{}, items)
+	assert.IsType(t, models.FocusResult{}, items)
 }
 
 func TestFocusService_GetFocusTasks_Empty(t *testing.T) {
@@ -45,7 +46,7 @@ func TestFocusService_GetFocusTasks_Empty(t *testing.T) {
 		t.Fatalf("failed to create service: %v", err)
 	}
 	ctx := context.Background()
-	opts := FocusOptions{
+	opts := models.FocusOptions{
 		Energy:   "medium",
 		Mode:     "deep",
 		Hours:    3,
@@ -54,7 +55,7 @@ func TestFocusService_GetFocusTasks_Empty(t *testing.T) {
 	}
 	items, err := s.GetFocusTasks(ctx, opts)
 	assert.NoError(t, err)
-	assert.IsType(t, []FocusResult{}, items)
+	assert.IsType(t, []models.FocusResult{}, items)
 }
 
 func TestFocusService_ParseHyperFocusMetadata(t *testing.T) {
@@ -62,7 +63,7 @@ func TestFocusService_ParseHyperFocusMetadata(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create service: %v", err)
 	}
-	meta := s.parseHyperFocusMetadata("some description")
+	meta := s.ParseHyperFocusMetadata("some description")
 	assert.Nil(t, meta)
 }
 
@@ -72,6 +73,6 @@ func TestFocusService_CleanDescription(t *testing.T) {
 		t.Fatalf("failed to create service: %v", err)
 	}
 	input := "desc"
-	out := s.cleanDescription(input)
+	out := s.CleanDescription(input)
 	assert.Equal(t, input, out)
 }

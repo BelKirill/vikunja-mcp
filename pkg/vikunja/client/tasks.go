@@ -32,3 +32,33 @@ func (c *Client) GetTask(ctx context.Context, id int64) (*RawTask, error) {
 	log.Info("task fetched", "id", id, "title", t.Title)
 	return &t, nil
 }
+
+// UpsertTask creates a new task or updates an existing one
+func (c *Client) UpsertTask(ctx context.Context, taskData RawTask) (*RawTask, error) {
+    if taskData.ID == 0 {
+        // CREATE: PUT /api/v1/projects/{id}/tasks
+        return c.createTask(ctx, &taskData)
+    }
+    // UPDATE: PUT /api/v1/tasks/{id}
+    return c.updateTask(ctx, &taskData)
+}
+
+func (c *Client) createTask(ctx context.Context, taskData *RawTask) (*RawTask, error) {
+	endpoint := fmt.Sprintf("/api/v1/projects/%d/tasks", taskData.ProjectID)
+	var task RawTask
+	if err := c.Put(ctx, endpoint, taskData, &task); err != nil {
+		return nil, err
+	}
+	log.Info("task created", "id", task.ID, "title", task.Title)
+	return &task, nil
+}
+
+func (c *Client) updateTask(ctx context.Context, taskData *RawTask) (*RawTask, error) {
+	endpoint := fmt.Sprintf("/api/v1/tasks/%d", taskData.ID)
+	var task RawTask
+	if err := c.Put(ctx, endpoint, taskData, &task); err != nil {
+		return nil, err
+	}
+	log.Info("task updated", "id", task.ID, "title", task.Title)
+	return &task, nil
+}

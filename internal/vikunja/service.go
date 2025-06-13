@@ -3,6 +3,7 @@ package vikunja
 import (
 	"context"
 
+	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/BelKirill/vikunja-mcp/pkg/vikunja/client"
 )
 
@@ -65,4 +66,32 @@ func (s *Service) GetTasksByLabel(ctx context.Context, label string) ([]client.R
 		}
 	}
 	return result, nil
+}
+
+// UpsertTask creates or updates a task using MinimalTask as the DTO.
+func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
+	var raw client.RawTask
+	// Convert MinimalTask to RawTask
+	raw.ID = int(task.TaskID)
+	raw.ProjectID = int64(task.Project)
+	raw.Title = task.Title
+	raw.Description = task.Description
+	raw.Priority = task.Priority
+	raw.Done = task.Done
+	// Metadata is ignored for now
+
+	result, err := s.Client.UpsertTask(ctx, raw)
+	if err != nil {
+		return nil, err
+	}
+	// Convert RawTask back to MinimalTask
+	return &models.MinimalTask{
+		TaskID:      int64(result.ID),
+		Project:     int64(result.ProjectID),
+		Title:       result.Title,
+		Description: result.Description,
+		Priority:    result.Priority,
+		Done:        result.Done,
+		// Metadata: nil (not handled)
+	}, nil
 }
