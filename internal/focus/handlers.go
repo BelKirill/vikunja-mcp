@@ -2,8 +2,8 @@ package focus
 
 import (
 	"context"
-	"time"
 	"fmt"
+	"time"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/charmbracelet/log"

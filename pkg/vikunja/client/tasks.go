@@ -62,7 +62,7 @@ func (c *Client) UpsertTask(ctx context.Context, taskData models.MinimalTask) (*
 
 func (c *Client) createTask(ctx context.Context, taskData *models.MinimalTask) (*models.MinimalTask, error) {
 	endpoint := fmt.Sprintf("/api/v1/projects/%d/tasks", taskData.Project)
-	
+
 	// Create request body without ID (let Vikunja assign it)
 	requestBody := RawTask{
 		// ID: 0, // Don't set ID for creation - Vikunja assigns it
@@ -72,13 +72,13 @@ func (c *Client) createTask(ctx context.Context, taskData *models.MinimalTask) (
 		Priority:    taskData.Priority,
 		Done:        taskData.Done,
 	}
-	
+
 	var result RawTask
 	// Use POST for creation (not PUT)
 	if err := c.Put(ctx, endpoint, &requestBody, &result); err != nil {
 		return nil, err
 	}
-	
+
 	log.Info("task created", "id", result.ID, "title", result.Title)
 	return &models.MinimalTask{
 		TaskID:      result.ID,
@@ -92,7 +92,7 @@ func (c *Client) createTask(ctx context.Context, taskData *models.MinimalTask) (
 
 func (c *Client) updateTask(ctx context.Context, taskData *models.MinimalTask) (*models.MinimalTask, error) {
 	endpoint := fmt.Sprintf("/api/v1/tasks/%d", taskData.TaskID)
-	
+
 	// Create request body with existing ID
 	requestBody := RawTask{
 		ID:          taskData.TaskID,
@@ -102,13 +102,13 @@ func (c *Client) updateTask(ctx context.Context, taskData *models.MinimalTask) (
 		Priority:    taskData.Priority,
 		Done:        taskData.Done,
 	}
-	
+
 	var result RawTask
 	// Use PUT for updates (not POST)
 	if err := c.Post(ctx, endpoint, &requestBody, &result); err != nil {
 		return nil, err
 	}
-	
+
 	log.Info("task updated", "id", result.ID, "title", result.Title)
 	return &models.MinimalTask{
 		TaskID:      result.ID,

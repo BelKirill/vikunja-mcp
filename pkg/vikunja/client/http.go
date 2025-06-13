@@ -44,14 +44,14 @@ func (c *Client) Post(ctx context.Context, endpoint string, body interface{}, re
 		r = bytes.NewReader(b)
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPost, endpoint, r)  // Pass endpoint, not fullURL
+	req, err := c.newRequest(ctx, http.MethodPost, endpoint, r) // Pass endpoint, not fullURL
 	if err != nil {
 		return err
 	}
 	return c.do(req, result)
 }
 
-// Put performs a PUT request with a JSON body and unmarshals the response into result.  
+// Put performs a PUT request with a JSON body and unmarshals the response into result.
 func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	log.Info("PUT request", "endpoint", endpoint)
 
@@ -64,7 +64,7 @@ func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, res
 		r = bytes.NewReader(b)
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPut, endpoint, r)  // Pass endpoint, not fullURL
+	req, err := c.newRequest(ctx, http.MethodPut, endpoint, r) // Pass endpoint, not fullURL
 	if err != nil {
 		return err
 	}
