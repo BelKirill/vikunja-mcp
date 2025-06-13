@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+
 	"github.com/BelKirill/vikunja-mcp/internal/focus"
 	"github.com/BelKirill/vikunja-mcp/pkg/mcp"
 	"github.com/charmbracelet/log"
@@ -11,7 +12,7 @@ func main() {
 	// Force logs to stderr for MCP
 	log.SetOutput(os.Stderr)
 	log.SetLevel(log.DebugLevel)
-	
+
 	log.Info("=== MCP SERVER STARTING ===")
 
 	// Create MCP server

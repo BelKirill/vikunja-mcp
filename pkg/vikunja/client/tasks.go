@@ -35,12 +35,12 @@ func (c *Client) GetTask(ctx context.Context, id int64) (*RawTask, error) {
 
 // UpsertTask creates a new task or updates an existing one
 func (c *Client) UpsertTask(ctx context.Context, taskData RawTask) (*RawTask, error) {
-    if taskData.ID == 0 {
-        // CREATE: PUT /api/v1/projects/{id}/tasks
-        return c.createTask(ctx, &taskData)
-    }
-    // UPDATE: PUT /api/v1/tasks/{id}
-    return c.updateTask(ctx, &taskData)
+	if taskData.ID == 0 {
+		// CREATE: PUT /api/v1/projects/{id}/tasks
+		return c.createTask(ctx, &taskData)
+	}
+	// UPDATE: PUT /api/v1/tasks/{id}
+	return c.updateTask(ctx, &taskData)
 }
 
 func (c *Client) createTask(ctx context.Context, taskData *RawTask) (*RawTask, error) {
