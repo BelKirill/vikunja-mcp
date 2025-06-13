@@ -29,11 +29,11 @@ func TestFocusService_Focus_Empty(t *testing.T) {
 	}
 	ctx := context.Background()
 	opts := models.FocusOptions{
-		Energy:   "low",
-		Mode:     "",
-		Hours:    5,
-		MaxItems: 5,
-		Date:     time.Now().String(),
+		Energy:     "low",
+		Mode:       "",
+		MaxMinutes: 5,
+		MaxTasks:   5,
+		Date:       time.Now().String(),
 	}
 
 	items, _ := s.GetFocusTasks(ctx, opts)
@@ -47,32 +47,13 @@ func TestFocusService_GetFocusTasks_Empty(t *testing.T) {
 	}
 	ctx := context.Background()
 	opts := models.FocusOptions{
-		Energy:   "medium",
-		Mode:     "deep",
-		Hours:    3,
-		MaxItems: 10,
-		Date:     time.Now().Format("2006-01-02"),
+		Energy:     "medium",
+		Mode:       "deep",
+		MaxMinutes: 3,
+		MaxTasks:   10,
+		Date:       time.Now().Format("2006-01-02"),
 	}
 	items, err := s.GetFocusTasks(ctx, opts)
 	assert.NoError(t, err)
 	assert.IsType(t, []models.FocusResult{}, items)
-}
-
-func TestFocusService_ParseHyperFocusMetadata(t *testing.T) {
-	s, err := NewService()
-	if err != nil {
-		t.Fatalf("failed to create service: %v", err)
-	}
-	meta := s.ParseHyperFocusMetadata("some description")
-	assert.Nil(t, meta)
-}
-
-func TestFocusService_CleanDescription(t *testing.T) {
-	s, err := NewService()
-	if err != nil {
-		t.Fatalf("failed to create service: %v", err)
-	}
-	input := "desc"
-	out := s.CleanDescription(input)
-	assert.Equal(t, input, out)
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,13 +20,13 @@ func (m *mockClient) Get(ctx context.Context, endpoint string, out interface{}) 
 }
 
 func TestGetAllTasks_Success(t *testing.T) {
-	expected := []RawTask{
+	expected := []models.RawTask{
 		{ID: 1, Title: "Task 1"},
 		{ID: 2, Title: "Task 2"},
 	}
 	mc := &mockClient{
 		getFunc: func(ctx context.Context, endpoint string, out interface{}) error {
-			tasks := out.(*[]RawTask)
+			tasks := out.(*[]models.RawTask)
 			*tasks = expected
 			return nil
 		},
@@ -49,10 +50,10 @@ func TestGetAllTasks_Error(t *testing.T) {
 }
 
 func TestGetTask_Success(t *testing.T) {
-	expected := RawTask{ID: 42, Title: "Test Task"}
+	expected := models.RawTask{ID: 42, Title: "Test Task"}
 	mc := &mockClient{
 		getFunc: func(ctx context.Context, endpoint string, out interface{}) error {
-			task := out.(*RawTask)
+			task := out.(*models.RawTask)
 			*task = expected
 			return nil
 		},

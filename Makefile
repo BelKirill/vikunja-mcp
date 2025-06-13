@@ -17,7 +17,7 @@ test:
 
 # Build the server binary
 build:
-	go build -o bin/server ./cmd/server
+	go build -o bin/server ./cmd/mcp/main.go
 
 ci-local: fmt goimports lint
 

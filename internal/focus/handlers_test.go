@@ -16,7 +16,7 @@ func TestFocusHandler_BadRequest(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create service: %v", err)
 	}
-	app.Post("/daily-focus", FocusHandler(service))
+	app.Post("/daily-focus", DailyFocusHandler(service))
 
 	// Invalid JSON
 	req := httptest.NewRequest(http.MethodPost, "/daily-focus", nil)
@@ -30,7 +30,7 @@ func TestFocusHandler_ValidRequest(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create service: %v", err)
 	}
-	app.Post("/daily-focus", FocusHandler(s))
+	app.Post("/daily-focus", DailyFocusHandler(s))
 
 	body := `{"date":"2025-06-12","hours":2}`
 	req := httptest.NewRequest(http.MethodPost, "/daily-focus", strings.NewReader(body))
@@ -46,7 +46,7 @@ func TestFocusHandler_Defaults(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create service: %v", err)
 	}
-	app.Post("/daily-focus", FocusHandler(s))
+	app.Post("/daily-focus", DailyFocusHandler(s))
 
 	body := `{}`
 	req := httptest.NewRequest(http.MethodPost, "/daily-focus", strings.NewReader(body))
@@ -60,7 +60,7 @@ func TestFocusHandler_ServiceError(t *testing.T) {
 	app := fiber.New()
 	// Use a nil Vikunja to force error
 	s := &Service{Vikunja: nil}
-	app.Post("/daily-focus", FocusHandler(s))
+	app.Post("/daily-focus", DailyFocusHandler(s))
 
 	body := `{"date":"2025-06-12","hours":2}`
 	req := httptest.NewRequest(http.MethodPost, "/daily-focus", strings.NewReader(body))
