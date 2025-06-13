@@ -151,16 +151,3 @@ func (c *Client) do(req *http.Request, v any) error {
 	}
 	return fmt.Errorf("request failed after %d attempts: %w", maxRetries, lastErr)
 }
-
-// Me fetches the current authenticated user.
-func (c *Client) Me(ctx context.Context) (*User, error) {
-	req, err := c.newRequest(ctx, http.MethodGet, "/api/v1/user", nil)
-	if err != nil {
-		return nil, err
-	}
-	var u User
-	if err := c.do(req, &u); err != nil {
-		return nil, err
-	}
-	return &u, nil
-}

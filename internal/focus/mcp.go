@@ -108,12 +108,49 @@ func RegisterMCPTools(server *mcp.Server) error {
 		return handleUpsertTask(vikunjaSvc, args)
 	})
 
+	// Register focus recommendation tool
+	server.RegisterTool(mcp.Tool{
+		Name:        "get-focus-recommendation",
+		Description: "Get the single best task recommendation for current focus session",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"energy": map[string]interface{}{
+					"type":        "string",
+					"enum":        []string{"low", "medium", "high", "social"},
+					"description": "Current energy level",
+					"default":     "medium",
+				},
+				"mode": map[string]interface{}{
+					"type":        "string",
+					"enum":        []string{"deep", "quick", "admin"},
+					"description": "Work mode preference",
+					"default":     "deep",
+				},
+				"max_minutes": map[string]interface{}{
+					"type":        "integer",
+					"description": "Available time in minutes",
+					"minimum":     5,
+					"maximum":     480,
+					"default":     60,
+				},
+			},
+		},
+	}, func(args map[string]interface{}) (interface{}, error) {
+		return handleGetFocusRecommendation(vikunjaSvc, args)
+	})
+
 	return nil
 }
 
 // handleDailyFocus processes the daily-focus tool call
-func handleDailyFocus(service models.FocusService, args map[string]interface{}) (interface{}, error) {
-	opts := models.FocusOptions{}
+func handleDailyFocus(service *Service, args map[string]interface{}) (interface{}, error) {
+	opts := models.FocusOptions{
+		Energy:     "medium", // Default values
+		Mode:       "deep",
+		MaxMinutes: 300, // 5 hours default
+		MaxTasks:   10,
+	}
 
 	// Parse arguments with defaults
 	if energy, ok := args["energy"].(string); ok {
@@ -123,16 +160,21 @@ func handleDailyFocus(service models.FocusService, args map[string]interface{}) 
 		opts.Mode = mode
 	}
 	if hours, ok := args["hours"].(float64); ok {
-		opts.Hours = float32(hours)
+		opts.MaxMinutes = int(hours * 60) // Convert hours to minutes
 	}
 	if maxItems, ok := args["max_items"].(float64); ok {
-		opts.MaxItems = int(maxItems)
+		opts.MaxTasks = int(maxItems)
 	}
 
-	log.Info("MCP daily-focus request", "energy", opts.Energy, "mode", opts.Mode, "hours", opts.Hours)
+	log.Info("MCP daily-focus request",
+		"energy", opts.Energy,
+		"mode", opts.Mode,
+		"max_minutes", opts.MaxMinutes,
+		"max_tasks", opts.MaxTasks)
 
 	tasks, err := service.GetFocusTasks(context.Background(), opts)
 	if err != nil {
+		log.Error("Failed to get focus tasks", "error", err)
 		return nil, err
 	}
 
@@ -143,38 +185,123 @@ func handleDailyFocus(service models.FocusService, args map[string]interface{}) 
 			"total_tasks":   len(tasks),
 			"energy_filter": opts.Energy,
 			"mode_filter":   opts.Mode,
-			"target_hours":  opts.Hours,
+			"target_hours":  float64(opts.MaxMinutes) / 60.0,
 		},
 		"tasks": tasks,
 	}, nil
 }
 
 // handleGetTaskMetadata retrieves metadata for a specific task
-func handleGetTaskMetadata(service models.FocusService, args map[string]interface{}) (interface{}, error) {
+func handleGetTaskMetadata(service *Service, args map[string]interface{}) (interface{}, error) {
 	taskIDFloat, ok := args["task_id"].(float64)
 	if !ok {
 		return nil, fmt.Errorf("task_id must be a number")
 	}
 	taskID := int64(taskIDFloat)
 
-	// For demonstration, just return a stub result
-	metadata := service.ParseHyperFocusMetadata("")
-	cleanDesc := service.CleanDescription("")
+	log.Info("MCP get-task-metadata request", "task_id", taskID)
+
+	task, err := service.GetTaskMetadata(context.Background(), taskID)
+	if err != nil {
+		log.Error("Failed to get task metadata", "task_id", taskID, "error", err)
+		return nil, err
+	}
+
+	if task == nil {
+		return map[string]interface{}{
+			"task_id":             taskID,
+			"title":               "",
+			"description":         "",
+			"done":                false,
+			"priority":            0,
+			"has_hyperfocus_data": false,
+			"metadata":            nil,
+		}, nil
+	}
+
+	// Return enriched task data
+	return map[string]interface{}{
+		"task_id":             task.RawTask.ID,
+		"title":               task.RawTask.Title,
+		"description":         task.CleanDescription,
+		"done":                task.RawTask.Done,
+		"priority":            task.RawTask.Priority,
+		"project_id":          task.RawTask.ProjectID,
+		"has_hyperfocus_data": task.Metadata != nil,
+		"metadata":            task.Metadata,
+		"created":             task.RawTask.Created,
+		"updated":             task.RawTask.Updated,
+	}, nil
+}
+
+// handleGetFocusRecommendation gets the single best task for focus session
+func handleGetFocusRecommendation(service *Service, args map[string]interface{}) (interface{}, error) {
+	opts := models.FocusOptions{
+		Energy:     "medium",
+		Mode:       "deep",
+		MaxMinutes: 60,
+		MaxTasks:   1, // Single recommendation
+	}
+
+	// Parse arguments
+	if energy, ok := args["energy"].(string); ok {
+		opts.Energy = energy
+	}
+	if mode, ok := args["mode"].(string); ok {
+		opts.Mode = mode
+	}
+	if maxMinutes, ok := args["max_minutes"].(float64); ok {
+		opts.MaxMinutes = int(maxMinutes)
+	}
+
+	log.Info("MCP focus recommendation request",
+		"energy", opts.Energy,
+		"mode", opts.Mode,
+		"max_minutes", opts.MaxMinutes)
+
+	recommendation, err := service.GetTaskRecommendation(context.Background(), opts)
+	if err != nil {
+		log.Error("Failed to get task recommendation", "error", err)
+		return nil, err
+	}
+
+	if recommendation == nil {
+		return map[string]interface{}{
+			"message":        "No suitable tasks found",
+			"recommendation": nil,
+			"criteria": map[string]interface{}{
+				"energy":      opts.Energy,
+				"mode":        opts.Mode,
+				"max_minutes": opts.MaxMinutes,
+			},
+		}, nil
+	}
+
+	// Calculate session recommendation
+	sessionLength := service.EstimateSessionLength(*recommendation, opts.MaxMinutes)
 
 	return map[string]interface{}{
-		"task_id":             taskID,
-		"title":               "",
-		"description":         cleanDesc,
-		"priority":            0,
-		"done":                false,
-		"metadata":            metadata,
-		"has_hyperfocus_data": metadata != nil,
+		"message": "Task recommendation generated successfully",
+		"recommendation": map[string]interface{}{
+			"task":               recommendation,
+			"recommended_length": sessionLength,
+			"can_extend":         recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
+			"focus_score":        recommendation.FocusScore,
+			"reasoning":          fmt.Sprintf("Selected for %s energy, %s mode (score: %.1f)", opts.Energy, opts.Mode, recommendation.FocusScore),
+		},
+		"criteria": map[string]interface{}{
+			"energy":      opts.Energy,
+			"mode":        opts.Mode,
+			"max_minutes": opts.MaxMinutes,
+		},
 	}, nil
 }
 
 // handleUpsertTask processes the upsert_task tool call
-func handleUpsertTask(service models.FocusService, args map[string]interface{}) (interface{}, error) {
+func handleUpsertTask(service *Service, args map[string]interface{}) (interface{}, error) {
 	var task models.MinimalTask
+
+	// Parse task data from arguments
 	if v, ok := args["task_id"].(float64); ok {
 		task.TaskID = int64(v)
 	}
@@ -194,14 +321,21 @@ func handleUpsertTask(service models.FocusService, args map[string]interface{}) 
 		task.Done = v
 	}
 
-	result, err := service.UpsertTask(context.Background(), task)
-	if err != nil {
-		return nil, err
-	}
-
 	action := "updated"
 	if task.TaskID == 0 {
 		action = "created"
+	}
+
+	log.Info("MCP upsert task request",
+		"action", action,
+		"task_id", task.TaskID,
+		"title", task.Title,
+		"project_id", task.Project)
+
+	result, err := service.UpsertTask(context.Background(), task)
+	if err != nil {
+		log.Error("Failed to upsert task", "error", err, "action", action)
+		return nil, err
 	}
 
 	return map[string]interface{}{

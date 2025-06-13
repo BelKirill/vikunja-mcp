@@ -10,7 +10,7 @@ import (
 // Export ParseHyperFocusMetadata and CleanDescription for idiomatic Go
 type FocusService interface {
 	GetFocusTasks(ctx context.Context, opts FocusOptions) ([]FocusResult, error)
-	ParseHyperFocusMetadata(desc string) *HyperfocusMetadata
+	ParseHyperFocusMetadata(desc string) (*HyperFocusMetadata, error)
 	CleanDescription(desc string) string
 	UpsertTask(ctx context.Context, task MinimalTask) (*MinimalTask, error)
 }

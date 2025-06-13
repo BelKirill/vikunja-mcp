@@ -12,8 +12,8 @@ import (
 //
 //	GET /api/v1/tasks
 func (c *Client) GetAllTasks(ctx context.Context) ([]models.MinimalTask, error) {
-	var tasks []RawTask
-	if err := c.Get(ctx, "/api/v1/tasks/all", &tasks); err != nil {
+	var tasks []models.RawTask
+	if err := c.Get(ctx, "/api/v1/tasks/all?limit=1000", &tasks); err != nil {
 		return nil, err
 	}
 	log.Info("tasks fetched", "count", len(tasks))
@@ -37,7 +37,7 @@ func (c *Client) GetAllTasks(ctx context.Context) ([]models.MinimalTask, error) 
 func (c *Client) GetTask(ctx context.Context, id int64) (*models.MinimalTask, error) {
 	endpoint := fmt.Sprintf("/api/v1/tasks/%d", id)
 
-	var t RawTask
+	var t models.RawTask
 	if err := c.Get(ctx, endpoint, &t); err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (c *Client) createTask(ctx context.Context, taskData *models.MinimalTask) (
 		"done":        taskData.Done,
 	}
 
-	var result RawTask
+	var result models.RawTask
 	// Use PUT for creation (as confirmed by curl)
 	if err := c.Put(ctx, endpoint, requestBody, &result); err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (c *Client) updateTask(ctx context.Context, taskData *models.MinimalTask) (
 		"done": taskData.Done,
 	}
 
-	var result RawTask
+	var result models.RawTask
 	// Use POST for updates (as shown in docs)
 	if err := c.Post(ctx, endpoint, requestBody, &result); err != nil {
 		return nil, err
