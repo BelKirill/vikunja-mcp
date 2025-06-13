@@ -61,61 +61,52 @@ func (c *Client) UpsertTask(ctx context.Context, taskData models.MinimalTask) (*
 }
 
 func (c *Client) createTask(ctx context.Context, taskData *models.MinimalTask) (*models.MinimalTask, error) {
-	endpoint := fmt.Sprintf("/api/v1/projects/%d/tasks", taskData.Project)
-
-	// Create request body without ID (let Vikunja assign it)
-	requestBody := RawTask{
-		// ID: 0, // Don't set ID for creation - Vikunja assigns it
-		ProjectID:   taskData.Project,
-		Title:       taskData.Title,
-		Description: taskData.Description,
-		Priority:    taskData.Priority,
-		Done:        taskData.Done,
-	}
-
-	var result RawTask
-	// Use POST for creation (not PUT)
-	if err := c.Put(ctx, endpoint, &requestBody, &result); err != nil {
-		return nil, err
-	}
-
-	log.Info("task created", "id", result.ID, "title", result.Title)
-	return &models.MinimalTask{
-		TaskID:      result.ID,
-		Project:     result.ProjectID,
-		Title:       result.Title,
-		Description: result.Description,
-		Priority:    result.Priority,
-		Done:        result.Done,
-	}, nil
+    endpoint := fmt.Sprintf("/api/v1/projects/%d/tasks", taskData.Project)
+    
+    requestBody := map[string]interface{}{
+        "title":       taskData.Title,
+        "description": taskData.Description,
+        "priority":    taskData.Priority,
+        "done":        taskData.Done,
+    }
+    
+    var result RawTask
+    // Use PUT for creation (as confirmed by curl)
+    if err := c.Put(ctx, endpoint, requestBody, &result); err != nil {
+        return nil, err
+    }
+    
+    log.Info("task created", "id", result.ID, "title", result.Title)
+    return &models.MinimalTask{
+        TaskID:      result.ID,
+        Project:     result.ProjectID,
+        Title:       result.Title,
+        Description: result.Description,
+        Priority:    result.Priority,
+        Done:        result.Done,
+    }, nil
 }
 
 func (c *Client) updateTask(ctx context.Context, taskData *models.MinimalTask) (*models.MinimalTask, error) {
-	endpoint := fmt.Sprintf("/api/v1/tasks/%d", taskData.TaskID)
-
-	// Create request body with existing ID
-	requestBody := RawTask{
-		ID:          taskData.TaskID,
-		ProjectID:   taskData.Project,
-		Title:       taskData.Title,
-		Description: taskData.Description,
-		Priority:    taskData.Priority,
-		Done:        taskData.Done,
-	}
-
-	var result RawTask
-	// Use PUT for updates (not POST)
-	if err := c.Post(ctx, endpoint, &requestBody, &result); err != nil {
-		return nil, err
-	}
-
-	log.Info("task updated", "id", result.ID, "title", result.Title)
-	return &models.MinimalTask{
-		TaskID:      result.ID,
-		Project:     result.ProjectID,
-		Title:       result.Title,
-		Description: result.Description,
-		Priority:    result.Priority,
-		Done:        result.Done,
-	}, nil
+    endpoint := fmt.Sprintf("/api/v1/tasks/%d", taskData.TaskID)
+    
+    requestBody := map[string]interface{}{
+        "done": taskData.Done,
+    }
+    
+    var result RawTask
+    // Use POST for updates (as shown in docs)
+    if err := c.Post(ctx, endpoint, requestBody, &result); err != nil {
+        return nil, err
+    }
+    
+    log.Info("task updated", "id", result.ID, "title", result.Title)
+    return &models.MinimalTask{
+        TaskID:      result.ID,
+        Project:     result.ProjectID,
+        Title:       result.Title,
+        Description: result.Description,
+        Priority:    result.Priority,
+        Done:        result.Done,
+    }, nil
 }
