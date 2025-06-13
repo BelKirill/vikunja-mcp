@@ -49,7 +49,7 @@ type Subscription struct {
 }
 
 type RawTask struct {
-	ID                     int                      `json:"id"`
+	ID                     int64                    `json:"id"`
 	Title                  string                   `json:"title"`
 	Description            string                   `json:"description"`
 	Done                   bool                     `json:"done"`

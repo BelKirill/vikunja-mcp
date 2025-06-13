@@ -3,6 +3,7 @@ package focus
 import (
 	"context"
 	"time"
+	"fmt"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/charmbracelet/log"
@@ -61,8 +62,8 @@ func FocusHandler(service *Service) fiber.Handler {
 		resp := make([]models.FocusResponseItem, 0, len(items))
 		for _, it := range items {
 			resp = append(resp, models.FocusResponseItem{
-				T:   it.TaskID,
-				P:   it.Project,
+				T:   fmt.Sprintf("%d", it.TaskID),
+				P:   fmt.Sprintf("%d", it.Project),
 				Est: 0, // TODO: map estimate if available
 			})
 		}

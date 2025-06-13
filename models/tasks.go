@@ -57,8 +57,8 @@ type FocusOptions struct {
 }
 
 type FocusResult struct {
-	TaskID      string
-	Project     string
+	TaskID      int64
+	Project     int64
 	Metadata    *HyperfocusMetadata
 	Priority    int
 	Title       string

@@ -2,7 +2,6 @@ package focus
 
 import (
 	"context"
-	"fmt"
 
 	vikunja "github.com/BelKirill/vikunja-mcp/internal/vikunja"
 	"github.com/BelKirill/vikunja-mcp/models"
@@ -31,8 +30,8 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts models.FocusOptions) (
 	results := make([]models.FocusResult, 0, len(tasks))
 	for _, t := range tasks {
 		results = append(results, models.FocusResult{
-			TaskID:      fmt.Sprintf("%v", t.ID),
-			Project:     fmt.Sprintf("%v", t.ProjectID),
+			TaskID:      t.TaskID,
+			Project:     t.Project,
 			Metadata:    s.ParseHyperFocusMetadata(t.Description),
 			Priority:    t.Priority,
 			Title:       t.Title,

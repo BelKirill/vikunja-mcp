@@ -35,13 +35,6 @@ func (c *Client) Get(ctx context.Context, endpoint string, result interface{}) e
 func (c *Client) Post(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	log.Info("POST request", "endpoint", endpoint)
 
-	fullURL := c.baseURL + endpoint
-	log.Info("Full URL", "URL", fullURL)
-	_, err := url.Parse(fullURL)
-	if err != nil {
-		return fmt.Errorf("invalid endpoint: %w", err)
-	}
-
 	var r io.Reader
 	if body != nil {
 		b, err := json.Marshal(body)
@@ -51,23 +44,16 @@ func (c *Client) Post(ctx context.Context, endpoint string, body interface{}, re
 		r = bytes.NewReader(b)
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPost, fullURL, r)
+	req, err := c.newRequest(ctx, http.MethodPost, endpoint, r)  // Pass endpoint, not fullURL
 	if err != nil {
 		return err
 	}
 	return c.do(req, result)
 }
 
-// Put performs a PUT request with a JSON body and unmarshals the response into result.
+// Put performs a PUT request with a JSON body and unmarshals the response into result.  
 func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	log.Info("PUT request", "endpoint", endpoint)
-
-	fullURL := c.baseURL + endpoint
-	log.Info("Full URL", "URL", fullURL)
-	_, err := url.Parse(fullURL)
-	if err != nil {
-		return fmt.Errorf("invalid endpoint: %w", err)
-	}
 
 	var r io.Reader
 	if body != nil {
@@ -78,7 +64,7 @@ func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, res
 		r = bytes.NewReader(b)
 	}
 
-	req, err := c.newRequest(ctx, http.MethodPut, fullURL, r)
+	req, err := c.newRequest(ctx, http.MethodPut, endpoint, r)  // Pass endpoint, not fullURL
 	if err != nil {
 		return err
 	}
