@@ -1,5 +1,15 @@
 package focus
 
+import "context"
+
+// handleDailyFocus processes the daily-focus tool call
+// FocusService defines the interface for focus-related service methods
+type FocusService interface {
+	GetFocusTasks(ctx context.Context, opts FocusOptions) ([]FocusResult, error)
+	parseHyperFocusMetadata(desc string) *HyperfocusMetadata
+	cleanDescription(desc string) string
+}
+
 // FocusRequest represents the daily focus request payload.
 // swagger:model FocusRequest
 type FocusRequest struct {
@@ -41,4 +51,31 @@ type APIError struct {
 	// Message is a human-readable error message.
 	// example: "invalid JSON body"
 	Message string `json:"message"`
+}
+
+type FocusItem struct {
+	TaskID  string
+	Project string
+}
+
+type FocusOptions struct {
+	Energy   string
+	Mode     string
+	Hours    float32
+	MaxItems int
+	Date     string
+}
+
+type FocusResult struct {
+	TaskID      string
+	Project     string
+	Metadata    *HyperfocusMetadata
+	Priority    int
+	Title       string
+	Done        bool
+	Description string
+}
+
+type HyperfocusMetadata struct {
+	Mode string
 }

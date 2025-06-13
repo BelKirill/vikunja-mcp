@@ -19,4 +19,6 @@ test:
 build:
 	go build -o bin/server ./cmd/server
 
-ci-local: fmt goimports lint test
+ci-local: fmt goimports lint
+
+ci-test: fmt goimports lint test
