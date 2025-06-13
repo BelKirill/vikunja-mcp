@@ -1,36 +1,63 @@
 package focus
 
-// --- Service Interfaces ------------------------------------------------------
+import (
+	"context"
 
-type FocusService interface {
-	// Focus takes a date and hours, returns a prioritized worklist
-	Focus(date string, hours float64) ([]FocusItem, error)
-}
-
-// --- Data Models -------------------------------------------------------------
-
-type FocusItem struct {
-	TaskID   string  // t
-	Project  string  // p
-	Estimate float64 // est
-}
-
-// --- Default stubs (override via setter) ------------------------------------
-
-// --- Default stubs (override via setter) ------------------------------------
-
-var (
-	focusService FocusService = &stubFocusService{}
+	vikunja "github.com/BelKirill/vikunja-mcp/internal/vikunja"
+	"github.com/BelKirill/vikunja-mcp/models"
 )
 
-func SetFocusService(svc FocusService) {
-	focusService = svc
+// --- Service -----------------------------------------------------------------
+
+type Service struct {
+	Vikunja *vikunja.Service
 }
 
-// stubFocusService returns empty slice
-type stubFocusService struct{}
+func NewService() (*Service, error) {
+	vikunjaSvc, err := vikunja.NewService()
+	if err != nil {
+		return nil, err
+	}
+	return &Service{Vikunja: vikunjaSvc}, nil
+}
 
-func (s *stubFocusService) Focus(date string, hours float64) ([]FocusItem, error) {
-	// stub: return no items
-	return []FocusItem{}, nil
+// Example: Get all incomplete tasks and map to FocusResult
+func (s *Service) GetFocusTasks(ctx context.Context, opts models.FocusOptions) ([]models.FocusResult, error) {
+	tasks, err := s.Vikunja.GetIncompleteTasks(ctx)
+	if err != nil {
+		return nil, err
+	}
+	results := make([]models.FocusResult, 0, len(tasks))
+	for _, t := range tasks {
+		results = append(results, models.FocusResult{
+			TaskID:      t.TaskID,
+			Project:     t.Project,
+			Metadata:    s.ParseHyperFocusMetadata(t.Description),
+			Priority:    t.Priority,
+			Title:       t.Title,
+			Done:        t.Done,
+			Description: t.Description,
+			// TODO: Add Estimate if available in t
+		})
+	}
+	// TODO: Add filtering/prioritization logic based on opts
+	return results, nil
+}
+
+func (s *Service) ParseHyperFocusMetadata(desc string) *models.HyperfocusMetadata {
+	// TODO: Parse metadata from description if needed
+	return nil
+}
+
+func (s *Service) cleanDescription(desc *string) string {
+	return *desc
+}
+
+// Add this method to the Service struct
+func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
+	return s.Vikunja.UpsertTask(ctx, task)
+}
+
+func (s *Service) CleanDescription(desc string) string {
+	return s.cleanDescription(&desc)
 }

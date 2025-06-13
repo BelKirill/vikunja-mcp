@@ -49,7 +49,7 @@ type Subscription struct {
 }
 
 type RawTask struct {
-	ID                     int                      `json:"id"`
+	ID                     int64                    `json:"id"`
 	Title                  string                   `json:"title"`
 	Description            string                   `json:"description"`
 	Done                   bool                     `json:"done"`
@@ -67,7 +67,7 @@ type RawTask struct {
 	RepeatAfter            int                      `json:"repeat_after"`
 	RepeatMode             int                      `json:"repeat_mode"`
 	BucketID               int                      `json:"bucket_id"`
-	ProjectID              int                      `json:"project_id"`
+	ProjectID              int64                    `json:"project_id"`
 	CoverImageAttachmentID int                      `json:"cover_image_attachment_id"`
 	Created                string                   `json:"created"`
 	Updated                string                   `json:"updated"`

@@ -1,4 +1,4 @@
-package focus
+package models
 
 // FocusRequest represents the daily focus request payload.
 // swagger:model FocusRequest
@@ -41,4 +41,41 @@ type APIError struct {
 	// Message is a human-readable error message.
 	// example: "invalid JSON body"
 	Message string `json:"message"`
+}
+
+type FocusItem struct {
+	TaskID  string
+	Project string
+}
+
+type FocusOptions struct {
+	Energy   string
+	Mode     string
+	Hours    float32
+	MaxItems int
+	Date     string
+}
+
+type FocusResult struct {
+	TaskID      int64
+	Project     int64
+	Metadata    *HyperfocusMetadata
+	Priority    int
+	Title       string
+	Done        bool
+	Description string
+}
+
+type HyperfocusMetadata struct {
+	Mode string
+}
+
+type MinimalTask struct {
+	TaskID      int64
+	Project     int64
+	Metadata    *HyperfocusMetadata
+	Priority    int
+	Title       string
+	Done        bool
+	Description string
 }
