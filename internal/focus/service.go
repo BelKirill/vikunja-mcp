@@ -207,8 +207,8 @@ func (s *Service) EstimateSessionLength(task models.FocusResult, userMaxMinutes 
 }
 
 // UpsertTask creates or updates a task through the Vikunja service
-func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
-	log.Info("UpsertTask called in focus.Service", "task_id", task.TaskID)
+func (s *Service) UpsertTask(ctx context.Context, task models.RawTask) (*models.RawTask, error) {
+	log.Info("UpsertTask called in focus.Service", "task_id", task.ID)
 	log.Debug("UpsertTask details", "task", task)
 	return s.Vikunja.UpsertTask(ctx, task)
 }

@@ -224,38 +224,38 @@ func enrichTasks(tasks []models.RawTask) ([]models.Task, error) {
 	return enrichedTasks, nil
 }
 
-// enrichMinimalTask enriches a MinimalTask with additional metadata or computed fields.
-func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
-	log.Debug("enrichMinimalTask called", "task", task)
-	if task == nil {
-		log.Debug("enrichMinimalTask: task is nil")
-		return nil
-	}
-	if task.Priority == 0 {
-		log.Debug("Setting default priority", "task_id", task.TaskID)
-		task.Priority = 3 // default priority
-	}
-	if task.Metadata == nil {
-		log.Debug("Setting default metadata", "task_id", task.TaskID)
-		task.Metadata = &models.HyperFocusMetadata{
-			Energy:                  "medium",
-			Mode:                    "quick",
-			Extend:                  false,
-			Minutes:                 25,
-			Estimate:                25,
-			HyperFocusCompatability: 3,
-		}
-	}
-	if task.Title != "" && (containsIgnoreCase(task.Title, "urgent") || containsIgnoreCase(task.Description, "urgent")) {
-		log.Info("Task marked as urgent", "task_id", task.TaskID)
-		task.Priority = 5
-	}
-	log.Debug("enrichMinimalTask returning", "task", task)
-	return task
-}
+// // enrichMinimalTask enriches a MinimalTask with additional metadata or computed fields.
+// func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
+// 	log.Debug("enrichMinimalTask called", "task", task)
+// 	if task == nil {
+// 		log.Debug("enrichMinimalTask: task is nil")
+// 		return nil
+// 	}
+// 	if task.Priority == 0 {
+// 		log.Debug("Setting default priority", "task_id", task.TaskID)
+// 		task.Priority = 3 // default priority
+// 	}
+// 	if task.Metadata == nil {
+// 		log.Debug("Setting default metadata", "task_id", task.TaskID)
+// 		task.Metadata = &models.HyperFocusMetadata{
+// 			Energy:                  "medium",
+// 			Mode:                    "quick",
+// 			Extend:                  false,
+// 			Minutes:                 25,
+// 			Estimate:                25,
+// 			HyperFocusCompatability: 3,
+// 		}
+// 	}
+// 	if task.Title != "" && (containsIgnoreCase(task.Title, "urgent") || containsIgnoreCase(task.Description, "urgent")) {
+// 		log.Info("Task marked as urgent", "task_id", task.TaskID)
+// 		task.Priority = 5
+// 	}
+// 	log.Debug("enrichMinimalTask returning", "task", task)
+// 	return task
+// }
 
-// containsIgnoreCase checks if substr is in s, case-insensitive
-func containsIgnoreCase(s, substr string) bool {
-	log.Debug("containsIgnoreCase called", "s", s, "substr", substr)
-	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
-}
+// // containsIgnoreCase checks if substr is in s, case-insensitive
+// func containsIgnoreCase(s, substr string) bool {
+// 	log.Debug("containsIgnoreCase called", "s", s, "substr", substr)
+// 	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
+// }

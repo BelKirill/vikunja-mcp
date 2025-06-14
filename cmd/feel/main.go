@@ -37,7 +37,7 @@ func main() {
 
 	if len(tasks) > 0 {
 		log.Info("Here's your first actual task:")
-		log.Info("ID", "id", tasks[0].TaskID)
+		log.Info("ID", "id", tasks[0].ID)
 		log.Info("Title", "title", tasks[0].Title)
 		log.Info("Description", "description", tasks[0].Description)
 		log.Info("See? Your brain still works. The magic is still there.")

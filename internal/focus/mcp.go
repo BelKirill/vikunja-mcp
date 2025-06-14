@@ -323,16 +323,16 @@ func handleGetFocusRecommendation(service *Service, args map[string]interface{})
 // handleUpsertTask processes the upsert_task tool call
 func handleUpsertTask(service *Service, args map[string]interface{}) (interface{}, error) {
 	log.Debug("handleUpsertTask called", "args", args)
-	var task models.MinimalTask
+	var task models.RawTask
 
 	// Parse task data from arguments
 	if v, ok := args["task_id"].(float64); ok {
 		log.Debug("Parsed task_id from args", "task_id", v)
-		task.TaskID = int64(v)
+		task.ID = int64(v)
 	}
 	if v, ok := args["project_id"].(float64); ok {
 		log.Debug("Parsed project_id from args", "project_id", v)
-		task.Project = int64(v)
+		task.ProjectID = int64(v)
 	}
 	if v, ok := args["title"].(string); ok {
 		log.Debug("Parsed title from args", "title", v)
@@ -352,7 +352,7 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 	}
 
 	action := "updated"
-	if task.TaskID == 0 {
+	if task.ID == 0 {
 		log.Debug("No task_id provided, will create new task")
 		action = "created"
 	}
@@ -368,12 +368,12 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 		"success": true,
 		"action":  action,
 		"task": map[string]interface{}{
-			"task_id":     result.TaskID,
+			"task_id":     result.ID,
 			"title":       result.Title,
 			"done":        result.Done,
 			"priority":    result.Priority,
 			"description": result.Description,
-			"project_id":  result.Project,
+			"project_id":  result.ProjectID,
 		},
 		"message": fmt.Sprintf("Task %s successfully", action),
 	}

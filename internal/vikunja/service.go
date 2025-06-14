@@ -36,20 +36,8 @@ func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
 		return nil, err
 	}
 	log.Debug("Fetched raw tasks", "count", len(rawTasks))
-	var rawTasksConverted []models.RawTask
-	for _, task := range rawTasks {
-		log.Debug("Converting MinimalTask to RawTask", "task_id", task.TaskID)
-		rawTask := models.RawTask{
-			ID:          task.TaskID,
-			Title:       task.Title,
-			Description: task.Description,
-			Priority:    task.Priority,
-			Done:        task.Done,
-			ProjectID:   task.Project,
-		}
-		rawTasksConverted = append(rawTasksConverted, rawTask)
-	}
-	enrichedTasks, err := enrichTasks(rawTasksConverted)
+
+	enrichedTasks, err := enrichTasks(rawTasks)
 	if err != nil {
 		log.Error("Failed to enrich tasks", "error", err)
 		return nil, err
@@ -96,49 +84,40 @@ func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error)
 }
 
 // UpsertTask creates or updates a task with proper metadata embedding
-func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
-	log.Info("UpsertTask called", "task_id", task.TaskID)
-	enriched := enrichMinimalTask(&task)
+func (s *Service) UpsertTask(ctx context.Context, task models.RawTask) (*models.RawTask, error) {
+	log.Info("UpsertTask called", "task_id", task.ID)
 
-	// CRITICAL: If metadata is provided via description field (from MCP),
+	// If metadata is provided via description field (from MCP),
 	// treat the description AS the metadata JSON and embed it properly
-	if enriched.Description != "" {
+	if task.Description != "" {
 		// Check if description contains JSON metadata
-		if strings.Contains(enriched.Description, "{") && strings.Contains(enriched.Description, "energy") {
+		if strings.Contains(task.Description, "{") && strings.Contains(task.Description, "energy") {
 			// Parse the JSON metadata from description
 			var metadata models.HyperFocusMetadata
-			if err := json.Unmarshal([]byte(enriched.Description), &metadata); err == nil {
-				log.Debug("Parsed metadata from description JSON", "task_id", task.TaskID)
-				enriched.Metadata = &metadata
-				// Clear the description since it was just JSON metadata
-				enriched.Description = ""
+			if err := json.Unmarshal([]byte(task.Description), &metadata); err == nil {
+				log.Debug("Parsed metadata from description JSON", "task_id", task.ID)
+				// Embed metadata as JSON in description
+				task.Description = embedMetadataInDescription("", &metadata)
 			}
 		}
 	}
 
-	// If we have metadata, embed it properly in the description
-	if enriched.Metadata != nil {
-		log.Debug("Embedding metadata in description", "task_id", task.TaskID)
-		enriched.Description = embedMetadataInDescription(enriched.Description, enriched.Metadata)
-	}
-
-	result, err := s.Client.UpsertTask(ctx, *enriched)
+	result, err := s.Client.UpsertTask(ctx, task)
 	if err != nil {
-		log.Error("Failed to upsert task", "task_id", task.TaskID, "error", err)
+		log.Error("Failed to upsert task", "task_id", task.ID, "error", err)
 		return nil, err
 	}
 
 	// Log successful operation
 	action := "updated"
-	if task.TaskID == 0 {
+	if task.ID == 0 {
 		action = "created"
 	}
 	log.Info("task upserted successfully",
 		"action", action,
-		"task_id", result.TaskID,
+		"task_id", result.ID,
 		"title", result.Title,
-		"description_length", len(result.Description),
-		"has_metadata", result.Metadata != nil)
+		"description_length", len(result.Description))
 
 	return result, nil
 }
