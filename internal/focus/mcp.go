@@ -11,12 +11,15 @@ import (
 
 // RegisterMCPTools registers focus-related MCP tools
 func RegisterMCPTools(server *mcp.Server) error {
+	log.Debug("Registering MCP tools for focus package")
 	vikunjaSvc, err := NewService()
 	if err != nil {
+		log.Error("Failed to create focus service for MCP tools", "error", err)
 		return err
 	}
 
 	// Register the daily-focus tool
+	log.Debug("Registering daily-focus tool with MCP server")
 	server.RegisterTool(mcp.Tool{
 		Name:        "daily-focus",
 		Description: "Get AI-recommended tasks for focus session based on energy/mode",
@@ -48,10 +51,12 @@ func RegisterMCPTools(server *mcp.Server) error {
 			},
 		},
 	}, func(args map[string]interface{}) (interface{}, error) {
+		log.Debug("daily-focus tool invoked", "args", args)
 		return handleDailyFocus(vikunjaSvc, args)
 	})
 
 	// Register task metadata reader
+	log.Debug("Registering get-task-metadata tool with MCP server")
 	server.RegisterTool(mcp.Tool{
 		Name:        "get-task-metadata",
 		Description: "Extract hyperfocus metadata from a specific task",
@@ -66,10 +71,12 @@ func RegisterMCPTools(server *mcp.Server) error {
 			"required": []string{"task_id"},
 		},
 	}, func(args map[string]interface{}) (interface{}, error) {
+		log.Debug("get-task-metadata tool invoked", "args", args)
 		return handleGetTaskMetadata(vikunjaSvc, args)
 	})
 
 	// Register the upsert_task tool
+	log.Debug("Registering upsert_task tool with MCP server")
 	server.RegisterTool(mcp.Tool{
 		Name:        "upsert_task",
 		Description: "Create a new task or update an existing task (including marking complete)",
@@ -105,10 +112,12 @@ func RegisterMCPTools(server *mcp.Server) error {
 			},
 		},
 	}, func(args map[string]interface{}) (interface{}, error) {
+		log.Debug("upsert_task tool invoked", "args", args)
 		return handleUpsertTask(vikunjaSvc, args)
 	})
 
 	// Register focus recommendation tool
+	log.Debug("Registering get-focus-recommendation tool with MCP server")
 	server.RegisterTool(mcp.Tool{
 		Name:        "get-focus-recommendation",
 		Description: "Get the single best task recommendation for current focus session",
@@ -137,14 +146,17 @@ func RegisterMCPTools(server *mcp.Server) error {
 			},
 		},
 	}, func(args map[string]interface{}) (interface{}, error) {
+		log.Debug("get-focus-recommendation tool invoked", "args", args)
 		return handleGetFocusRecommendation(vikunjaSvc, args)
 	})
 
+	log.Debug("All MCP tools registered for focus package")
 	return nil
 }
 
 // handleDailyFocus processes the daily-focus tool call
 func handleDailyFocus(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleDailyFocus called", "args", args)
 	opts := models.FocusOptions{
 		Energy:     "medium", // Default values
 		Mode:       "deep",
@@ -154,32 +166,32 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 
 	// Parse arguments with defaults
 	if energy, ok := args["energy"].(string); ok {
+		log.Debug("Parsed energy from args", "energy", energy)
 		opts.Energy = energy
 	}
 	if mode, ok := args["mode"].(string); ok {
+		log.Debug("Parsed mode from args", "mode", mode)
 		opts.Mode = mode
 	}
 	if hours, ok := args["hours"].(float64); ok {
+		log.Debug("Parsed hours from args", "hours", hours)
 		opts.MaxMinutes = int(hours * 60) // Convert hours to minutes
 	}
 	if maxItems, ok := args["max_items"].(float64); ok {
+		log.Debug("Parsed max_items from args", "max_items", maxItems)
 		opts.MaxTasks = int(maxItems)
 	}
 
-	log.Info("MCP daily-focus request",
-		"energy", opts.Energy,
-		"mode", opts.Mode,
-		"max_minutes", opts.MaxMinutes,
-		"max_tasks", opts.MaxTasks)
-
-	tasks, err := service.GetFocusTasks(context.Background(), opts)
+	log.Debug("Calling service.GetFocusTasks", "opts", opts)
+	tasks, err := service.GetFocusTasks(context.Background(), &opts)
 	if err != nil {
 		log.Error("Failed to get focus tasks", "error", err)
 		return nil, err
 	}
+	log.Debug("service.GetFocusTasks returned", "count", len(tasks))
 
 	// Format response for Claude
-	return map[string]interface{}{
+	resp := map[string]interface{}{
 		"message": "Focus tasks retrieved successfully",
 		"summary": map[string]interface{}{
 			"total_tasks":   len(tasks),
@@ -188,19 +200,22 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 			"target_hours":  float64(opts.MaxMinutes) / 60.0,
 		},
 		"tasks": tasks,
-	}, nil
+	}
+	log.Debug("handleDailyFocus response ready", "resp", resp)
+	return resp, nil
 }
 
 // handleGetTaskMetadata retrieves metadata for a specific task
 func handleGetTaskMetadata(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleGetTaskMetadata called", "args", args)
 	taskIDFloat, ok := args["task_id"].(float64)
 	if !ok {
+		log.Error("task_id missing or not a number", "args", args)
 		return nil, fmt.Errorf("task_id must be a number")
 	}
 	taskID := int64(taskIDFloat)
 
-	log.Info("MCP get-task-metadata request", "task_id", taskID)
-
+	log.Debug("Calling service.GetTaskMetadata", "task_id", taskID)
 	task, err := service.GetTaskMetadata(context.Background(), taskID)
 	if err != nil {
 		log.Error("Failed to get task metadata", "task_id", taskID, "error", err)
@@ -208,6 +223,7 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 	}
 
 	if task == nil {
+		log.Debug("No metadata found for task", "task_id", taskID)
 		return map[string]interface{}{
 			"task_id":             taskID,
 			"title":               "",
@@ -219,8 +235,9 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 		}, nil
 	}
 
+	log.Debug("Task metadata found", "task_id", taskID, "metadata", task.Metadata)
 	// Return enriched task data
-	return map[string]interface{}{
+	resp := map[string]interface{}{
 		"task_id":             task.RawTask.ID,
 		"title":               task.RawTask.Title,
 		"description":         task.CleanDescription,
@@ -231,11 +248,14 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 		"metadata":            task.Metadata,
 		"created":             task.RawTask.Created,
 		"updated":             task.RawTask.Updated,
-	}, nil
+	}
+	log.Debug("handleGetTaskMetadata response ready", "resp", resp)
+	return resp, nil
 }
 
 // handleGetFocusRecommendation gets the single best task for focus session
 func handleGetFocusRecommendation(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleGetFocusRecommendation called", "args", args)
 	opts := models.FocusOptions{
 		Energy:     "medium",
 		Mode:       "deep",
@@ -245,27 +265,27 @@ func handleGetFocusRecommendation(service *Service, args map[string]interface{})
 
 	// Parse arguments
 	if energy, ok := args["energy"].(string); ok {
+		log.Debug("Parsed energy from args", "energy", energy)
 		opts.Energy = energy
 	}
 	if mode, ok := args["mode"].(string); ok {
+		log.Debug("Parsed mode from args", "mode", mode)
 		opts.Mode = mode
 	}
 	if maxMinutes, ok := args["max_minutes"].(float64); ok {
+		log.Debug("Parsed max_minutes from args", "max_minutes", maxMinutes)
 		opts.MaxMinutes = int(maxMinutes)
 	}
 
-	log.Info("MCP focus recommendation request",
-		"energy", opts.Energy,
-		"mode", opts.Mode,
-		"max_minutes", opts.MaxMinutes)
-
-	recommendation, err := service.GetTaskRecommendation(context.Background(), opts)
+	log.Debug("Calling service.GetTaskRecommendation", "opts", opts)
+	recommendation, err := service.GetTaskRecommendation(context.Background(), &opts)
 	if err != nil {
 		log.Error("Failed to get task recommendation", "error", err)
 		return nil, err
 	}
 
 	if recommendation == nil {
+		log.Debug("No suitable task found for recommendation", "opts", opts)
 		return map[string]interface{}{
 			"message":        "No suitable tasks found",
 			"recommendation": nil,
@@ -277,78 +297,83 @@ func handleGetFocusRecommendation(service *Service, args map[string]interface{})
 		}, nil
 	}
 
-	// Calculate session recommendation
-	sessionLength := service.EstimateSessionLength(*recommendation, opts.MaxMinutes)
+	log.Debug("Task recommendation found", "task_id", recommendation.RawTask.ID, "score", recommendation.FocusScore)
 
-	return map[string]interface{}{
+	resp := map[string]interface{}{
 		"message": "Task recommendation generated successfully",
 		"recommendation": map[string]interface{}{
-			"task":               recommendation,
-			"recommended_length": sessionLength,
-			"can_extend":         recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
-			"focus_score":        recommendation.FocusScore,
-			"reasoning":          fmt.Sprintf("Selected for %s energy, %s mode (score: %.1f)", opts.Energy, opts.Mode, recommendation.FocusScore),
+			"task":        recommendation,
+			"can_extend":  recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
+			"focus_score": recommendation.FocusScore,
+			"reasoning":   fmt.Sprintf("Selected for %s energy, %s mode (score: %.1f)", opts.Energy, opts.Mode, recommendation.FocusScore),
 		},
 		"criteria": map[string]interface{}{
 			"energy":      opts.Energy,
 			"mode":        opts.Mode,
 			"max_minutes": opts.MaxMinutes,
 		},
-	}, nil
+	}
+	log.Debug("handleGetFocusRecommendation response ready", "resp", resp)
+	return resp, nil
 }
 
 // handleUpsertTask processes the upsert_task tool call
 func handleUpsertTask(service *Service, args map[string]interface{}) (interface{}, error) {
-	var task models.MinimalTask
+	log.Debug("handleUpsertTask called", "args", args)
+	var task models.RawTask
 
 	// Parse task data from arguments
 	if v, ok := args["task_id"].(float64); ok {
-		task.TaskID = int64(v)
+		log.Debug("Parsed task_id from args", "task_id", v)
+		task.ID = int64(v)
 	}
 	if v, ok := args["project_id"].(float64); ok {
-		task.Project = int64(v)
+		log.Debug("Parsed project_id from args", "project_id", v)
+		task.ProjectID = int64(v)
 	}
 	if v, ok := args["title"].(string); ok {
+		log.Debug("Parsed title from args", "title", v)
 		task.Title = v
 	}
 	if v, ok := args["description"].(string); ok {
+		log.Debug("Parsed description from args", "description", v)
 		task.Description = v
 	}
 	if v, ok := args["priority"].(float64); ok {
+		log.Debug("Parsed priority from args", "priority", v)
 		task.Priority = int(v)
 	}
 	if v, ok := args["done"].(bool); ok {
+		log.Debug("Parsed done from args", "done", v)
 		task.Done = v
 	}
 
 	action := "updated"
-	if task.TaskID == 0 {
+	if task.ID == 0 {
+		log.Debug("No task_id provided, will create new task")
 		action = "created"
 	}
 
-	log.Info("MCP upsert task request",
-		"action", action,
-		"task_id", task.TaskID,
-		"title", task.Title,
-		"project_id", task.Project)
-
-	result, err := service.UpsertTask(context.Background(), task)
+	log.Debug("Calling service.UpsertTask", "action", action, "task", task)
+	result, err := service.UpsertTask(context.Background(), &task)
 	if err != nil {
 		log.Error("Failed to upsert task", "error", err, "action", action)
 		return nil, err
 	}
 
-	return map[string]interface{}{
+	resp := map[string]interface{}{
 		"success": true,
 		"action":  action,
 		"task": map[string]interface{}{
-			"task_id":     result.TaskID,
+			"task_id":     result.ID,
 			"title":       result.Title,
 			"done":        result.Done,
 			"priority":    result.Priority,
 			"description": result.Description,
-			"project_id":  result.Project,
+			"project_id":  result.ProjectID,
 		},
 		"message": fmt.Sprintf("Task %s successfully", action),
-	}, nil
+	}
+	log.Debug("handleUpsertTask response ready", "resp", resp)
+	return resp, nil
 }

@@ -49,6 +49,7 @@ type Server struct {
 }
 
 func NewServer(name, version string) *Server {
+	log.Info("NewServer called for MCP", "name", name, "version", version)
 	return &Server{
 		name:     name,
 		version:  version,
@@ -60,6 +61,7 @@ func NewServer(name, version string) *Server {
 }
 
 func (s *Server) RegisterTool(tool Tool, handler ToolHandler) {
+	log.Info("Registering MCP tool", "name", tool.Name)
 	s.tools[tool.Name] = tool
 	s.handlers[tool.Name] = handler
 	log.Debug("registered MCP tool", "name", tool.Name)
@@ -107,6 +109,7 @@ func (s *Server) handleRequest(req JSONRPCRequest) JSONRPCResponse {
 	case "tools/call":
 		return s.handleToolCall(req)
 	default:
+		log.Error("Unknown MCP method", "method", req.Method)
 		return JSONRPCResponse{
 			JSONRPC: "2.0",
 			ID:      req.ID,
@@ -119,6 +122,8 @@ func (s *Server) handleRequest(req JSONRPCRequest) JSONRPCResponse {
 }
 
 func (s *Server) handleInitialize(req JSONRPCRequest) JSONRPCResponse {
+	log.Info("handleInitialize called", "id", req.ID)
+
 	// Parse params to get client info
 	var params map[string]interface{}
 	if req.Params != nil {
@@ -155,8 +160,11 @@ func (s *Server) handleInitialize(req JSONRPCRequest) JSONRPCResponse {
 }
 
 func (s *Server) handleToolsList(req JSONRPCRequest) JSONRPCResponse {
+	log.Info("handleToolsList called", "id", req.ID)
+
 	tools := make([]Tool, 0, len(s.tools))
 	for _, tool := range s.tools {
+		log.Debug("Tool listed", "name", tool.Name)
 		tools = append(tools, tool)
 	}
 
@@ -172,6 +180,8 @@ func (s *Server) handleToolsList(req JSONRPCRequest) JSONRPCResponse {
 }
 
 func (s *Server) handleToolCall(req JSONRPCRequest) JSONRPCResponse {
+	log.Info("handleToolCall called", "id", req.ID)
+
 	// Parse tool call parameters
 	params, ok := req.Params.(map[string]interface{})
 	if !ok {
@@ -195,6 +205,7 @@ func (s *Server) handleToolCall(req JSONRPCRequest) JSONRPCResponse {
 	}
 
 	log.Info("calling MCP tool", "tool", toolName, "args", args)
+	log.Debug("Calling MCP tool handler", "tool", toolName)
 
 	// Call the handler
 	result, err := handler(args)
@@ -220,6 +231,7 @@ func (s *Server) handleToolCall(req JSONRPCRequest) JSONRPCResponse {
 }
 
 func (s *Server) errorResponse(id interface{}, code int, message string) JSONRPCResponse {
+	log.Error("MCP error response", "id", id, "code", code, "message", message)
 	return JSONRPCResponse{
 		JSONRPC: "2.0",
 		ID:      id,
@@ -231,18 +243,20 @@ func (s *Server) errorResponse(id interface{}, code int, message string) JSONRPC
 }
 
 func (s *Server) sendResponse(response JSONRPCResponse) error {
+	log.Debug("sending MCP response", "response", response)
+
 	data, err := json.Marshal(response)
 	if err != nil {
 		return err
 	}
-
-	log.Debug("sending MCP response", "response", string(data))
 
 	_, err = fmt.Fprintf(s.writer, "%s\n", data)
 	return err
 }
 
 func (s *Server) sendError(id interface{}, code int, message string, data interface{}) {
+	log.Error("MCP sendError", "id", id, "code", code, "message", message, "data", data)
+
 	response := JSONRPCResponse{
 		JSONRPC: "2.0",
 		ID:      id,
@@ -260,6 +274,8 @@ func (s *Server) sendError(id interface{}, code int, message string, data interf
 }
 
 func (s *Server) formatToolResult(result interface{}) string {
+	log.Debug("Formatting tool result for output", "result", result)
+
 	// Format the result as a nice JSON string for Claude
 	data, err := json.MarshalIndent(result, "", "  ")
 	if err != nil {

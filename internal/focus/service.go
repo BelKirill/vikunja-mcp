@@ -2,222 +2,225 @@ package focus
 
 import (
 	"context"
-	"sort"
+	"os"
 
+	"github.com/BelKirill/vikunja-mcp/internal/engine"
+	"github.com/BelKirill/vikunja-mcp/internal/openai"
 	vikunja "github.com/BelKirill/vikunja-mcp/internal/vikunja"
 	"github.com/BelKirill/vikunja-mcp/models"
+	"github.com/charmbracelet/log"
 )
 
 // Service provides focus-specific business logic for task management
 type Service struct {
-	Vikunja *vikunja.Service
+	Vikunja     *vikunja.Service
+	FocusEngine *engine.FocusEngine
 }
 
-// NewService creates a new Focus Service with Vikunja dependency
+// NewService creates a new Focus Service with Vikunja dependency and AI engine
 func NewService() (*Service, error) {
+	log.Info("NewService (focus) called")
+
+	// Initialize Vikunja service
 	vikunjaSvc, err := vikunja.NewService()
 	if err != nil {
+		log.Error("Failed to create Vikunja service", "error", err)
 		return nil, err
 	}
-	return &Service{Vikunja: vikunjaSvc}, nil
+	log.Info("Vikunja service created successfully for focus.Service")
+
+	// Initialize AI-powered focus engine
+	focusEngine, err := initializeFocusEngine()
+	if err != nil {
+		log.Error("Failed to create focus engine", "error", err)
+		return nil, err
+	}
+	log.Info("Focus engine created successfully")
+
+	return &Service{
+		Vikunja:     vikunjaSvc,
+		FocusEngine: focusEngine,
+	}, nil
 }
 
-// GetFocusTasks returns tasks suitable for focus sessions based on energy and mode
-func (s *Service) GetFocusTasks(ctx context.Context, opts models.FocusOptions) ([]models.FocusResult, error) {
-	// Get enriched tasks from Vikunja service
+// initializeFocusEngine creates and configures the focus engine with AI decision making
+func initializeFocusEngine() (*engine.FocusEngine, error) {
+	// Configure OpenAI decision engine
+	openaiConfig := openai.OpenAIConfig{
+		APIKey: os.Getenv("OPENAI_API_KEY"),
+		Model:  getEnvOrDefault("OPENAI_MODEL", "gpt-4"),
+	}
+
+	if openaiConfig.APIKey == "" {
+		log.Warn("OPENAI_API_KEY not set, focus engine will use heuristic fallback only")
+	}
+
+	decisionEngine := openai.NewOpenAIDecisionEngine(openaiConfig)
+
+	// Create focus engine with AI decision making and heuristic fallback
+	focusEngine := engine.NewFocusEngine(
+		decisionEngine,
+		engine.WithLearning(true), // Enable learning from past sessions
+	)
+
+	return focusEngine, nil
+}
+
+// GetFocusTasks returns AI-ranked tasks suitable for focus sessions
+func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) ([]models.Task, error) {
+	log.Info("GetFocusTasks called with AI engine", "opts", opts)
+
+	// Get all incomplete tasks from Vikunja
 	tasks, err := s.Vikunja.GetIncompleteTasks(ctx)
 	if err != nil {
+		log.Error("Failed to get incomplete tasks from Vikunja", "error", err)
 		return nil, err
 	}
+	log.Info("Fetched incomplete tasks", "count", len(tasks))
 
-	// Convert to FocusResult and apply filtering
-	var candidateTasks []models.FocusResult
-	for _, t := range tasks {
-		// Skip if metadata is missing
-		if t.Metadata == nil {
-			continue
-		}
-
-		// Apply energy and mode filtering
-		if s.isTaskSuitable(t, opts) {
-			result := models.FocusResult{
-				TaskID:      t.RawTask.ID,
-				Project:     t.RawTask.ProjectID,
-				Metadata:    t.Metadata,
-				Priority:    t.RawTask.Priority,
-				Title:       t.RawTask.Title,
-				Done:        t.RawTask.Done,
-				Description: t.CleanDescription,
-				Estimate:    t.Metadata.Estimate,
-			}
-			candidateTasks = append(candidateTasks, result)
-		}
-	}
-
-	// Sort by focus suitability score
-	s.sortTasksByFocusScore(candidateTasks, opts)
-
-	// Limit results if specified
-	if opts.MaxTasks > 0 && len(candidateTasks) > opts.MaxTasks {
-		candidateTasks = candidateTasks[:opts.MaxTasks]
-	}
-
-	return candidateTasks, nil
-}
-
-// isTaskSuitable determines if a task matches the focus criteria
-func (s *Service) isTaskSuitable(task models.Task, opts models.FocusOptions) bool {
-	meta := task.Metadata
-
-	// Check hyperfocus compatibility threshold
-	if meta.HyperFocusCompatability < 3 {
-		return false
-	}
-
-	// Energy level matching with flexibility
-	energyMatch := s.isEnergyCompatible(meta.Energy, opts.Energy)
-
-	// Mode matching (exact match preferred)
-	modeMatch := meta.Mode == opts.Mode
-
-	// Time constraint matching (if specified)
-	timeMatch := true
-	if opts.MaxMinutes > 0 {
-		timeMatch = meta.Estimate <= opts.MaxMinutes
-	}
-
-	return energyMatch && modeMatch && timeMatch
-}
-
-// isEnergyCompatible checks if task energy level matches user's current energy
-func (s *Service) isEnergyCompatible(taskEnergy, userEnergy string) bool {
-	// Exact match is always good
-	if taskEnergy == userEnergy {
-		return true
-	}
-
-	// Medium energy can handle low or high energy tasks (flexibility)
-	if userEnergy == "medium" && (taskEnergy == "low" || taskEnergy == "high") {
-		return true
-	}
-
-	// High energy can handle medium tasks
-	if userEnergy == "high" && taskEnergy == "medium" {
-		return true
-	}
-
-	// Social energy is separate - no cross-compatibility
-	return false
-}
-
-// sortTasksByFocusScore sorts tasks by their suitability for focus sessions
-func (s *Service) sortTasksByFocusScore(tasks []models.FocusResult, opts models.FocusOptions) {
-	sort.Slice(tasks, func(i, j int) bool {
-		scoreI := s.calculateFocusScore(tasks[i], opts)
-		scoreJ := s.calculateFocusScore(tasks[j], opts)
-		return scoreI > scoreJ // Higher score first
-	})
-}
-
-// calculateFocusScore computes a focus suitability score for a task
-func (s *Service) calculateFocusScore(task models.FocusResult, opts models.FocusOptions) float64 {
-	var score float64
-
-	// Base score from hyperfocus compatibility (1-5)
-	score = float64(task.Metadata.HyperFocusCompatability)
-
-	// Bonus for exact energy match
-	if task.Metadata.Energy == opts.Energy {
-		score += 2.0
-	}
-
-	// Bonus for exact mode match
-	if task.Metadata.Mode == opts.Mode {
-		score += 2.0
-	}
-
-	// Bonus for extendable tasks if user has time
-	if task.Metadata.Extend && opts.MaxMinutes >= 50 {
-		score += 1.0
-	}
-
-	// Priority weighting (Vikunja priority 1-5)
-	score += float64(task.Priority) * 0.5
-
-	// Time preference: prefer tasks that fit well in available time
-	if opts.MaxMinutes > 0 {
-		timeRatio := float64(task.Metadata.Estimate) / float64(opts.MaxMinutes)
-		if timeRatio >= 0.5 && timeRatio <= 1.0 {
-			score += 1.0 // Good time fit
-		}
-	}
-
-	return score
-}
-
-// GetTaskRecommendation returns the single best task for a focus session
-func (s *Service) GetTaskRecommendation(ctx context.Context, opts models.FocusOptions) (*models.FocusResult, error) {
-	// Limit to 1 task
-	opts.MaxTasks = 1
-
-	tasks, err := s.GetFocusTasks(ctx, opts)
+	// Use AI-powered focus engine for intelligent task selection
+	decision, err := s.FocusEngine.GetFocusTasks(ctx, tasks, opts)
 	if err != nil {
+		log.Error("Focus engine failed", "error", err)
+		// Fallback to basic filtering if AI fails
+		return s.basicTaskFiltering(tasks, opts), nil
+	}
+
+	// Convert ranked tasks back to models.Task slice
+	result := make([]models.Task, len(decision.RankedTasks))
+	for i, rankedTask := range decision.RankedTasks {
+		result[i] = rankedTask.Task
+	}
+
+	log.Info("GetFocusTasks returning AI-ranked tasks",
+		"count", len(result),
+		"strategy", decision.Strategy,
+		"confidence", decision.Confidence,
+		"reasoning", decision.Reasoning)
+
+	return result, nil
+}
+
+// GetTaskRecommendation returns the single best task with AI-powered reasoning
+func (s *Service) GetTaskRecommendation(ctx context.Context, opts *models.FocusOptions) (*models.Task, error) {
+	log.Info("GetTaskRecommendation called with AI engine", "opts", opts)
+
+	// Get all incomplete tasks
+	tasks, err := s.Vikunja.GetIncompleteTasks(ctx)
+	if err != nil {
+		log.Error("Failed to get incomplete tasks", "error", err)
 		return nil, err
 	}
 
-	if len(tasks) == 0 {
-		return nil, nil // No suitable tasks found
+	// Use AI-powered recommendation
+	recommendation, err := s.FocusEngine.GetTaskRecommendation(ctx, tasks, opts)
+	if err != nil {
+		log.Error("AI recommendation failed", "error", err)
+		// Fallback to basic recommendation
+		return s.basicTaskRecommendation(tasks, opts), nil
 	}
 
-	return &tasks[0], nil
+	if recommendation == nil || recommendation.Task == nil {
+		log.Info("No suitable tasks found for recommendation")
+		return nil, nil
+	}
+
+	log.Info("Returning AI-powered task recommendation",
+		"task_id", recommendation.Task.Task.RawTask.ID,
+		"strategy", recommendation.SessionStrategy,
+		"length", recommendation.RecommendedLength,
+		"reasoning", recommendation.Reasoning)
+
+	return &recommendation.Task.Task, nil
 }
 
-// EstimateSessionLength calculates optimal session length for a task
-func (s *Service) EstimateSessionLength(task models.FocusResult, userMaxMinutes int) int {
-	estimate := task.Metadata.Estimate
-	minutes := task.Metadata.Minutes
+// GetEnhancedTaskRecommendation returns the full AI recommendation with reasoning
+func (s *Service) GetEnhancedTaskRecommendation(ctx context.Context, opts *models.FocusOptions) (*models.TaskRecommendation, error) {
+	log.Info("GetEnhancedTaskRecommendation called")
 
-	// If task can extend and user has time, suggest longer session
-	if task.Metadata.Extend && userMaxMinutes >= estimate {
-		return estimate
+	tasks, err := s.Vikunja.GetIncompleteTasks(ctx)
+	if err != nil {
+		log.Error("Failed to get incomplete tasks", "error", err)
+		return nil, err
 	}
 
-	// Otherwise use base pomodoro length
-	if userMaxMinutes >= minutes {
-		return minutes
+	recommendation, err := s.FocusEngine.GetTaskRecommendation(ctx, tasks, opts)
+	if err != nil {
+		log.Error("Enhanced recommendation failed", "error", err)
+		return nil, err
 	}
 
-	// User doesn't have enough time for even base pomodoro
-	return userMaxMinutes
+	return recommendation, nil
+}
+
+// EstimateSessionLength calculates optimal session length using AI insights
+func (s *Service) EstimateSessionLength(task *models.FocusResult, userMaxMinutes int) int {
+	log.Info("EstimateSessionLength called", "task_id", task.TaskID, "userMaxMinutes", userMaxMinutes)
+
+	// If we have AI metadata, use it
+	if task.Metadata != nil {
+		estimate := task.Metadata.Estimate
+		minutes := task.Metadata.Minutes
+
+		// If task can extend and user has time, suggest longer session
+		if task.Metadata.Extend && userMaxMinutes >= estimate {
+			log.Debug("Suggesting extended session length", "estimate", estimate)
+			return estimate
+		}
+
+		// Otherwise use base pomodoro length
+		if userMaxMinutes >= minutes {
+			log.Debug("Suggesting base pomodoro length", "minutes", minutes)
+			return minutes
+		}
+	}
+
+	// Default fallback
+	log.Debug("Using default session length", "userMaxMinutes", userMaxMinutes)
+	return min(25, userMaxMinutes) // Default 25-minute pomodoro
 }
 
 // UpsertTask creates or updates a task through the Vikunja service
-func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
-	return s.Vikunja.UpsertTask(ctx, task)
+func (s *Service) UpsertTask(ctx context.Context, task *models.RawTask) (*models.RawTask, error) {
+	log.Info("UpsertTask called in focus.Service", "task_id", task.ID)
+	log.Debug("UpsertTask details", "task", task)
+	return s.Vikunja.UpsertTask(ctx, *task)
 }
 
 // GetTaskMetadata retrieves detailed metadata for a specific task
 func (s *Service) GetTaskMetadata(ctx context.Context, taskID int64) (*models.Task, error) {
-	// Get the minimal task first
-	minTask, err := s.Vikunja.GetTaskByID(ctx, taskID)
+	log.Info("GetTaskMetadata called", "task_id", taskID)
+	log.Debug("Fetching task metadata from Vikunja", "task_id", taskID)
+	task, err := s.Vikunja.GetTaskByID(ctx, taskID)
 	if err != nil {
+		log.Error("Failed to get task by ID in GetTaskMetadata", "task_id", taskID, "error", err)
 		return nil, err
 	}
+	log.Info("Returning task metadata", "task_id", taskID)
+	log.Debug("Task metadata result", "task", task)
+	return task, nil
+}
 
-	// Convert to enriched task format
-	// This might need adjustment based on your actual models
-	enrichedTask := &models.Task{
-		RawTask: &models.RawTask{
-			ID:          minTask.TaskID,
-			Title:       minTask.Title,
-			Description: minTask.Description,
-			Priority:    minTask.Priority,
-			Done:        minTask.Done,
-			ProjectID:   minTask.Project,
-		},
-		Metadata:         minTask.Metadata,
-		CleanDescription: minTask.Description, // This would be cleaned by Vikunja service
+// =============================================================================
+// Fallback Methods (for when AI is unavailable)
+// =============================================================================
+
+// =============================================================================
+// Utility Functions
+// =============================================================================
+
+// getEnvOrDefault returns environment variable value or default
+func getEnvOrDefault(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
 	}
+	return defaultValue
+}
 
-	return enrichedTask, nil
+// min returns the smaller of two integers
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }

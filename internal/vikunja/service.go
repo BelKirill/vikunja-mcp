@@ -7,147 +7,8 @@ import (
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/BelKirill/vikunja-mcp/pkg/vikunja/client"
+	"github.com/charmbracelet/log"
 )
-
-// extractJSON extracts the first valid JSON object or array from a string.
-func extractJSON(input string) (string, error) {
-	input = strings.TrimSpace(input)
-	startObj := strings.Index(input, "{")
-	startArr := strings.Index(input, "[")
-	var start int
-	if startObj == -1 && startArr == -1 {
-		return "", nil // No JSON found
-	} else if startObj == -1 {
-		start = startArr
-	} else if startArr == -1 {
-		start = startObj
-	} else if startObj < startArr {
-		start = startObj
-	} else {
-		start = startArr
-	}
-	for end := len(input); end > start; end-- {
-		candidate := input[start:end]
-		var js interface{}
-		if json.Unmarshal([]byte(candidate), &js) == nil {
-			return candidate, nil
-		}
-	}
-	return "", nil // No valid JSON found
-}
-
-func enrichTask(task *models.RawTask) (*models.Task, error) {
-	meta, err := extractJSON(task.Description)
-	if err != nil {
-		return nil, err
-	}
-
-	enrichedTask := &models.Task{
-		RawTask:          task,             // Embed the raw task
-		CleanDescription: task.Description, // Will be cleaned below
-	}
-
-	if meta == "" {
-		// No JSON metadata found - use defaults
-		enrichedTask.Metadata = &models.HyperFocusMetadata{
-			Energy:                  "medium", // Default energy level
-			Mode:                    "quick",  // Default mode
-			Extend:                  false,    // Default no extension
-			Minutes:                 25,       // Default pomodoro
-			Estimate:                25,       // Default estimate same as minutes
-			HyperFocusCompatability: 3,        // Default middle compatibility
-		}
-		// Description stays as-is since no JSON to remove
-	} else {
-		// Parse the JSON metadata
-		var hyperfocusData models.HyperFocusMetadata
-		if err := json.Unmarshal([]byte(meta), &hyperfocusData); err != nil {
-			// JSON exists but invalid - use defaults
-			enrichedTask.Metadata = &models.HyperFocusMetadata{
-				Energy:                  "medium",
-				Mode:                    "quick",
-				Extend:                  false,
-				Minutes:                 25,
-				Estimate:                25,
-				HyperFocusCompatability: 3,
-			}
-		} else {
-			// Valid JSON metadata found
-			enrichedTask.Metadata = &hyperfocusData
-
-			// Validate and set defaults for missing fields
-			if hyperfocusData.Energy == "" {
-				enrichedTask.Metadata.Energy = "medium"
-			}
-			if hyperfocusData.Mode == "" {
-				enrichedTask.Metadata.Mode = "quick"
-			}
-			if hyperfocusData.Minutes == 0 {
-				enrichedTask.Metadata.Minutes = 25
-			}
-			if hyperfocusData.Estimate == 0 {
-				// If no estimate provided, use minutes as estimate
-				enrichedTask.Metadata.Estimate = enrichedTask.Metadata.Minutes
-			}
-			if hyperfocusData.HyperFocusCompatability == 0 {
-				enrichedTask.Metadata.HyperFocusCompatability = 3 // Default middle
-			}
-		}
-
-		// Clean the description by removing the JSON metadata
-		enrichedTask.CleanDescription = strings.Replace(task.Description, meta, "", 1)
-		enrichedTask.CleanDescription = strings.TrimSpace(enrichedTask.CleanDescription)
-	}
-
-	return enrichedTask, nil
-}
-
-func enrichTasks(tasks []models.RawTask) ([]models.Task, error) {
-	enrichedTasks := make([]models.Task, 0, len(tasks))
-
-	for _, task := range tasks {
-		enriched, err := enrichTask(&task)
-		if err != nil {
-			// Log error but continue with others
-			continue
-		}
-		enrichedTasks = append(enrichedTasks, *enriched)
-	}
-
-	return enrichedTasks, nil
-}
-
-// enrichMinimalTask enriches a MinimalTask with additional metadata or computed fields.
-func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
-	if task == nil {
-		return nil
-	}
-	// Example: set a default priority if not set
-	if task.Priority == 0 {
-		task.Priority = 3 // default priority
-	}
-	// Example: add a stub metadata if missing
-	if task.Metadata == nil {
-		task.Metadata = &models.HyperFocusMetadata{
-			Energy:                  "medium",
-			Mode:                    "quick",
-			Extend:                  false,
-			Minutes:                 25,
-			Estimate:                25,
-			HyperFocusCompatability: 3,
-		}
-	}
-	// Example: mark as high priority if title contains "urgent"
-	if task.Title != "" && (containsIgnoreCase(task.Title, "urgent") || containsIgnoreCase(task.Description, "urgent")) {
-		task.Priority = 5
-	}
-	return task
-}
-
-// containsIgnoreCase checks if substr is in s, case-insensitive
-func containsIgnoreCase(s, substr string) bool {
-	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
-}
 
 // Service provides business logic on top of the Vikunja API client.
 type Service struct {
@@ -156,80 +17,133 @@ type Service struct {
 
 // NewService creates a new Service with the given Vikunja client.
 func NewService() (*Service, error) {
+	log.Info("NewService called for vikunja.Service")
 	vikClient, err := client.NewClient()
 	if err != nil {
+		log.Error("Failed to create Vikunja client", "error", err)
 		return nil, err
 	}
+	log.Info("Vikunja client created successfully")
 	return &Service{Client: vikClient}, nil
 }
 
 // GetUserTasks fetches all tasks for the current user and enriches them with metadata.
 func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
+	log.Info("GetUserTasks called")
 	rawTasks, err := s.Client.GetAllTasks(ctx)
 	if err != nil {
+		log.Error("Failed to get all tasks", "error", err)
 		return nil, err
 	}
+	log.Debug("Fetched raw tasks", "count", len(rawTasks))
 
-	// Convert MinimalTask to RawTask - you may need to adjust this based on your actual types
-	// For now assuming they're compatible or you have a conversion method
-	var rawTasksConverted []models.RawTask
-	for _, task := range rawTasks {
-		// Convert MinimalTask to RawTask format
-		rawTask := models.RawTask{
-			ID:          task.TaskID,
-			Title:       task.Title,
-			Description: task.Description,
-			Priority:    task.Priority,
-			Done:        task.Done,
-			ProjectID:   task.Project,
-		}
-		rawTasksConverted = append(rawTasksConverted, rawTask)
-	}
-
-	enrichedTasks, err := enrichTasks(rawTasksConverted)
+	enrichedTasks, err := enrichTasks(rawTasks)
 	if err != nil {
+		log.Error("Failed to enrich tasks", "error", err)
 		return nil, err
 	}
-
+	log.Info("GetUserTasks returning", "enriched_count", len(enrichedTasks))
 	return enrichedTasks, nil
 }
 
 // GetTaskByID fetches a single task by its ID.
-func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.MinimalTask, error) {
+func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, error) {
+	log.Info("GetTaskByID called", "id", id)
 	task, err := s.Client.GetTask(ctx, id)
 	if err != nil {
+		log.Error("Failed to get task by ID", "id", id, "error", err)
 		return nil, err
 	}
-	return enrichMinimalTask(task), nil
+	log.Debug("Fetched task", "task", task)
+	result, err := enrichTask(task)
+	if err != nil {
+		log.Error("Failed to enrich task by ID", "id", id, "error", err)
+		return nil, err
+	}
+	log.Info("GetTaskByID returning", "id", id, "has_metadata", result.Metadata != nil)
+	return result, nil
 }
 
 // GetIncompleteTasks returns all tasks that are not marked as done.
 func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error) {
+	log.Info("GetIncompleteTasks called")
 	tasks, err := s.GetUserTasks(ctx)
 	if err != nil {
+		log.Error("Failed to get user tasks", "error", err)
 		return nil, err
 	}
 	var result []models.Task
 	for _, t := range tasks {
 		if !t.RawTask.Done {
+			log.Debug("Task is incomplete", "task_id", t.RawTask.ID)
 			result = append(result, t)
 		}
 	}
+	log.Info("GetIncompleteTasks returning", "count", len(result))
 	return result, nil
 }
 
-// UpsertTask creates or updates a task.
-func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
-	enriched := enrichMinimalTask(&task)
-	return s.Client.UpsertTask(ctx, *enriched)
+// UpsertTask creates or updates a task with proper metadata embedding
+func (s *Service) UpsertTask(ctx context.Context, task models.RawTask) (*models.RawTask, error) {
+	log.Info("UpsertTask called", "task_id", task.ID)
+
+	// If metadata is provided via description field (from MCP),
+	// treat the description AS the metadata JSON and embed it properly
+	if task.Description != "" {
+		// Check if description contains JSON metadata
+		if strings.Contains(task.Description, "{") && strings.Contains(task.Description, "energy") {
+			// Parse the JSON metadata from description
+			var metadata models.HyperFocusMetadata
+			if err := json.Unmarshal([]byte(task.Description), &metadata); err == nil {
+				log.Debug("Parsed metadata from description JSON", "task_id", task.ID)
+				// Embed metadata as JSON in description
+				task.Description = embedMetadataInDescription("", &metadata)
+			}
+		}
+	}
+
+	// Assign the value of the vikunja service Me to assignee
+	if user, err := s.Me(ctx); err == nil && user != nil {
+		task.Assignees = []models.User{*user}
+	} else if err != nil {
+		log.Warn("Could not fetch current user for assignee", "error", err)
+	}
+
+	// Set priority to 3 if it is 0
+	if task.Priority == 0 {
+		log.Debug("Setting default priority to 3 for task", "task_id", task.ID)
+		task.Priority = 3
+	}
+
+	result, err := s.Client.UpsertTask(ctx, task)
+	if err != nil {
+		log.Error("Failed to upsert task", "task_id", task.ID, "error", err)
+		return nil, err
+	}
+
+	// Log successful operation
+	action := "updated"
+	if task.ID == 0 {
+		action = "created"
+	}
+	log.Info("task upserted successfully",
+		"action", action,
+		"task_id", result.ID,
+		"title", result.Title,
+		"description_length", len(result.Description))
+
+	return result, nil
 }
 
-// Me fetches the current authenticated user.
+// Me fetches the current user information.
 func (s *Service) Me(ctx context.Context) (*models.User, error) {
+	log.Info("Me called")
 	var user models.User
 	err := s.Client.Get(ctx, "/api/v1/user", &user)
 	if err != nil {
+		log.Error("Failed to fetch current user", "error", err)
 		return nil, err
 	}
+	log.Info("Me returning user", "user_id", user.ID, "username", user.Username)
 	return &user, nil
 }

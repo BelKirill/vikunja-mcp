@@ -1,55 +1,13 @@
 package models
 
-// FocusRequest represents the daily focus request payload.
-// swagger:model FocusRequest
-type FocusRequest struct {
-	// Date is the desired focus date. Defaults to tomorrow if not provided.
-	// example: "2025-05-26"
-	Date string `json:"date,omitempty"`
-	// Hours is the number of hours to focus. Derived from calendar if zero.
-	// example: 5
-	Hours float64 `json:"hours,omitempty"`
-}
-
-// FocusResponseItem represents an item in the daily-focus endpoint response.
-// swagger:model FocusResponseItem
-type FocusResponseItem struct {
-	// T represents the task ID.
-	// example: "task-123"
-	T string `json:"t"`
-	// P represents the project identifier.
-	// example: "project-a"
-	P string `json:"p"`
-	// Est represents the estimated duration of the task.
-	// example: 2.5
-	Est float64 `json:"est"`
-}
-
-// FocusResponse represents the daily focus endpoint response comprising a slice of focus response items.
-// swagger:model FocusResponse
-type FocusResponse struct {
-	// Items is a list of focus response items.
-	Items []FocusResponseItem `json:"items"`
-}
-
-// APIError represents a standard API error response.
-// swagger:model APIError
-type APIError struct {
-	// Code is the HTTP status code.
-	// example: 400
-	Code int `json:"code"`
-	// Message is a human-readable error message.
-	// example: "invalid JSON body"
-	Message string `json:"message"`
-}
-
 // FocusOptions represents the criteria for selecting focus tasks
 type FocusOptions struct {
-	Energy     string `json:"energy"`      // "low"|"medium"|"high"|"social"
-	Mode       string `json:"mode"`        // "deep"|"quick"|"admin"
-	MaxMinutes int    `json:"max_minutes"` // Maximum available time for session
-	MaxTasks   int    `json:"max_tasks"`   // Maximum number of tasks to return
-	Date       string `json:"date"`        // Target date for focus session
+	Energy     string `json:"energy"`           // "low"|"medium"|"high"|"social"
+	Mode       string `json:"mode"`             // "deep"|"quick"|"admin"
+	MaxMinutes int    `json:"max_minutes"`      // Maximum available time for session
+	MaxTasks   int    `json:"max_tasks"`        // Maximum number of tasks to return
+	Date       string `json:"date"`             // Target date for focus session
+	HyperFocus int    `json:"hyperfocus_level"` // Target hyperfocus level
 }
 
 // FocusResult represents a task recommended for a focus session with enriched metadata
@@ -73,71 +31,6 @@ type HyperFocusMetadata struct {
 	Minutes                 int    `json:"minutes"`          // Base pomodoro work unit
 	Estimate                int    `json:"estimate"`         // Total estimated duration in minutes
 	HyperFocusCompatability int    `json:"hyper_focus_comp"` // Scale 1-5, hyperfocus compatibility
-}
-
-// MinimalTask represents the essential task data for MCP operations
-type MinimalTask struct {
-	TaskID      int64               `json:"task_id"`
-	Project     int64               `json:"project"`
-	Metadata    *HyperFocusMetadata `json:"metadata"`
-	Priority    int                 `json:"priority"`
-	Title       string              `json:"title"`
-	Done        bool                `json:"done"`
-	Description string              `json:"description"`
-}
-
-// User represents a Vikunja user
-type User struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Created  string `json:"created"`
-	Updated  string `json:"updated"`
-}
-
-// FileInfo represents file metadata for attachments
-type FileInfo struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Mime    string `json:"mime"`
-	Size    int    `json:"size"`
-	Created string `json:"created"`
-}
-
-// Attachment represents a file attached to a task
-type Attachment struct {
-	ID        int      `json:"id"`
-	TaskID    int      `json:"task_id"`
-	Created   string   `json:"created"`
-	CreatedBy User     `json:"created_by"`
-	File      FileInfo `json:"file"`
-}
-
-// Label represents a task label/tag
-type Label struct {
-	ID          int    `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	HexColor    string `json:"hex_color"`
-	Created     string `json:"created"`
-	Updated     string `json:"updated"`
-	CreatedBy   User   `json:"created_by"`
-}
-
-// Reminder represents a task reminder configuration
-type Reminder struct {
-	Reminder       string `json:"reminder"`
-	RelativePeriod int    `json:"relative_period"`
-	RelativeTo     string `json:"relative_to"` // e.g., "due_date"
-}
-
-// Subscription represents a user's subscription to task updates
-type Subscription struct {
-	ID       int    `json:"id"`
-	Entity   int    `json:"entity"`
-	EntityID int    `json:"entity_id"`
-	Created  string `json:"created"`
 }
 
 // RawTask represents the complete task data from Vikunja API
@@ -178,15 +71,17 @@ type RawTask struct {
 type Task struct {
 	RawTask          *RawTask            `json:"raw_task"`
 	Metadata         *HyperFocusMetadata `json:"metadata,omitempty"`
+	FocusScore       float64             `json:"focus_score,omitempty"`
 	CleanDescription string              `json:"clean_description"`
 }
 
 // SessionRecommendation represents an optimal focus session recommendation
 type SessionRecommendation struct {
-	Task              *FocusResult `json:"task"`
-	RecommendedLength int          `json:"recommended_length"` // Minutes
-	CanExtend         bool         `json:"can_extend"`
-	Reasoning         string       `json:"reasoning"` // Why this task was chosen
+	Task              *Task   `json:"task"`
+	Score             float64 `json:"recommendation_score"`
+	RecommendedLength int     `json:"recommended_length"` // Minutes
+	CanExtend         bool    `json:"can_extend"`
+	Reasoning         string  `json:"reasoning"` // Why this task was chosen
 }
 
 // FocusSession represents an active or completed focus session
