@@ -102,6 +102,19 @@ func (s *Service) UpsertTask(ctx context.Context, task models.RawTask) (*models.
 		}
 	}
 
+	// Assign the value of the vikunja service Me to assignee
+	if user, err := s.Me(ctx); err == nil && user != nil {
+		task.Assignees = []models.User{*user}
+	} else if err != nil {
+		log.Warn("Could not fetch current user for assignee", "error", err)
+	}
+
+	// Set priority to 3 if it is 0
+	if task.Priority == 0 {
+		log.Debug("Setting default priority to 3 for task", "task_id", task.ID)
+		task.Priority = 3
+	}
+
 	result, err := s.Client.UpsertTask(ctx, task)
 	if err != nil {
 		log.Error("Failed to upsert task", "task_id", task.ID, "error", err)

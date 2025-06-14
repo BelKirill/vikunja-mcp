@@ -179,22 +179,27 @@ func (e *FocusEngine) fallbackToHeuristic(ctx context.Context, tasks []models.Ta
 
 // validateAndEnrichResponse ensures response quality and adds missing data
 func (e *FocusEngine) validateAndEnrichResponse(response *models.DecisionResponse, opts *models.FocusOptions) {
+	log.Debug("Validating and enriching response", "ranked_tasks", len(response.RankedTasks), "max_tasks", opts.MaxTasks)
 	// Limit to requested max tasks
 	if opts.MaxTasks > 0 && len(response.RankedTasks) > opts.MaxTasks {
+		log.Debug("Trimming ranked tasks to max_tasks", "before", len(response.RankedTasks), "after", opts.MaxTasks)
 		response.RankedTasks = response.RankedTasks[:opts.MaxTasks]
 	}
 
 	// Ensure scores are valid
 	for i := range response.RankedTasks {
 		if response.RankedTasks[i].Score < 0.0 {
+			log.Debug("Score below 0.0, correcting", "index", i, "score", response.RankedTasks[i].Score)
 			response.RankedTasks[i].Score = 0.0
 		}
 		if response.RankedTasks[i].Score > 1.0 {
+			log.Debug("Score above 1.0, correcting", "index", i, "score", response.RankedTasks[i].Score)
 			response.RankedTasks[i].Score = 1.0
 		}
 	}
 
 	// Sort by score (should already be sorted, but ensure it)
+	log.Debug("Sorting ranked tasks by score")
 	sort.Slice(response.RankedTasks, func(i, j int) bool {
 		return response.RankedTasks[i].Score > response.RankedTasks[j].Score
 	})
@@ -341,11 +346,12 @@ func NewHeuristicFallback() *HeuristicFallback {
 }
 
 func (h *HeuristicFallback) SelectTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.RankedTask {
+	log.Info("HeuristicFallback.SelectTasks called", "task_count", len(tasks), "opts", opts)
 	var ranked []models.RankedTask
 
 	for _, task := range tasks {
 		score := h.calculateHeuristicScore(task, opts)
-
+		log.Debug("Heuristic score calculated", "task_id", task.RawTask.ID, "score", score)
 		ranked = append(ranked, models.RankedTask{
 			Task:             task,
 			Score:            score,
@@ -355,12 +361,14 @@ func (h *HeuristicFallback) SelectTasks(ctx context.Context, tasks []models.Task
 		})
 	}
 
+	log.Debug("Sorting ranked tasks by score (heuristic)")
 	// Sort by score
 	sort.Slice(ranked, func(i, j int) bool {
 		return ranked[i].Score > ranked[j].Score
 	})
 
 	if opts.MaxTasks > 0 && len(ranked) > opts.MaxTasks {
+		log.Debug("Trimming ranked tasks to max_tasks (heuristic)", "before", len(ranked), "after", opts.MaxTasks)
 		ranked = ranked[:opts.MaxTasks]
 	}
 
@@ -368,9 +376,11 @@ func (h *HeuristicFallback) SelectTasks(ctx context.Context, tasks []models.Task
 }
 
 func (h *HeuristicFallback) GetRecommendation(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) *models.TaskRecommendation {
+	log.Info("HeuristicFallback.GetRecommendation called", "task_count", len(tasks), "opts", opts)
 	ranked := h.SelectTasks(ctx, tasks, opts)
 
 	if len(ranked) == 0 {
+		log.Info("No ranked tasks available for recommendation")
 		return nil
 	}
 
@@ -380,6 +390,7 @@ func (h *HeuristicFallback) GetRecommendation(ctx context.Context, tasks []model
 		alternatives = ranked[1:min(4, len(ranked))] // Up to 3 alternatives
 	}
 
+	log.Info("Returning best task recommendation", "task_id", best.Task.RawTask.ID, "alternatives_count", len(alternatives))
 	return &models.TaskRecommendation{
 		Task:              &best,
 		RecommendedLength: best.EstimatedLength,
