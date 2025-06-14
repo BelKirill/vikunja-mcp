@@ -17,25 +17,28 @@ type Service struct {
 
 // NewService creates a new Service with the given Vikunja client.
 func NewService() (*Service, error) {
+	log.Info("NewService called")
 	vikClient, err := client.NewClient()
 	if err != nil {
+		log.Error("Failed to create Vikunja client", "error", err)
 		return nil, err
 	}
+	log.Info("Vikunja client created successfully")
 	return &Service{Client: vikClient}, nil
 }
 
 // GetUserTasks fetches all tasks for the current user and enriches them with metadata.
 func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
+	log.Info("GetUserTasks called")
 	rawTasks, err := s.Client.GetAllTasks(ctx)
 	if err != nil {
+		log.Error("Failed to get all tasks", "error", err)
 		return nil, err
 	}
-
-	// Convert MinimalTask to RawTask - you may need to adjust this based on your actual types
-	// For now assuming they're compatible or you have a conversion method
+	log.Debug("Fetched raw tasks", "count", len(rawTasks))
 	var rawTasksConverted []models.RawTask
 	for _, task := range rawTasks {
-		// Convert MinimalTask to RawTask format
+		log.Debug("Converting MinimalTask to RawTask", "task_id", task.TaskID)
 		rawTask := models.RawTask{
 			ID:          task.TaskID,
 			Title:       task.Title,
@@ -46,41 +49,54 @@ func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
 		}
 		rawTasksConverted = append(rawTasksConverted, rawTask)
 	}
-
 	enrichedTasks, err := enrichTasks(rawTasksConverted)
 	if err != nil {
+		log.Error("Failed to enrich tasks", "error", err)
 		return nil, err
 	}
-
+	log.Info("GetUserTasks returning", "enriched_count", len(enrichedTasks))
 	return enrichedTasks, nil
 }
 
 // GetTaskByID fetches a single task by its ID.
-func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.MinimalTask, error) {
+func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, error) {
+	log.Info("GetTaskByID called", "id", id)
 	task, err := s.Client.GetTask(ctx, id)
+	if err != nil {
+		log.Error("Failed to get task by ID", "id", id, "error", err)
+		return nil, err
+	}
+	log.Debug("Fetched task", "task", task)
+	result, err := enrichTask(task)
 	if err != nil {
 		return nil, err
 	}
-	return enrichMinimalTask(task), nil
+	log.Info("GetTaskByID returning", "id", id, "has_metadata", result.Metadata != nil)
+	return result, nil
 }
 
 // GetIncompleteTasks returns all tasks that are not marked as done.
 func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error) {
+	log.Info("GetIncompleteTasks called")
 	tasks, err := s.GetUserTasks(ctx)
 	if err != nil {
+		log.Error("Failed to get user tasks", "error", err)
 		return nil, err
 	}
 	var result []models.Task
 	for _, t := range tasks {
 		if !t.RawTask.Done {
+			log.Debug("Task is incomplete", "task_id", t.RawTask.ID)
 			result = append(result, t)
 		}
 	}
+	log.Info("GetIncompleteTasks returning", "count", len(result))
 	return result, nil
 }
 
 // UpsertTask creates or updates a task with proper metadata embedding
 func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
+	log.Info("UpsertTask called", "task_id", task.TaskID)
 	enriched := enrichMinimalTask(&task)
 
 	// CRITICAL: If metadata is provided via description field (from MCP),
@@ -91,7 +107,7 @@ func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*mod
 			// Parse the JSON metadata from description
 			var metadata models.HyperFocusMetadata
 			if err := json.Unmarshal([]byte(enriched.Description), &metadata); err == nil {
-				// Successfully parsed - use this metadata
+				log.Debug("Parsed metadata from description JSON", "task_id", task.TaskID)
 				enriched.Metadata = &metadata
 				// Clear the description since it was just JSON metadata
 				enriched.Description = ""
@@ -101,11 +117,13 @@ func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*mod
 
 	// If we have metadata, embed it properly in the description
 	if enriched.Metadata != nil {
+		log.Debug("Embedding metadata in description", "task_id", task.TaskID)
 		enriched.Description = embedMetadataInDescription(enriched.Description, enriched.Metadata)
 	}
 
 	result, err := s.Client.UpsertTask(ctx, *enriched)
 	if err != nil {
+		log.Error("Failed to upsert task", "task_id", task.TaskID, "error", err)
 		return nil, err
 	}
 
@@ -122,4 +140,17 @@ func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*mod
 		"has_metadata", result.Metadata != nil)
 
 	return result, nil
+}
+
+// Me fetches the current user information.
+func (s *Service) Me(ctx context.Context) (*models.User, error) {
+	log.Info("Me called")
+	var user models.User
+	err := s.Client.Get(ctx, "/api/v1/user", &user)
+	if err != nil {
+		log.Error("Failed to fetch current user", "error", err)
+		return nil, err
+	}
+	log.Info("Me returning user", "user_id", user.ID, "username", user.Username)
+	return &user, nil
 }

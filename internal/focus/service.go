@@ -199,25 +199,10 @@ func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*mod
 // GetTaskMetadata retrieves detailed metadata for a specific task
 func (s *Service) GetTaskMetadata(ctx context.Context, taskID int64) (*models.Task, error) {
 	// Get the minimal task first
-	minTask, err := s.Vikunja.GetTaskByID(ctx, taskID)
+	task, err := s.Vikunja.GetTaskByID(ctx, taskID)
 	if err != nil {
 		return nil, err
 	}
 
-	// Convert to enriched task format
-	// This might need adjustment based on your actual models
-	enrichedTask := &models.Task{
-		RawTask: &models.RawTask{
-			ID:          minTask.TaskID,
-			Title:       minTask.Title,
-			Description: minTask.Description,
-			Priority:    minTask.Priority,
-			Done:        minTask.Done,
-			ProjectID:   minTask.Project,
-		},
-		Metadata:         minTask.Metadata,
-		CleanDescription: minTask.Description, // This would be cleaned by Vikunja service
-	}
-
-	return enrichedTask, nil
+	return task, nil
 }

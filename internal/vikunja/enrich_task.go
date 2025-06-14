@@ -11,7 +11,9 @@ import (
 // extractJSON safely extracts the first valid JSON object from a string
 // Returns the JSON string and any error encountered
 func extractJSON(input string) (string, error) {
+	log.Debug("extractJSON called", "input_length", len(input))
 	if input == "" {
+		log.Debug("extractJSON: input is empty")
 		return "", nil
 	}
 
@@ -85,12 +87,15 @@ func extractJSON(input string) (string, error) {
 		}
 	}
 
+	log.Debug("extractJSON: no valid JSON found")
 	return "", nil // No valid JSON found
 }
 
 // embedMetadataInDescription safely embeds hyperfocus metadata into a task description
 func embedMetadataInDescription(description string, metadata *models.HyperFocusMetadata) string {
+	log.Debug("embedMetadataInDescription called", "desc_length", len(description), "metadata", metadata)
 	if metadata == nil {
+		log.Debug("No metadata provided, returning original description")
 		return description
 	}
 
@@ -98,6 +103,7 @@ func embedMetadataInDescription(description string, metadata *models.HyperFocusM
 	existingJSON, err := extractJSON(description)
 	cleanDesc := description
 	if err == nil && existingJSON != "" {
+		log.Debug("Existing JSON found in description, cleaning", "existingJSON", existingJSON)
 		cleanDesc = strings.Replace(description, existingJSON, "", 1)
 		cleanDesc = strings.TrimSpace(cleanDesc)
 	}
@@ -117,20 +123,22 @@ func embedMetadataInDescription(description string, metadata *models.HyperFocusM
 		log.Error("Failed to marshal metadata", "error", err)
 		return description // Return original on error
 	}
+	log.Debug("Metadata marshaled to JSON", "json", string(metadataJSON))
 
 	// Combine clean description with new metadata
 	if cleanDesc == "" {
+		log.Debug("Clean description is empty, returning only metadata JSON")
 		return string(metadataJSON)
 	}
-
+	log.Debug("Returning combined description and metadata JSON")
 	return cleanDesc + " " + string(metadataJSON)
 }
 
 func enrichTask(task *models.RawTask) (*models.Task, error) {
+	log.Info("enrichTask called", "task_id", task.ID, "title", task.Title)
 	meta, err := extractJSON(task.Description)
 	if err != nil {
 		log.Error("Failed to extract JSON from task description", "error", err, "task_id", task.ID)
-		// Continue with defaults rather than failing
 		meta = ""
 	}
 
@@ -140,6 +148,7 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 	}
 
 	if meta == "" {
+		log.Debug("No JSON metadata found, using defaults", "task_id", task.ID)
 		// No JSON metadata found - use defaults
 		enrichedTask.Metadata = &models.HyperFocusMetadata{
 			Energy:                  "medium", // Default energy level
@@ -151,6 +160,7 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 		}
 		// Description stays as-is since no JSON to remove
 	} else {
+		log.Debug("JSON metadata found, attempting to unmarshal", "json", meta, "task_id", task.ID)
 		// Parse the JSON metadata
 		var hyperfocusData models.HyperFocusMetadata
 		if err := json.Unmarshal([]byte(meta), &hyperfocusData); err != nil {
@@ -165,6 +175,7 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 				HyperFocusCompatability: 3,
 			}
 		} else {
+			log.Debug("Valid JSON metadata found and unmarshaled", "task_id", task.ID, "metadata", hyperfocusData)
 			// Valid JSON metadata found
 			enrichedTask.Metadata = &hyperfocusData
 
@@ -190,38 +201,42 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 		// Clean the description by removing the JSON metadata
 		enrichedTask.CleanDescription = strings.Replace(task.Description, meta, "", 1)
 		enrichedTask.CleanDescription = strings.TrimSpace(enrichedTask.CleanDescription)
+		log.Debug("Cleaned description after removing JSON metadata", "clean_description", enrichedTask.CleanDescription)
 	}
-
+	log.Info("enrichTask returning", "task_id", task.ID, "has_metadata", enrichedTask.Metadata != nil)
 	return enrichedTask, nil
 }
 
 func enrichTasks(tasks []models.RawTask) ([]models.Task, error) {
+	log.Info("enrichTasks called", "task_count", len(tasks))
 	enrichedTasks := make([]models.Task, 0, len(tasks))
 
 	for _, task := range tasks {
+		log.Debug("Enriching task", "task_id", task.ID)
 		enriched, err := enrichTask(&task)
 		if err != nil {
-			// Log error but continue with others
 			log.Error("Failed to enrich task", "error", err, "task_id", task.ID)
 			continue
 		}
 		enrichedTasks = append(enrichedTasks, *enriched)
 	}
-
+	log.Info("enrichTasks returning", "enriched_count", len(enrichedTasks))
 	return enrichedTasks, nil
 }
 
 // enrichMinimalTask enriches a MinimalTask with additional metadata or computed fields.
 func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
+	log.Debug("enrichMinimalTask called", "task", task)
 	if task == nil {
+		log.Debug("enrichMinimalTask: task is nil")
 		return nil
 	}
-	// Example: set a default priority if not set
 	if task.Priority == 0 {
+		log.Debug("Setting default priority", "task_id", task.TaskID)
 		task.Priority = 3 // default priority
 	}
-	// Example: add a stub metadata if missing
 	if task.Metadata == nil {
+		log.Debug("Setting default metadata", "task_id", task.TaskID)
 		task.Metadata = &models.HyperFocusMetadata{
 			Energy:                  "medium",
 			Mode:                    "quick",
@@ -231,14 +246,16 @@ func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
 			HyperFocusCompatability: 3,
 		}
 	}
-	// Example: mark as high priority if title contains "urgent"
 	if task.Title != "" && (containsIgnoreCase(task.Title, "urgent") || containsIgnoreCase(task.Description, "urgent")) {
+		log.Info("Task marked as urgent", "task_id", task.TaskID)
 		task.Priority = 5
 	}
+	log.Debug("enrichMinimalTask returning", "task", task)
 	return task
 }
 
 // containsIgnoreCase checks if substr is in s, case-insensitive
 func containsIgnoreCase(s, substr string) bool {
+	log.Debug("containsIgnoreCase called", "s", s, "substr", substr)
 	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
 }

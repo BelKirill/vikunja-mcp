@@ -34,7 +34,7 @@ func (c *Client) GetAllTasks(ctx context.Context) ([]models.MinimalTask, error) 
 // GetTask returns a single task by its ID.
 //
 //	GET /api/v1/tasks/{id}
-func (c *Client) GetTask(ctx context.Context, id int64) (*models.MinimalTask, error) {
+func (c *Client) GetTask(ctx context.Context, id int64) (*models.RawTask, error) {
 	endpoint := fmt.Sprintf("/api/v1/tasks/%d", id)
 
 	var t models.RawTask
@@ -42,14 +42,7 @@ func (c *Client) GetTask(ctx context.Context, id int64) (*models.MinimalTask, er
 		return nil, err
 	}
 	log.Info("task fetched", "id", id, "title", t.Title)
-	return &models.MinimalTask{
-		TaskID:      int64(t.ID),
-		Project:     int64(t.ProjectID),
-		Title:       t.Title,
-		Description: t.Description,
-		Priority:    t.Priority,
-		Done:        t.Done,
-	}, nil
+	return &t, nil
 }
 
 // UpsertTask creates a new task or updates an existing one using MinimalTask
