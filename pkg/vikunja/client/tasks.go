@@ -91,7 +91,10 @@ func (c *Client) updateTask(ctx context.Context, taskData *models.MinimalTask) (
 	endpoint := fmt.Sprintf("/api/v1/tasks/%d", taskData.TaskID)
 
 	requestBody := map[string]interface{}{
-		"done": taskData.Done,
+		"title":       taskData.Title,
+		"description": taskData.Description,
+		"priority":    taskData.Priority,
+		"done":        taskData.Done,
 	}
 
 	var result models.RawTask

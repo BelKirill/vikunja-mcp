@@ -2,152 +2,13 @@ package vikunja
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
+	"encoding/json"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/BelKirill/vikunja-mcp/pkg/vikunja/client"
+	"github.com/charmbracelet/log"
 )
-
-// extractJSON extracts the first valid JSON object or array from a string.
-func extractJSON(input string) (string, error) {
-	input = strings.TrimSpace(input)
-	startObj := strings.Index(input, "{")
-	startArr := strings.Index(input, "[")
-	var start int
-	if startObj == -1 && startArr == -1 {
-		return "", nil // No JSON found
-	} else if startObj == -1 {
-		start = startArr
-	} else if startArr == -1 {
-		start = startObj
-	} else if startObj < startArr {
-		start = startObj
-	} else {
-		start = startArr
-	}
-	for end := len(input); end > start; end-- {
-		candidate := input[start:end]
-		var js interface{}
-		if json.Unmarshal([]byte(candidate), &js) == nil {
-			return candidate, nil
-		}
-	}
-	return "", nil // No valid JSON found
-}
-
-func enrichTask(task *models.RawTask) (*models.Task, error) {
-	meta, err := extractJSON(task.Description)
-	if err != nil {
-		return nil, err
-	}
-
-	enrichedTask := &models.Task{
-		RawTask:          task,             // Embed the raw task
-		CleanDescription: task.Description, // Will be cleaned below
-	}
-
-	if meta == "" {
-		// No JSON metadata found - use defaults
-		enrichedTask.Metadata = &models.HyperFocusMetadata{
-			Energy:                  "medium", // Default energy level
-			Mode:                    "quick",  // Default mode
-			Extend:                  false,    // Default no extension
-			Minutes:                 25,       // Default pomodoro
-			Estimate:                25,       // Default estimate same as minutes
-			HyperFocusCompatability: 3,        // Default middle compatibility
-		}
-		// Description stays as-is since no JSON to remove
-	} else {
-		// Parse the JSON metadata
-		var hyperfocusData models.HyperFocusMetadata
-		if err := json.Unmarshal([]byte(meta), &hyperfocusData); err != nil {
-			// JSON exists but invalid - use defaults
-			enrichedTask.Metadata = &models.HyperFocusMetadata{
-				Energy:                  "medium",
-				Mode:                    "quick",
-				Extend:                  false,
-				Minutes:                 25,
-				Estimate:                25,
-				HyperFocusCompatability: 3,
-			}
-		} else {
-			// Valid JSON metadata found
-			enrichedTask.Metadata = &hyperfocusData
-
-			// Validate and set defaults for missing fields
-			if hyperfocusData.Energy == "" {
-				enrichedTask.Metadata.Energy = "medium"
-			}
-			if hyperfocusData.Mode == "" {
-				enrichedTask.Metadata.Mode = "quick"
-			}
-			if hyperfocusData.Minutes == 0 {
-				enrichedTask.Metadata.Minutes = 25
-			}
-			if hyperfocusData.Estimate == 0 {
-				// If no estimate provided, use minutes as estimate
-				enrichedTask.Metadata.Estimate = enrichedTask.Metadata.Minutes
-			}
-			if hyperfocusData.HyperFocusCompatability == 0 {
-				enrichedTask.Metadata.HyperFocusCompatability = 3 // Default middle
-			}
-		}
-
-		// Clean the description by removing the JSON metadata
-		enrichedTask.CleanDescription = strings.Replace(task.Description, meta, "", 1)
-		enrichedTask.CleanDescription = strings.TrimSpace(enrichedTask.CleanDescription)
-	}
-
-	return enrichedTask, nil
-}
-
-func enrichTasks(tasks []models.RawTask) ([]models.Task, error) {
-	enrichedTasks := make([]models.Task, 0, len(tasks))
-
-	for _, task := range tasks {
-		enriched, err := enrichTask(&task)
-		if err != nil {
-			// Log error but continue with others
-			continue
-		}
-		enrichedTasks = append(enrichedTasks, *enriched)
-	}
-
-	return enrichedTasks, nil
-}
-
-// enrichMinimalTask enriches a MinimalTask with additional metadata or computed fields.
-func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
-	if task == nil {
-		return nil
-	}
-	// Example: set a default priority if not set
-	if task.Priority == 0 {
-		task.Priority = 3 // default priority
-	}
-	// Example: add a stub metadata if missing
-	if task.Metadata == nil {
-		task.Metadata = &models.HyperFocusMetadata{
-			Energy:                  "medium",
-			Mode:                    "quick",
-			Extend:                  false,
-			Minutes:                 25,
-			Estimate:                25,
-			HyperFocusCompatability: 3,
-		}
-	}
-	// Example: mark as high priority if title contains "urgent"
-	if task.Title != "" && (containsIgnoreCase(task.Title, "urgent") || containsIgnoreCase(task.Description, "urgent")) {
-		task.Priority = 5
-	}
-	return task
-}
-
-// containsIgnoreCase checks if substr is in s, case-insensitive
-func containsIgnoreCase(s, substr string) bool {
-	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
-}
 
 // Service provides business logic on top of the Vikunja API client.
 type Service struct {
@@ -218,18 +79,47 @@ func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error)
 	return result, nil
 }
 
-// UpsertTask creates or updates a task.
+// UpsertTask creates or updates a task with proper metadata embedding
 func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
 	enriched := enrichMinimalTask(&task)
-	return s.Client.UpsertTask(ctx, *enriched)
-}
-
-// Me fetches the current authenticated user.
-func (s *Service) Me(ctx context.Context) (*models.User, error) {
-	var user models.User
-	err := s.Client.Get(ctx, "/api/v1/user", &user)
+	
+	// CRITICAL: If metadata is provided via description field (from MCP), 
+	// treat the description AS the metadata JSON and embed it properly
+	if enriched.Description != "" {
+		// Check if description contains JSON metadata
+		if strings.Contains(enriched.Description, "{") && strings.Contains(enriched.Description, "energy") {
+			// Parse the JSON metadata from description
+			var metadata models.HyperFocusMetadata
+			if err := json.Unmarshal([]byte(enriched.Description), &metadata); err == nil {
+				// Successfully parsed - use this metadata
+				enriched.Metadata = &metadata
+				// Clear the description since it was just JSON metadata
+				enriched.Description = ""
+			}
+		}
+	}
+	
+	// If we have metadata, embed it properly in the description
+	if enriched.Metadata != nil {
+		enriched.Description = embedMetadataInDescription(enriched.Description, enriched.Metadata)
+	}
+	
+	result, err := s.Client.UpsertTask(ctx, *enriched)
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
+	
+	// Log successful operation
+	action := "updated"
+	if task.TaskID == 0 {
+		action = "created"
+	}
+	log.Info("task upserted successfully", 
+		"action", action,
+		"task_id", result.TaskID,
+		"title", result.Title,
+		"description_length", len(result.Description),
+		"has_metadata", result.Metadata != nil)
+	
+	return result, nil
 }
