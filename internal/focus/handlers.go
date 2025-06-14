@@ -51,6 +51,8 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 			})
 		}
 
+		log.Debug("parsed focus request", "req", req)
+
 		// Set defaults
 		if req.Date == "" {
 			req.Date = time.Now().Format("2006-01-02")
@@ -62,6 +64,7 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 		}
 
 		log.Info("processing focus request", "date", req.Date, "hours", req.Hours)
+		log.Debug("focus request context setup", "date", req.Date, "hours", req.Hours)
 
 		ctx := context.Background()
 		opts := models.FocusOptions{
@@ -75,11 +78,14 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 		// Check for query parameters to override defaults
 		if energy := c.Query("energy"); energy != "" {
 			opts.Energy = energy
+			log.Debug("overriding energy from query param", "energy", energy)
 		}
 		if mode := c.Query("mode"); mode != "" {
 			opts.Mode = mode
+			log.Debug("overriding mode from query param", "mode", mode)
 		}
 
+		log.Debug("calling service.GetFocusTasks", "opts", opts)
 		items, err := service.GetFocusTasks(ctx, opts)
 		if err != nil {
 			log.Error("focus service error", "date", req.Date, "hours", req.Hours, "error", err)
@@ -88,6 +94,8 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 				Message: err.Error(),
 			})
 		}
+
+		log.Debug("service.GetFocusTasks returned items", "count", len(items))
 
 		// Convert to response format
 		resp := make([]models.FocusResponseItem, 0, len(items))
@@ -100,6 +108,7 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 		}
 
 		log.Info("focus request completed", "date", req.Date, "items", len(items))
+		log.Debug("focus response ready", "response", resp)
 		return c.Status(fiber.StatusOK).JSON(resp)
 	}
 }
@@ -127,6 +136,8 @@ func FocusRecommendationHandler(service *Service) fiber.Handler {
 			MaxTasks:   1, // Single recommendation
 		}
 
+		log.Debug("parsed recommendation options", "opts", opts)
+
 		recommendation, err := service.GetTaskRecommendation(ctx, opts)
 		if err != nil {
 			log.Error("failed to get task recommendation", "error", err)
@@ -137,11 +148,14 @@ func FocusRecommendationHandler(service *Service) fiber.Handler {
 		}
 
 		if recommendation == nil {
+			log.Debug("no suitable tasks found for recommendation", "opts", opts)
 			return c.Status(fiber.StatusOK).JSON(models.APIError{
 				Code:    fiber.StatusNoContent,
 				Message: "no suitable tasks found for current criteria",
 			})
 		}
+
+		log.Debug("recommendation found", "task_id", recommendation.TaskID, "score", recommendation.FocusScore)
 
 		// Create session recommendation
 		sessionLength := service.EstimateSessionLength(*recommendation, opts.MaxMinutes)
@@ -158,6 +172,7 @@ func FocusRecommendationHandler(service *Service) fiber.Handler {
 			"task_id", recommendation.TaskID,
 			"score", recommendation.FocusScore,
 			"session_length", sessionLength)
+		log.Debug("recommendation response ready", "response", response)
 
 		return c.Status(fiber.StatusOK).JSON(response)
 	}
@@ -185,10 +200,14 @@ func StartFocusSessionHandler(service *Service) fiber.Handler {
 			})
 		}
 
+		log.Debug("parsed focus session", "session", session)
+
 		// Set session start time and generate ID
 		session.ID = fmt.Sprintf("session_%d_%d", session.TaskID, time.Now().Unix())
 		session.StartTime = time.Now().Format(time.RFC3339)
 		session.Completed = false
+
+		log.Debug("focus session initialized", "session_id", session.ID, "start_time", session.StartTime)
 
 		// TODO: Store session in database/memory for tracking
 		log.Info("focus session started",
@@ -226,16 +245,23 @@ func CompleteFocusSessionHandler(service *Service) fiber.Handler {
 			})
 		}
 
+		log.Debug("parsed session completion", "completion", completion)
+
 		// Set completion data
 		completion.ID = sessionID
 		completion.EndTime = time.Now().Format(time.RFC3339)
 		completion.Completed = true
+
+		log.Debug("completion data set", "session_id", sessionID, "end_time", completion.EndTime)
 
 		// Calculate actual length if not provided
 		if completion.ActualLength == 0 && completion.StartTime != "" {
 			startTime, err := time.Parse(time.RFC3339, completion.StartTime)
 			if err == nil {
 				completion.ActualLength = int(time.Since(startTime).Minutes())
+				log.Debug("calculated actual session length", "actual_length", completion.ActualLength)
+			} else {
+				log.Debug("failed to parse start time for actual length calculation", "error", err)
 			}
 		}
 
@@ -244,6 +270,7 @@ func CompleteFocusSessionHandler(service *Service) fiber.Handler {
 			"session_id", sessionID,
 			"actual_length", completion.ActualLength,
 			"effectiveness", completion.Effectiveness)
+		log.Debug("completion response ready", "completion", completion)
 
 		return c.Status(fiber.StatusOK).JSON(completion)
 	}

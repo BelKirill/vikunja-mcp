@@ -17,7 +17,7 @@ type Service struct {
 
 // NewService creates a new Service with the given Vikunja client.
 func NewService() (*Service, error) {
-	log.Info("NewService called")
+	log.Info("NewService called for vikunja.Service")
 	vikClient, err := client.NewClient()
 	if err != nil {
 		log.Error("Failed to create Vikunja client", "error", err)
@@ -69,6 +69,7 @@ func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, erro
 	log.Debug("Fetched task", "task", task)
 	result, err := enrichTask(task)
 	if err != nil {
+		log.Error("Failed to enrich task by ID", "id", id, "error", err)
 		return nil, err
 	}
 	log.Info("GetTaskByID returning", "id", id, "has_metadata", result.Metadata != nil)
