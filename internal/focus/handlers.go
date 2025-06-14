@@ -86,7 +86,7 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 		}
 
 		log.Debug("calling service.GetFocusTasks", "opts", opts)
-		items, err := service.GetFocusTasks(ctx, opts)
+		items, err := service.GetFocusTasks(ctx, &opts)
 		if err != nil {
 			log.Error("focus service error", "date", req.Date, "hours", req.Hours, "error", err)
 			return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{
@@ -101,9 +101,9 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 		resp := make([]models.FocusResponseItem, 0, len(items))
 		for _, item := range items {
 			resp = append(resp, models.FocusResponseItem{
-				T:   fmt.Sprintf("%d", item.TaskID),
-				P:   fmt.Sprintf("%d", item.Project),
-				Est: float64(item.Estimate) / 60.0, // Convert minutes to hours for API consistency
+				T:   fmt.Sprintf("%d", item.RawTask.ID),
+				P:   fmt.Sprintf("%d", item.RawTask.ProjectID),
+				Est: float64(item.Metadata.Estimate) / 60.0, // Convert minutes to hours for API consistency
 			})
 		}
 
@@ -138,7 +138,7 @@ func FocusRecommendationHandler(service *Service) fiber.Handler {
 
 		log.Debug("parsed recommendation options", "opts", opts)
 
-		recommendation, err := service.GetTaskRecommendation(ctx, opts)
+		recommendation, err := service.GetTaskRecommendation(ctx, &opts)
 		if err != nil {
 			log.Error("failed to get task recommendation", "error", err)
 			return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{
@@ -155,23 +155,18 @@ func FocusRecommendationHandler(service *Service) fiber.Handler {
 			})
 		}
 
-		log.Debug("recommendation found", "task_id", recommendation.TaskID, "score", recommendation.FocusScore)
-
-		// Create session recommendation
-		sessionLength := service.EstimateSessionLength(*recommendation, opts.MaxMinutes)
+		log.Debug("recommendation found", "task_id", recommendation.RawTask.ID, "score", recommendation.FocusScore)
 
 		response := models.SessionRecommendation{
-			Task:              recommendation,
-			RecommendedLength: sessionLength,
-			CanExtend:         recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
+			Task:      recommendation,
+			CanExtend: recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
 			Reasoning: fmt.Sprintf("Selected based on %s energy, %s mode compatibility (score: %.1f)",
 				opts.Energy, opts.Mode, recommendation.FocusScore),
 		}
 
 		log.Info("task recommendation generated",
-			"task_id", recommendation.TaskID,
-			"score", recommendation.FocusScore,
-			"session_length", sessionLength)
+			"task_id", recommendation.RawTask.ID,
+			"score", recommendation.FocusScore)
 		log.Debug("recommendation response ready", "response", response)
 
 		return c.Status(fiber.StatusOK).JSON(response)

@@ -183,7 +183,7 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.GetFocusTasks", "opts", opts)
-	tasks, err := service.GetFocusTasks(context.Background(), opts)
+	tasks, err := service.GetFocusTasks(context.Background(), &opts)
 	if err != nil {
 		log.Error("Failed to get focus tasks", "error", err)
 		return nil, err
@@ -278,7 +278,7 @@ func handleGetFocusRecommendation(service *Service, args map[string]interface{})
 	}
 
 	log.Debug("Calling service.GetTaskRecommendation", "opts", opts)
-	recommendation, err := service.GetTaskRecommendation(context.Background(), opts)
+	recommendation, err := service.GetTaskRecommendation(context.Background(), &opts)
 	if err != nil {
 		log.Error("Failed to get task recommendation", "error", err)
 		return nil, err
@@ -297,18 +297,15 @@ func handleGetFocusRecommendation(service *Service, args map[string]interface{})
 		}, nil
 	}
 
-	log.Debug("Task recommendation found", "task_id", recommendation.TaskID, "score", recommendation.FocusScore)
-	// Calculate session recommendation
-	sessionLength := service.EstimateSessionLength(*recommendation, opts.MaxMinutes)
+	log.Debug("Task recommendation found", "task_id", recommendation.RawTask.ID, "score", recommendation.FocusScore)
 
 	resp := map[string]interface{}{
 		"message": "Task recommendation generated successfully",
 		"recommendation": map[string]interface{}{
-			"task":               recommendation,
-			"recommended_length": sessionLength,
-			"can_extend":         recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
-			"focus_score":        recommendation.FocusScore,
-			"reasoning":          fmt.Sprintf("Selected for %s energy, %s mode (score: %.1f)", opts.Energy, opts.Mode, recommendation.FocusScore),
+			"task":        recommendation,
+			"can_extend":  recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
+			"focus_score": recommendation.FocusScore,
+			"reasoning":   fmt.Sprintf("Selected for %s energy, %s mode (score: %.1f)", opts.Energy, opts.Mode, recommendation.FocusScore),
 		},
 		"criteria": map[string]interface{}{
 			"energy":      opts.Energy,
@@ -358,7 +355,7 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.UpsertTask", "action", action, "task", task)
-	result, err := service.UpsertTask(context.Background(), task)
+	result, err := service.UpsertTask(context.Background(), &task)
 	if err != nil {
 		log.Error("Failed to upsert task", "error", err, "action", action)
 		return nil, err
