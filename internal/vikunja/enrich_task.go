@@ -16,14 +16,14 @@ func extractJSON(input string) (string, error) {
 	}
 
 	input = strings.TrimSpace(input)
-	
+
 	// Find the start of JSON object or array
 	startObj := strings.Index(input, "{")
 	startArr := strings.Index(input, "[")
-	
+
 	var start int
 	var expectedEnd rune
-	
+
 	if startObj == -1 && startArr == -1 {
 		return "", nil // No JSON found
 	} else if startObj == -1 {
@@ -44,7 +44,7 @@ func extractJSON(input string) (string, error) {
 	depth := 0
 	inString := false
 	escaped := false
-	
+
 	for i := start; i < len(input); i++ {
 		char := rune(input[i])
 
@@ -104,12 +104,12 @@ func embedMetadataInDescription(description string, metadata *models.HyperFocusM
 
 	// Create new metadata JSON
 	metadataMap := map[string]interface{}{
-		"energy":             metadata.Energy,
-		"mode":              metadata.Mode,
-		"extend":            metadata.Extend,
-		"minutes":           metadata.Minutes,
-		"estimate":          metadata.Estimate,
-		"hyper_focus_comp":  metadata.HyperFocusCompatability,
+		"energy":           metadata.Energy,
+		"mode":             metadata.Mode,
+		"extend":           metadata.Extend,
+		"minutes":          metadata.Minutes,
+		"estimate":         metadata.Estimate,
+		"hyper_focus_comp": metadata.HyperFocusCompatability,
 	}
 
 	metadataJSON, err := json.Marshal(metadataMap)
@@ -122,7 +122,7 @@ func embedMetadataInDescription(description string, metadata *models.HyperFocusM
 	if cleanDesc == "" {
 		return string(metadataJSON)
 	}
-	
+
 	return cleanDesc + " " + string(metadataJSON)
 }
 
@@ -135,19 +135,19 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 	}
 
 	enrichedTask := &models.Task{
-		RawTask:          task,           // Embed the raw task
+		RawTask:          task,             // Embed the raw task
 		CleanDescription: task.Description, // Will be cleaned below
 	}
 
 	if meta == "" {
 		// No JSON metadata found - use defaults
 		enrichedTask.Metadata = &models.HyperFocusMetadata{
-			Energy:                    "medium", // Default energy level
-			Mode:                     "quick",  // Default mode
-			Extend:                   false,    // Default no extension
-			Minutes:                  25,       // Default pomodoro
-			Estimate:                 25,       // Default estimate same as minutes
-			HyperFocusCompatability:  3,        // Default middle compatibility
+			Energy:                  "medium", // Default energy level
+			Mode:                    "quick",  // Default mode
+			Extend:                  false,    // Default no extension
+			Minutes:                 25,       // Default pomodoro
+			Estimate:                25,       // Default estimate same as minutes
+			HyperFocusCompatability: 3,        // Default middle compatibility
 		}
 		// Description stays as-is since no JSON to remove
 	} else {
@@ -157,7 +157,7 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 			log.Error("Failed to unmarshal hyperfocus metadata", "error", err, "json", meta, "task_id", task.ID)
 			// JSON exists but invalid - use defaults
 			enrichedTask.Metadata = &models.HyperFocusMetadata{
-				Energy:                   "medium",
+				Energy:                  "medium",
 				Mode:                    "quick",
 				Extend:                  false,
 				Minutes:                 25,
@@ -223,7 +223,7 @@ func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
 	// Example: add a stub metadata if missing
 	if task.Metadata == nil {
 		task.Metadata = &models.HyperFocusMetadata{
-			Energy:                   "medium",
+			Energy:                  "medium",
 			Mode:                    "quick",
 			Extend:                  false,
 			Minutes:                 25,

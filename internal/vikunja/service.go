@@ -2,8 +2,8 @@ package vikunja
 
 import (
 	"context"
-	"strings"
 	"encoding/json"
+	"strings"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/BelKirill/vikunja-mcp/pkg/vikunja/client"
@@ -82,8 +82,8 @@ func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error)
 // UpsertTask creates or updates a task with proper metadata embedding
 func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*models.MinimalTask, error) {
 	enriched := enrichMinimalTask(&task)
-	
-	// CRITICAL: If metadata is provided via description field (from MCP), 
+
+	// CRITICAL: If metadata is provided via description field (from MCP),
 	// treat the description AS the metadata JSON and embed it properly
 	if enriched.Description != "" {
 		// Check if description contains JSON metadata
@@ -98,28 +98,28 @@ func (s *Service) UpsertTask(ctx context.Context, task models.MinimalTask) (*mod
 			}
 		}
 	}
-	
+
 	// If we have metadata, embed it properly in the description
 	if enriched.Metadata != nil {
 		enriched.Description = embedMetadataInDescription(enriched.Description, enriched.Metadata)
 	}
-	
+
 	result, err := s.Client.UpsertTask(ctx, *enriched)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	// Log successful operation
 	action := "updated"
 	if task.TaskID == 0 {
 		action = "created"
 	}
-	log.Info("task upserted successfully", 
+	log.Info("task upserted successfully",
 		"action", action,
 		"task_id", result.TaskID,
 		"title", result.Title,
 		"description_length", len(result.Description),
 		"has_metadata", result.Metadata != nil)
-	
+
 	return result, nil
 }
