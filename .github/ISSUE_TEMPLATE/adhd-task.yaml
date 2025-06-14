@@ -1,0 +1,89 @@
+---
+name: ADHD Task Card
+description: Break work into 10-30 min, dopamine-friendly chunks
+title: "[TASK]: "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **How to use this form**
+
+        * Keep the *Estimate* ≤ 30 min—slice large work.
+        * “Energy level” is the *starting energy* needed.
+        * “Instructions” = 1-2 lines of self-coaching tips (timer, reward, music).
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Imperative verb + high-signal noun
+      placeholder: Draft minimal Dockerfile
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Success criteria (≤ 3 sentences, start with “Done when…”)
+      placeholder: |
+        Done when a `docker build .` produces an image and `/healthz` returns 200 OK.
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority (5 = must-do now, 1 = nice-to-have)
+      options: ["5","4","3","2","1"]
+      default: 3
+    validations:
+      required: true
+
+  - type: input
+    id: project
+    attributes:
+      label: Project ID / slug
+      description: Keeps cards sortable across repos
+      placeholder: "8"
+    validations:
+      required: true
+
+  - type: input
+    id: estimate
+    attributes:
+      label: Estimate (minutes)
+      placeholder: "25"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: energy
+    attributes:
+      label: Energy level
+      options: ["high","medium","low"]
+      default: 1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      description: deep = focus block, quick = swoop, admin = routine
+      options: ["deep","quick","admin"]
+      default: 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: instructions
+    attributes:
+      label: Instructions
+      description: ADHD-friendly self-coaching tips (timer, reward, movement)
+      placeholder: |
+        Start a 25-min Pomodoro; work fullscreen; reward = espresso shot on finish.
+    validations:
+      required: true
