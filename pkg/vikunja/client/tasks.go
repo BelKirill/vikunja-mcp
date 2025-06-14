@@ -2,7 +2,9 @@ package client
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/charmbracelet/log"
@@ -13,14 +15,35 @@ import (
 //	GET /api/v1/tasks
 func (c *Client) GetAllTasks(ctx context.Context) ([]models.RawTask, error) {
 	log.Info("GetAllTasks called")
-	var tasks []models.RawTask
-	if err := c.Get(ctx, "/api/v1/tasks/all?limit=1000", &tasks); err != nil {
-		log.Error("Failed to fetch all tasks", "error", err)
-		return nil, err
+	var allTasks []models.RawTask
+	page := 1
+	for {
+		var tasks []models.RawTask
+		endpoint := fmt.Sprintf("/api/v1/tasks/all?page=%d", page)
+		resp, err := c.getWithResponse(ctx, endpoint, &tasks)
+		if err != nil {
+			log.Error("Failed to fetch tasks", "page", page, "error", err)
+			return nil, err
+		}
+		allTasks = append(allTasks, tasks...)
+
+		totalPages := 1
+		if resp != nil {
+			totalPagesStr := resp.Header.Get("x-pagination-total-pages")
+			if totalPagesStr != "" {
+				if _, err := fmt.Sscanf(totalPagesStr, "%d", &totalPages); err != nil {
+					log.Warn("Failed to parse x-pagination-total-pages header", "value", totalPagesStr, "error", err)
+				}
+			}
+		}
+		if page >= totalPages || len(tasks) == 0 {
+			break
+		}
+		page++
 	}
-	log.Info("tasks fetched", "count", len(tasks))
-	log.Debug("Returning RawTasks", "count", len(tasks))
-	return tasks, nil
+	log.Info("tasks fetched", "count", len(allTasks))
+	log.Debug("Returning RawTasks", "count", len(allTasks))
+	return allTasks, nil
 }
 
 // GetTask returns a single task by its ID.
@@ -87,4 +110,33 @@ func (c *Client) updateTask(ctx context.Context, taskData *models.RawTask) (*mod
 	log.Info("task updated", "id", result.ID, "title", result.Title)
 	log.Debug("Updated task details", "task", result)
 	return &result, nil
+}
+
+// getWithResponse performs a GET request and returns the http.Response for header inspection.
+func (c *Client) getWithResponse(ctx context.Context, endpoint string, result interface{}) (*http.Response, error) {
+	log.Info("GET request (with response)", "endpoint", endpoint)
+	fullURL := c.baseURL + endpoint
+	req, err := c.newRequest(ctx, http.MethodGet, fullURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		cerr := resp.Body.Close()
+		if cerr != nil {
+			log.Error("error closing response body", "error", cerr)
+		}
+	}()
+	if resp.StatusCode >= 400 {
+		return resp, fmt.Errorf("vikunja API error: %s", resp.Status)
+	}
+	if result != nil {
+		if err := json.NewDecoder(resp.Body).Decode(result); err != nil {
+			return resp, err
+		}
+	}
+	return resp, nil
 }
