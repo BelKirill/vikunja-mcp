@@ -66,29 +66,32 @@ func initializeFocusEngine() (*engine.FocusEngine, error) {
 	return focusEngine, nil
 }
 
-func (s Service) GetFilteredTasks(ctx context.Context, filter string) ([]models.Task, error) {
-	log.Info("GetFilteredTasks called", "filter", filter)
+func (s Service) GetFilteredTasks(ctx context.Context, filter string, useAI bool) ([]models.Task, error) {
+	log.Info("GetFilteredTasks called", "filter", filter, "useAI", useAI)
 
-	// Use AI-powered filter engine for intelligent task filtering
-	newFilter, err := s.FocusEngine.SuggestFilter(ctx, &filter)
-	if err != nil {
-		log.Warn("Filter engine failed", "error", err)
+	finalFilter := filter
 
-		tasks, err := s.Vikunja.GetFilteredTasks(ctx, &filter)
+	// Only use AI if explicitly requested
+	if useAI {
+		log.Debug("Using AI to enhance filter", "original_filter", filter)
+		newFilter, err := s.FocusEngine.SuggestFilter(ctx, &filter)
 		if err != nil {
-			log.Error("Basic filtering failed", "filter", filter, "error", err)
-			return nil, err
+			log.Warn("Filter engine failed, using original filter", "error", err, "original_filter", filter)
+		} else {
+			finalFilter = newFilter.Filter
+			log.Debug("AI enhanced filter", "original", filter, "enhanced", finalFilter)
 		}
-
-		return tasks, nil
+	} else {
+		log.Debug("Using filter expression directly", "filter", filter)
 	}
 
-	tasks, err := s.Vikunja.GetFilteredTasks(ctx, &newFilter.Filter)
+	tasks, err := s.Vikunja.GetFilteredTasks(ctx, &finalFilter)
 	if err != nil {
-		log.Error("AI suggested filtering failed", "filter", newFilter, "error", err)
+		log.Error("Filtering failed", "filter", finalFilter, "error", err)
 		return nil, err
 	}
 
+	log.Info("Successfully filtered tasks", "count", len(tasks), "filter", finalFilter)
 	return tasks, nil
 }
 
