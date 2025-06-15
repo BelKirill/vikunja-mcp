@@ -48,6 +48,10 @@ func RegisterMCPTools(server *mcp.Server) error {
 					"minimum":     1,
 					"maximum":     50,
 				},
+				"instructions": map[string]interface{}{
+					"type":        "string",
+					"description": "Additional details about the current request of the user",
+				},
 			},
 		},
 	}, func(args map[string]interface{}) (interface{}, error) {
@@ -105,6 +109,11 @@ func RegisterMCPTools(server *mcp.Server) error {
 					"type":        "string",
 					"description": "Task description",
 				},
+				"hex_color": map[string]interface{}{
+					"type":        "string",
+					"description": "Colour of the task in Hexadecimal number, 6 characters",
+					"pattern":     "^[0-9A-Fa-f]{6}$",
+				},
 				"project_id": map[string]interface{}{
 					"type":        "integer",
 					"description": "Project ID",
@@ -158,10 +167,11 @@ func RegisterMCPTools(server *mcp.Server) error {
 func handleDailyFocus(service *Service, args map[string]interface{}) (interface{}, error) {
 	log.Debug("handleDailyFocus called", "args", args)
 	opts := models.FocusOptions{
-		Energy:     "medium", // Default values
-		Mode:       "deep",
-		MaxMinutes: 300, // 5 hours default
-		MaxTasks:   10,
+		Energy:       "medium", // Default values
+		Mode:         "deep",
+		MaxMinutes:   300, // 5 hours default
+		MaxTasks:     10,
+		Instructions: "General request, give a good assortment of tasks",
 	}
 
 	// Parse arguments with defaults
@@ -180,6 +190,10 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	if maxItems, ok := args["max_items"].(float64); ok {
 		log.Debug("Parsed max_items from args", "max_items", maxItems)
 		opts.MaxTasks = int(maxItems)
+	}
+	if instructions, ok := args["instructions"].(string); ok {
+		log.Debug("Parsed instructions from args", "instructions", instructions)
+		opts.Instructions = instructions
 	}
 
 	log.Debug("Calling service.GetFocusTasks", "opts", opts)
@@ -241,6 +255,7 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 		"task_id":             task.RawTask.ID,
 		"title":               task.RawTask.Title,
 		"description":         task.CleanDescription,
+		"hex_color":           task.RawTask.HexColor,
 		"done":                task.RawTask.Done,
 		"priority":            task.RawTask.Priority,
 		"project_id":          task.RawTask.ProjectID,
@@ -343,6 +358,10 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 		log.Debug("Parsed priority from args", "priority", v)
 		task.Priority = int(v)
 	}
+	if v, ok := args["hex_color"].(string); ok {
+		log.Debug("Parsed Hex Color from args", "done", v)
+		task.HexColor = v
+	}
 	if v, ok := args["done"].(bool); ok {
 		log.Debug("Parsed done from args", "done", v)
 		task.Done = v
@@ -370,6 +389,7 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 			"done":        result.Done,
 			"priority":    result.Priority,
 			"description": result.Description,
+			"hex_color":   result.HexColor,
 			"project_id":  result.ProjectID,
 		},
 		"message": fmt.Sprintf("Task %s successfully", action),

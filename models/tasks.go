@@ -2,12 +2,13 @@ package models
 
 // FocusOptions represents the criteria for selecting focus tasks
 type FocusOptions struct {
-	Energy     string `json:"energy"`           // "low"|"medium"|"high"|"social"
-	Mode       string `json:"mode"`             // "deep"|"quick"|"admin"
-	MaxMinutes int    `json:"max_minutes"`      // Maximum available time for session
-	MaxTasks   int    `json:"max_tasks"`        // Maximum number of tasks to return
-	Date       string `json:"date"`             // Target date for focus session
-	HyperFocus int    `json:"hyperfocus_level"` // Target hyperfocus level
+	Energy       string `json:"energy"`           // "low"|"medium"|"high"|"social"
+	Mode         string `json:"mode"`             // "deep"|"quick"|"admin"
+	MaxMinutes   int    `json:"max_minutes"`      // Maximum available time for session
+	MaxTasks     int    `json:"max_tasks"`        // Maximum number of tasks to return
+	Date         string `json:"date"`             // Target date for focus session
+	HyperFocus   int    `json:"hyperfocus_level"` // Target hyperfocus level
+	Instructions string `json:"instructions"`
 }
 
 // FocusResult represents a task recommended for a focus session with enriched metadata
@@ -23,14 +24,30 @@ type FocusResult struct {
 	FocusScore  float64             `json:"focus_score"` // Calculated suitability score
 }
 
+type Dependencies struct {
+	Blocked_by []int `json:"blocked_by"`
+	Blocks     []int `json:"blocks"`
+}
+
+type ContextualHints struct {
+	PartOfChain bool   `json:"is_part_of_chain"`  // true,
+	Next        []int  `json:"next_in_chain"`     // [9],
+	Progress    string `json:"chain_progress"`    // "1/2",
+	Name        string `json:"chain_name"`        // "Quality Assurance",
+	Description string `json:"chain_description"` // "Testing and validation for dependency system reliability"
+}
+
 // HyperFocusMetadata represents the ADHD-optimized task metadata
 type HyperFocusMetadata struct {
-	Energy                  string `json:"energy"`           // "low"|"medium"|"high"|"social"
-	Mode                    string `json:"mode"`             // "deep"|"quick"|"admin"
-	Extend                  bool   `json:"extend"`           // Can extend beyond 25min?
-	Minutes                 int    `json:"minutes"`          // Base pomodoro work unit
-	Estimate                int    `json:"estimate"`         // Total estimated duration in minutes
-	HyperFocusCompatability int    `json:"hyper_focus_comp"` // Scale 1-5, hyperfocus compatibility
+	Energy                  string          `json:"energy"`           // "low"|"medium"|"high"|"social"
+	Mode                    string          `json:"mode"`             // "deep"|"quick"|"admin"
+	Extend                  bool            `json:"extend"`           // Can extend beyond 25min?
+	Minutes                 int             `json:"minutes"`          // Base pomodoro work unit
+	Estimate                int             `json:"estimate"`         // Total estimated duration in minutes
+	HyperFocusCompatability int             `json:"hyper_focus_comp"` // Scale 1-5, hyperfocus compatibility
+	Instructions            string          `json:"instructions"`     // Instructions and considerations on selecting this task
+	Dependencies            Dependencies    `json:"dependencies"`     // Other tasks blocking or being blocked by this task
+	ContextualHints         ContextualHints `json:"contextual_hints"` // Currently: Chain tracking for tasks
 }
 
 // RawTask represents the complete task data from Vikunja API

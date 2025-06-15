@@ -79,6 +79,7 @@ func (c *Client) createTask(ctx context.Context, taskData *models.RawTask) (*mod
 	requestBody := map[string]interface{}{
 		"title":       taskData.Title,
 		"description": taskData.Description,
+		"hex_color":   taskData.HexColor,
 		"priority":    taskData.Priority,
 		"done":        taskData.Done,
 	}
@@ -99,6 +100,7 @@ func (c *Client) updateTask(ctx context.Context, taskData *models.RawTask) (*mod
 	requestBody := map[string]interface{}{
 		"title":       taskData.Title,
 		"description": taskData.Description,
+		"hex_color":   taskData.HexColor,
 		"priority":    taskData.Priority,
 		"done":        taskData.Done,
 	}

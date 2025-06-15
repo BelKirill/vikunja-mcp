@@ -8,11 +8,12 @@ import (
 // DecisionRequest contains all context needed for AI-powered task selection
 type DecisionRequest struct {
 	// User context
-	Energy     string    `json:"energy"` // "low"|"medium"|"high"|"social"
-	Mode       string    `json:"mode"`   // "deep"|"quick"|"admin"
-	MaxMinutes int       `json:"max_minutes"`
-	Date       time.Time `json:"date"`
-	TimeOfDay  string    `json:"time_of_day"` // "morning"|"afternoon"|"evening"
+	Energy       string    `json:"energy"` // "low"|"medium"|"high"|"social"
+	Mode         string    `json:"mode"`   // "deep"|"quick"|"admin"
+	MaxMinutes   int       `json:"max_minutes"`
+	Date         time.Time `json:"date"`
+	TimeOfDay    string    `json:"time_of_day"`  // "morning"|"afternoon"|"evening"
+	Instructions string    `json:"instructions"` // Free text instructions
 
 	// Available tasks with rich metadata
 	CandidateTasks []Task `json:"candidate_tasks"`
