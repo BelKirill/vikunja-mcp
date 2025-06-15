@@ -34,23 +34,6 @@ func (s *Service) basicTaskFocus(tasks []models.Task, opts *models.FocusOptions)
 	return candidateTasks
 }
 
-// basicTaskRecommendation provides simple recommendation when AI is unavailable
-func (s *Service) basicTaskRecommendation(tasks []models.Task, opts *models.FocusOptions) *models.Task {
-	log.Info("Using basic recommendation fallback")
-
-	// Limit to 1 task
-	opts.MaxTasks = 1
-
-	filtered := s.basicTaskFocus(tasks, opts)
-	if len(filtered) == 0 {
-		log.Info("No suitable tasks found for basic recommendation")
-		return nil
-	}
-
-	log.Info("Returning basic recommended task", "task_id", filtered[0].RawTask.ID)
-	return &filtered[0]
-}
-
 // isTaskSuitable checks if a task is suitable for the current focus session
 func (s *Service) isTaskSuitable(task *models.Task, opts *models.FocusOptions) bool {
 	if task.Metadata == nil {

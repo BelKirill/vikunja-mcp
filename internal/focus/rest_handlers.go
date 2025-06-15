@@ -24,7 +24,6 @@ func RegisterRoutes(app *fiber.App) {
 
 	// Focus endpoints
 	api.Post("/daily-focus", DailyFocusHandler(service))
-	api.Get("/focus/recommendation", FocusRecommendationHandler(service))
 	api.Post("/focus/session", StartFocusSessionHandler(service))
 	api.Put("/focus/session/:id", CompleteFocusSessionHandler(service))
 }
@@ -110,66 +109,6 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 		log.Info("focus request completed", "date", req.Date, "items", len(items))
 		log.Debug("focus response ready", "response", resp)
 		return c.Status(fiber.StatusOK).JSON(resp)
-	}
-}
-
-// FocusRecommendationHandler handles GET /focus/recommendation
-// @Summary Get single best task recommendation
-// @Description Returns the single most suitable task for the current focus session
-// @Tags focus
-// @Produce json
-// @Param energy query string false "Energy level (low, medium, high, social)" default(medium)
-// @Param mode query string false "Focus mode (deep, quick, admin)" default(deep)
-// @Param minutes query int false "Available time in minutes" default(60)
-// @Success 200 {object} models.SessionRecommendation "Task recommendation with session details"
-// @Failure 500 {object} models.APIError "Internal server error"
-// @Router /focus/recommendation [get]
-func FocusRecommendationHandler(service *Service) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		ctx := context.Background()
-
-		// Parse query parameters
-		opts := models.FocusOptions{
-			Energy:     c.Query("energy", "medium"),
-			Mode:       c.Query("mode", "deep"),
-			MaxMinutes: c.QueryInt("minutes", 60),
-			MaxTasks:   1, // Single recommendation
-		}
-
-		log.Debug("parsed recommendation options", "opts", opts)
-
-		recommendation, err := service.GetTaskRecommendation(ctx, &opts)
-		if err != nil {
-			log.Error("failed to get task recommendation", "error", err)
-			return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{
-				Code:    fiber.StatusInternalServerError,
-				Message: err.Error(),
-			})
-		}
-
-		if recommendation == nil {
-			log.Debug("no suitable tasks found for recommendation", "opts", opts)
-			return c.Status(fiber.StatusOK).JSON(models.APIError{
-				Code:    fiber.StatusNoContent,
-				Message: "no suitable tasks found for current criteria",
-			})
-		}
-
-		log.Debug("recommendation found", "task_id", recommendation.RawTask.ID, "score", recommendation.FocusScore)
-
-		response := models.SessionRecommendation{
-			Task:      recommendation,
-			CanExtend: recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
-			Reasoning: fmt.Sprintf("Selected based on %s energy, %s mode compatibility (score: %.1f)",
-				opts.Energy, opts.Mode, recommendation.FocusScore),
-		}
-
-		log.Info("task recommendation generated",
-			"task_id", recommendation.RawTask.ID,
-			"score", recommendation.FocusScore)
-		log.Debug("recommendation response ready", "response", response)
-
-		return c.Status(fiber.StatusOK).JSON(response)
 	}
 }
 
