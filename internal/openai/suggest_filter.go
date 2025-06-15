@@ -113,7 +113,7 @@ You are an expert at creating Vikunja filter expressions. Your task is to conver
 - **done_at** - When task was completed
 - **assignees** - Users assigned to task
 - **labels** - Labels/tags on task
-- **project** - Project the task belongs to (only for saved filters, not project-level filters)
+- **project_id** - Project id of the project the task belongs to (only for saved filters, not project-level filters)
 - **reminders** - Task reminders
 - **created** - When task was created
 - **updated** - When task was last modified
@@ -173,9 +173,9 @@ All date fields support relative date expressions:
 
 ### By Project
 '''
-project = "Work Tasks"
-project in "Project A", "Project B"
-project != "Archive"
+project_id = 8
+project_id in 8, 10
+project_id != 1
 '''
 
 ### By Labels  
@@ -237,7 +237,7 @@ labels = "urgent" && percent_done = 0 && done = false
 
 ### Work Tasks Assigned to Me with High Priority
 '''
-project = "Work" && assignees = "me@company.com" && priority >= 4
+project_id = 10 && assignees = "me@company.com" && priority >= 4
 '''
 
 ### Tasks Created This Month but Not Done

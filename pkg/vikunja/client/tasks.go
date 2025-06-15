@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/charmbracelet/log"
@@ -55,7 +56,8 @@ func (c *Client) GetFilteredTasks(ctx context.Context, filter *string) ([]models
 	page := 1
 	for {
 		var tasks []models.RawTask
-		endpoint := fmt.Sprintf("/api/v1/tasks/all?page=%d&filter=%s", page, *filter)
+		endpoint := fmt.Sprintf("/api/v1/tasks/all?page=%d&filter=%s", page, url.QueryEscape(*filter))
+		log.Debug("Fetching tasks with endpoint", "endpoint", endpoint)
 		resp, err := c.getWithResponse(ctx, endpoint, &tasks)
 		if err != nil {
 			log.Error("Failed to fetch tasks", "page", page, "error", err)
