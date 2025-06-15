@@ -5,8 +5,8 @@ import (
 	"github.com/charmbracelet/log"
 )
 
-// basicTaskFiltering provides simple task filtering when AI is unavailable
-func (s *Service) basicTaskFiltering(tasks []models.Task, opts *models.FocusOptions) []models.Task {
+// basicTaskFocus provides simple task filtering by focuswhen AI is unavailable
+func (s *Service) basicTaskFocus(tasks []models.Task, opts *models.FocusOptions) []models.Task {
 	log.Info("Using basic task filtering fallback")
 
 	candidateTasks := []models.Task{}
@@ -41,7 +41,7 @@ func (s *Service) basicTaskRecommendation(tasks []models.Task, opts *models.Focu
 	// Limit to 1 task
 	opts.MaxTasks = 1
 
-	filtered := s.basicTaskFiltering(tasks, opts)
+	filtered := s.basicTaskFocus(tasks, opts)
 	if len(filtered) == 0 {
 		log.Info("No suitable tasks found for basic recommendation")
 		return nil
