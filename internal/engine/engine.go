@@ -63,6 +63,20 @@ func WithLearning(enabled bool) EngineOption {
 	}
 }
 
+// SuggestFilter return AI filtered tasks
+func (e *FocusEngine) SuggestFilter(ctx context.Context, filter *string) (*models.FilterSuggestionResponse, error) {
+	log.Info("FocusEngine.SuggestFilter called", "filter", &filter)
+
+	response, err := e.decisionEngine.SuggestFilter(ctx, filter)
+	if err != nil {
+		log.Error("AI decision engine failed, filter directly", "error", err)
+		return nil, err
+	}
+
+	log.Info("FilterEngine returning AI-suggested filter", "filter", response.Filter)
+	return response, nil
+}
+
 // GetFocusTasks returns AI-ranked tasks for focus session
 func (e *FocusEngine) GetFocusTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) (*models.DecisionResponse, error) {
 	log.Info("FocusEngine.GetFocusTasks called", "task_count", len(tasks), "opts", opts)

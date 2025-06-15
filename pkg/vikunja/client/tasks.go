@@ -46,6 +46,42 @@ func (c *Client) GetAllTasks(ctx context.Context) ([]models.RawTask, error) {
 	return allTasks, nil
 }
 
+// ListTasks returns all tasks visible to the authenticated user and passing the filter.
+//
+//	GET /api/v1/tasks
+func (c *Client) GetFilteredTasks(ctx context.Context, filter *string) ([]models.RawTask, error) {
+	log.Info("GetFilteredTasks called")
+	var allTasks []models.RawTask
+	page := 1
+	for {
+		var tasks []models.RawTask
+		endpoint := fmt.Sprintf("/api/v1/tasks/all?page=%d&filter=%s", page, *filter)
+		resp, err := c.getWithResponse(ctx, endpoint, &tasks)
+		if err != nil {
+			log.Error("Failed to fetch tasks", "page", page, "error", err)
+			return nil, err
+		}
+		allTasks = append(allTasks, tasks...)
+
+		totalPages := 1
+		if resp != nil {
+			totalPagesStr := resp.Header.Get("x-pagination-total-pages")
+			if totalPagesStr != "" {
+				if _, err := fmt.Sscanf(totalPagesStr, "%d", &totalPages); err != nil {
+					log.Warn("Failed to parse x-pagination-total-pages header", "value", totalPagesStr, "error", err)
+				}
+			}
+		}
+		if page >= totalPages || len(tasks) == 0 {
+			break
+		}
+		page++
+	}
+	log.Info("tasks fetched", "count", len(allTasks))
+	log.Debug("Returning RawTasks", "count", len(allTasks))
+	return allTasks, nil
+}
+
 // GetTask returns a single task by its ID.
 //
 //	GET /api/v1/tasks/{id}

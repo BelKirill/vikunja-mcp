@@ -56,3 +56,12 @@ type TaskRecommendation struct {
 	Reasoning         string       `json:"reasoning"`
 	Alternatives      []RankedTask `json:"alternatives"` // Other good options
 }
+
+// FilterResponse contains AI-suggested filter
+type FilterSuggestionResponse struct {
+	Filter     string  `json:"filter"`
+	Reasoning  string  `json:"reasoning"`
+	Confidence float64 `json:"confidence"` // 0.0-1.0
+	Strategy   string  `json:"strategy"`   // Which strategy was used
+	Fallback   bool    `json:"fallback"`   // Whether fallback was used
+}

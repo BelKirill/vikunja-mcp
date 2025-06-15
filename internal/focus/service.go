@@ -66,6 +66,32 @@ func initializeFocusEngine() (*engine.FocusEngine, error) {
 	return focusEngine, nil
 }
 
+func (s Service) GetFilteredTasks(ctx context.Context, filter string) ([]models.Task, error) {
+	log.Info("GetFilteredTasks called", "filter", filter)
+
+	// Use AI-powered filter engine for intelligent task filtering
+	newFilter, err := s.FocusEngine.SuggestFilter(ctx, &filter)
+	if err != nil {
+		log.Warn("Filter engine failed", "error", err)
+
+		tasks, err := s.Vikunja.GetFilteredTasks(ctx, &filter)
+		if err != nil {
+			log.Error("Basic filtering failed", "filter", filter, "error", err)
+			return nil, err
+		}
+
+		return tasks, nil
+	}
+
+	tasks, err := s.Vikunja.GetFilteredTasks(ctx, &newFilter.Filter)
+	if err != nil {
+		log.Error("AI suggested filtering failed", "filter", newFilter, "error", err)
+		return nil, err
+	}
+
+	return tasks, nil
+}
+
 // GetFocusTasks returns AI-ranked tasks suitable for focus sessions
 func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) ([]models.Task, error) {
 	log.Info("GetFocusTasks called with AI engine", "opts", opts)
@@ -83,7 +109,7 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) 
 	if err != nil {
 		log.Error("Focus engine failed", "error", err)
 		// Fallback to basic filtering if AI fails
-		return s.basicTaskFiltering(tasks, opts), nil
+		return s.basicTaskFocus(tasks, opts), nil
 	}
 
 	// Convert ranked tasks back to models.Task slice

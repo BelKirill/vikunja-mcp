@@ -46,6 +46,26 @@ func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
 	return enrichedTasks, nil
 }
 
+// GetFilteredTask fetches tasks using a filter
+// https://vikunja.io/docs/filters/
+func (s *Service) GetFilteredTasks(ctx context.Context, filter *string) ([]models.Task, error) {
+	log.Info("GetFilteredTask called")
+	filtered, err := s.Client.GetFilteredTasks(ctx, filter)
+	if err != nil {
+		log.Error("Failed to get filter", "error", err)
+		return nil, err
+	}
+	log.Debug("Fetched filtered raw tasks", "count", len(filtered))
+
+	enrichedTasks, err := enrichTasks(filtered)
+	if err != nil {
+		log.Error("Failed to enrich tasks", "error", err)
+		return nil, err
+	}
+	log.Info("GetUserTasks returning", "enriched_count", len(enrichedTasks))
+	return enrichedTasks, nil
+}
+
 // GetTaskByID fetches a single task by its ID.
 func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, error) {
 	log.Info("GetTaskByID called", "id", id)

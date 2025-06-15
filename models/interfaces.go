@@ -18,6 +18,7 @@ type FocusService interface {
 // DecisionEngine interface allows pluggable AI decision backends
 type DecisionEngine interface {
 	RankTasks(ctx context.Context, request *DecisionRequest) (*DecisionResponse, error)
+	SuggestFilter(ctx context.Context, request *string) (*FilterSuggestionResponse, error)
 	GetRecommendation(ctx context.Context, request *DecisionRequest) (*TaskRecommendation, error)
 }
 
