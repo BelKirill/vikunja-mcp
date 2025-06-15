@@ -172,6 +172,7 @@ Your job is to rank tasks for a focus session based on the user's current state 
 - Available Time: %d minutes
 - Time of Day: %s
 - Date: %s
+- Instructions: %s
 
 ## Available Tasks:
 %s
@@ -215,6 +216,7 @@ Respond with valid JSON only.`,
 		request.MaxMinutes,
 		request.TimeOfDay,
 		request.Date.Format("2006-01-02"),
+		request.Instructions,
 		string(tasksJSON))
 }
 

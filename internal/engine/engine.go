@@ -148,6 +148,7 @@ func (e *FocusEngine) buildDecisionRequest(ctx context.Context, tasks []models.T
 		TimeOfDay:      getTimeOfDay(now),
 		CandidateTasks: tasks,
 		MaxTasks:       opts.MaxTasks,
+		Instructions:   opts.Instructions,
 	}
 
 	// // Add learning context if enabled
