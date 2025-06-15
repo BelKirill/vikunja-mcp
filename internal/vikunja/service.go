@@ -224,12 +224,12 @@ type UpsertTaskOptions struct {
 	Priority    *int    `json:"priority,omitempty"`
 	HexColor    *string `json:"hex_color,omitempty"`
 	Done        *bool   `json:"done,omitempty"`
-	ProjectID   *int64    `json:"project_id,omitempty"`
+	ProjectID   *int64  `json:"project_id,omitempty"`
 }
 
 func (s *Service) UpsertTaskSelective(ctx context.Context, opts UpsertTaskOptions) (*models.RawTask, error) {
 	var finalTask models.RawTask
-	
+
 	// If updating existing task
 	if opts.TaskID != nil && *opts.TaskID > 0 {
 		log.Debug("Selective update - fetching existing task", "task_id", *opts.TaskID)
@@ -247,27 +247,27 @@ func (s *Service) UpsertTaskSelective(ctx context.Context, opts UpsertTaskOption
 			log.Debug("Selective update: title", "task_id", *opts.TaskID, "new_title", *opts.Title)
 			finalTask.Title = *opts.Title
 		}
-		
+
 		if opts.Description != nil {
 			log.Debug("Selective update: description", "task_id", *opts.TaskID)
 			finalTask.Description = *opts.Description
 		}
-		
+
 		if opts.Priority != nil {
 			log.Debug("Selective update: priority", "task_id", *opts.TaskID, "new_priority", *opts.Priority)
 			finalTask.Priority = *opts.Priority
 		}
-		
+
 		if opts.HexColor != nil {
 			log.Debug("Selective update: hex_color", "task_id", *opts.TaskID, "new_color", *opts.HexColor)
 			finalTask.HexColor = *opts.HexColor
 		}
-		
+
 		if opts.Done != nil {
 			log.Debug("Selective update: done", "task_id", *opts.TaskID, "new_done", *opts.Done)
 			finalTask.Done = *opts.Done
 		}
-		
+
 		if opts.ProjectID != nil {
 			log.Debug("Selective update: project_id", "task_id", *opts.TaskID, "new_project_id", *opts.ProjectID)
 			finalTask.ProjectID = *opts.ProjectID
