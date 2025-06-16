@@ -86,6 +86,7 @@ type RawTask struct {
 
 // Task represents an enriched task with parsed hyperfocus metadata
 type Task struct {
+	Identifier       string              `json:"identifier"`
 	RawTask          *RawTask            `json:"raw_task"`
 	Metadata         *HyperFocusMetadata `json:"metadata,omitempty"`
 	FocusScore       float64             `json:"focus_score,omitempty"`

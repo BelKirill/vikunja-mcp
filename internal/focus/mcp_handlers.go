@@ -98,6 +98,7 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 	// Return enriched task data
 	resp := map[string]interface{}{
 		"task_id":             task.RawTask.ID,
+		"identifier":          task.RawTask.Identifier,
 		"title":               task.RawTask.Title,
 		"description":         task.CleanDescription,
 		"hex_color":           task.RawTask.HexColor,
@@ -166,6 +167,7 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 		"action":  action,
 		"task": map[string]interface{}{
 			"task_id":     result.ID,
+			"identifier":  result.Identifier,
 			"title":       result.Title,
 			"done":        result.Done,
 			"priority":    result.Priority,
