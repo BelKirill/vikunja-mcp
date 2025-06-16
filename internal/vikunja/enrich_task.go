@@ -145,6 +145,7 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 	enrichedTask := &models.Task{
 		RawTask:          task,             // Embed the raw task
 		CleanDescription: task.Description, // Will be cleaned below
+		Identifier:       task.Identifier,  // For human readable identifier like 'mcp-63'
 	}
 
 	if meta == "" {

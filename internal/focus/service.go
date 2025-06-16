@@ -130,58 +130,6 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) 
 	return result, nil
 }
 
-// GetTaskRecommendation returns the single best task with AI-powered reasoning
-func (s *Service) GetTaskRecommendation(ctx context.Context, opts *models.FocusOptions) (*models.Task, error) {
-	log.Info("GetTaskRecommendation called with AI engine", "opts", opts)
-
-	// Get all incomplete tasks
-	tasks, err := s.Vikunja.GetIncompleteTasks(ctx)
-	if err != nil {
-		log.Error("Failed to get incomplete tasks", "error", err)
-		return nil, err
-	}
-
-	// Use AI-powered recommendation
-	recommendation, err := s.FocusEngine.GetTaskRecommendation(ctx, tasks, opts)
-	if err != nil {
-		log.Error("AI recommendation failed", "error", err)
-		// Fallback to basic recommendation
-		return s.basicTaskRecommendation(tasks, opts), nil
-	}
-
-	if recommendation == nil || recommendation.Task == nil {
-		log.Info("No suitable tasks found for recommendation")
-		return nil, nil
-	}
-
-	log.Info("Returning AI-powered task recommendation",
-		"task_id", recommendation.Task.Task.RawTask.ID,
-		"strategy", recommendation.SessionStrategy,
-		"length", recommendation.RecommendedLength,
-		"reasoning", recommendation.Reasoning)
-
-	return &recommendation.Task.Task, nil
-}
-
-// GetEnhancedTaskRecommendation returns the full AI recommendation with reasoning
-func (s *Service) GetEnhancedTaskRecommendation(ctx context.Context, opts *models.FocusOptions) (*models.TaskRecommendation, error) {
-	log.Info("GetEnhancedTaskRecommendation called")
-
-	tasks, err := s.Vikunja.GetIncompleteTasks(ctx)
-	if err != nil {
-		log.Error("Failed to get incomplete tasks", "error", err)
-		return nil, err
-	}
-
-	recommendation, err := s.FocusEngine.GetTaskRecommendation(ctx, tasks, opts)
-	if err != nil {
-		log.Error("Enhanced recommendation failed", "error", err)
-		return nil, err
-	}
-
-	return recommendation, nil
-}
-
 // EstimateSessionLength calculates optimal session length using AI insights
 func (s *Service) EstimateSessionLength(task *models.FocusResult, userMaxMinutes int) int {
 	log.Info("EstimateSessionLength called", "task_id", task.TaskID, "userMaxMinutes", userMaxMinutes)

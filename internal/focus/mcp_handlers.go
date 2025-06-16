@@ -98,6 +98,7 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 	// Return enriched task data
 	resp := map[string]interface{}{
 		"task_id":             task.RawTask.ID,
+		"identifier":          task.RawTask.Identifier,
 		"title":               task.RawTask.Title,
 		"description":         task.CleanDescription,
 		"hex_color":           task.RawTask.HexColor,
@@ -110,70 +111,6 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 		"updated":             task.RawTask.Updated,
 	}
 	log.Debug("handleGetTaskMetadata response ready", "resp", resp)
-	return resp, nil
-}
-
-// handleGetFocusRecommendation gets the single best task for focus session
-func handleGetFocusRecommendation(service *Service, args map[string]interface{}) (interface{}, error) {
-	log.Debug("handleGetFocusRecommendation called", "args", args)
-	opts := models.FocusOptions{
-		Energy:     "medium",
-		Mode:       "deep",
-		MaxMinutes: 60,
-		MaxTasks:   1, // Single recommendation
-	}
-
-	// Parse arguments
-	if energy, ok := args["energy"].(string); ok {
-		log.Debug("Parsed energy from args", "energy", energy)
-		opts.Energy = energy
-	}
-	if mode, ok := args["mode"].(string); ok {
-		log.Debug("Parsed mode from args", "mode", mode)
-		opts.Mode = mode
-	}
-	if maxMinutes, ok := args["max_minutes"].(float64); ok {
-		log.Debug("Parsed max_minutes from args", "max_minutes", maxMinutes)
-		opts.MaxMinutes = int(maxMinutes)
-	}
-
-	log.Debug("Calling service.GetTaskRecommendation", "opts", opts)
-	recommendation, err := service.GetTaskRecommendation(context.Background(), &opts)
-	if err != nil {
-		log.Error("Failed to get task recommendation", "error", err)
-		return nil, err
-	}
-
-	if recommendation == nil {
-		log.Debug("No suitable task found for recommendation", "opts", opts)
-		return map[string]interface{}{
-			"message":        "No suitable tasks found",
-			"recommendation": nil,
-			"criteria": map[string]interface{}{
-				"energy":      opts.Energy,
-				"mode":        opts.Mode,
-				"max_minutes": opts.MaxMinutes,
-			},
-		}, nil
-	}
-
-	log.Debug("Task recommendation found", "task_id", recommendation.RawTask.ID, "score", recommendation.FocusScore)
-
-	resp := map[string]interface{}{
-		"message": "Task recommendation generated successfully",
-		"recommendation": map[string]interface{}{
-			"task":        recommendation,
-			"can_extend":  recommendation.Metadata.Extend && opts.MaxMinutes >= recommendation.Metadata.Estimate,
-			"focus_score": recommendation.FocusScore,
-			"reasoning":   fmt.Sprintf("Selected for %s energy, %s mode (score: %.1f)", opts.Energy, opts.Mode, recommendation.FocusScore),
-		},
-		"criteria": map[string]interface{}{
-			"energy":      opts.Energy,
-			"mode":        opts.Mode,
-			"max_minutes": opts.MaxMinutes,
-		},
-	}
-	log.Debug("handleGetFocusRecommendation response ready", "resp", resp)
 	return resp, nil
 }
 
@@ -230,6 +167,7 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 		"action":  action,
 		"task": map[string]interface{}{
 			"task_id":     result.ID,
+			"identifier":  result.Identifier,
 			"title":       result.Title,
 			"done":        result.Done,
 			"priority":    result.Priority,

@@ -111,29 +111,6 @@ func (e *FocusEngine) GetFocusTasks(ctx context.Context, tasks []models.Task, op
 	return response, nil
 }
 
-// GetTaskRecommendation returns the single best task with detailed reasoning
-func (e *FocusEngine) GetTaskRecommendation(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) (*models.TaskRecommendation, error) {
-	log.Info("FocusEngine.GetTaskRecommendation called")
-
-	// Apply filters first
-	filteredTasks := e.applyContextualFilters(ctx, tasks, opts)
-	if len(filteredTasks) == 0 {
-		return nil, fmt.Errorf("no suitable tasks found")
-	}
-
-	// Build rich context
-	request := e.buildDecisionRequest(ctx, filteredTasks, opts)
-
-	// Try AI recommendation
-	recommendation, err := e.decisionEngine.GetRecommendation(ctx, request)
-	if err != nil {
-		log.Warn("AI recommendation failed, using fallback", "error", err)
-		return e.fallbackStrategy.GetRecommendation(ctx, filteredTasks, opts), nil
-	}
-
-	return recommendation, nil
-}
-
 // applyContextualFilters runs all contextual filters in sequence
 func (e *FocusEngine) applyContextualFilters(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
 	filtered := tasks

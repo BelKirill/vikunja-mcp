@@ -158,40 +158,6 @@ func RegisterMCPTools(server *mcp.Server) error {
 		return handleUpsertTask(vikunjaSvc, args)
 	})
 
-	// Register focus recommendation tool
-	log.Debug("Registering get-focus-recommendation tool with MCP server")
-	server.RegisterTool(mcp.Tool{
-		Name:        "get-focus-recommendation",
-		Description: "Get the single best task recommendation for current focus session",
-		InputSchema: map[string]interface{}{
-			"type": "object",
-			"properties": map[string]interface{}{
-				"energy": map[string]interface{}{
-					"type":        "string",
-					"enum":        []string{"low", "medium", "high", "social"},
-					"description": "Current energy level",
-					"default":     "medium",
-				},
-				"mode": map[string]interface{}{
-					"type":        "string",
-					"enum":        []string{"deep", "quick", "admin"},
-					"description": "Work mode preference",
-					"default":     "deep",
-				},
-				"max_minutes": map[string]interface{}{
-					"type":        "integer",
-					"description": "Available time in minutes",
-					"minimum":     5,
-					"maximum":     480,
-					"default":     60,
-				},
-			},
-		},
-	}, func(args map[string]interface{}) (interface{}, error) {
-		log.Debug("get-focus-recommendation tool invoked", "args", args)
-		return handleGetFocusRecommendation(vikunjaSvc, args)
-	})
-
 	log.Debug("All MCP tools registered for focus package")
 	return nil
 }
