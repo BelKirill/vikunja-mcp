@@ -6,6 +6,8 @@ require (
 	github.com/charmbracelet/log v0.4.2
 	github.com/gofiber/fiber/v2 v2.52.8
 	github.com/gofiber/swagger v1.1.1
+	github.com/google/uuid v1.6.0
+	github.com/sashabaranov/go-openai v1.40.2
 	github.com/stretchr/testify v1.10.0
 	github.com/swaggo/swag v1.16.4
 )
@@ -25,7 +27,6 @@ require (
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.1 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect

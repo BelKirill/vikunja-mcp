@@ -18,6 +18,7 @@ test:
 # Build the server binary
 build:
 	go build -o bin/server ./cmd/mcp/main.go
+	docker build -t vikunja-mcp:latest .
 
 ci-local: fmt goimports lint
 

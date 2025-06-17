@@ -36,7 +36,7 @@ func NewOpenAIDecisionEngine(config OpenAIConfig) *OpenAIDecisionEngine {
 		config.BaseURL = "https://api.openai.com/v1"
 	}
 	if config.Model == "" {
-		config.Model = "gpt-4"
+		config.Model = "gpt-4.1-nano"
 	}
 	if config.MaxTokens == 0 {
 		config.MaxTokens = 1000
