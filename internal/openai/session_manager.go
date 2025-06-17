@@ -677,13 +677,13 @@ func (sm *SessionManagerImpl) startBackgroundProcesses() {
 			case <-sm.cleanupTicker.C:
 				ctx := context.Background()
 				if _, err := sm.CleanupExpiredSessions(ctx); err != nil {
-						sm.logger.Error("Background cleanup failed", "error", err)
-   		  }
+					sm.logger.Error("Background cleanup failed", "error", err)
+				}
 			case <-sm.healthTicker.C:
-    		ctx := context.Background()
-    		if err := sm.HealthCheck(ctx); err != nil {
-        	sm.logger.Error("Health check failed", "error", err)
-    		}
+				ctx := context.Background()
+				if err := sm.HealthCheck(ctx); err != nil {
+					sm.logger.Error("Health check failed", "error", err)
+				}
 			case <-sm.shutdownChan:
 				return
 			}
@@ -691,11 +691,7 @@ func (sm *SessionManagerImpl) startBackgroundProcesses() {
 	}()
 }
 
-
 // In startBackgroundProcesses() around line 679-682:
-
-
-
 
 // updateMetrics safely updates metrics with the given function
 func (sm *SessionManagerImpl) updateMetrics(updateFunc func(*SessionMetrics)) {
