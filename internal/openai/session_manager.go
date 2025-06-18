@@ -691,8 +691,6 @@ func (sm *SessionManagerImpl) startBackgroundProcesses() {
 	}()
 }
 
-// In startBackgroundProcesses() around line 679-682:
-
 // updateMetrics safely updates metrics with the given function
 func (sm *SessionManagerImpl) updateMetrics(updateFunc func(*SessionMetrics)) {
 	sm.metricsMutex.Lock()
