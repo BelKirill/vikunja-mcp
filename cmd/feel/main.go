@@ -26,7 +26,7 @@ func main() {
 	defer cancel()
 
 	// Touch the real system
-	tasks, err := c.GetAllTasks(&ctx)
+	tasks, err := c.GetAllTasks(ctx)
 	if err != nil {
 		log.Error("API call failed", "err", err)
 		log.Warn("Let me see what the actual response looks like...")

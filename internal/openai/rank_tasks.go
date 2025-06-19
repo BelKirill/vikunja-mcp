@@ -11,7 +11,7 @@ import (
 )
 
 // RankTasks uses OpenAI to intelligently rank tasks for focus sessions
-func (e *OpenAIDecisionEngine) RankTasks(ctx *context.Context, request *models.DecisionRequest) (*models.DecisionResponse, error) {
+func (e *OpenAIDecisionEngine) RankTasks(ctx context.Context, request *models.DecisionRequest) (*models.DecisionResponse, error) {
 	log.Info("OpenAI: Ranking tasks for focus session", "task_count", len(request.CandidateTasks))
 	log.Debug("DecisionRequest", "energy", request.Energy, "mode", request.Mode, "max_minutes", request.MaxMinutes, "tasks", request.CandidateTasks)
 

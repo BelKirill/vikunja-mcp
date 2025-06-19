@@ -66,7 +66,7 @@ func initializeFocusEngine() (*engine.FocusEngine, error) {
 	return focusEngine, nil
 }
 
-func (s Service) GetFilteredTasks(ctx *context.Context, filter string, useAI bool) ([]models.Task, error) {
+func (s Service) GetFilteredTasks(ctx context.Context, filter string, useAI bool) ([]models.Task, error) {
 	log.Info("GetFilteredTasks called", "filter", filter, "useAI", useAI)
 
 	finalFilter := filter
@@ -96,7 +96,7 @@ func (s Service) GetFilteredTasks(ctx *context.Context, filter string, useAI boo
 }
 
 // GetFocusTasks returns AI-ranked tasks suitable for focus sessions
-func (s *Service) GetFocusTasks(ctx *context.Context, opts *models.FocusOptions) ([]models.Task, error) {
+func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) ([]models.Task, error) {
 	log.Info("GetFocusTasks called with AI engine", "opts", opts)
 
 	// Get all incomplete tasks from Vikunja
@@ -158,14 +158,14 @@ func (s *Service) EstimateSessionLength(task *models.FocusResult, userMaxMinutes
 }
 
 // UpsertTask creates or updates a task through the Vikunja service
-func (s *Service) UpsertTask(ctx *context.Context, task *models.RawTask) (*models.RawTask, error) {
+func (s *Service) UpsertTask(ctx context.Context, task *models.RawTask) (*models.RawTask, error) {
 	log.Info("UpsertTask called in focus.Service", "task_id", task.ID)
 	log.Debug("UpsertTask details", "task", task)
 	return s.Vikunja.UpsertTask(ctx, task)
 }
 
 // GetFullTaskData retrieves detailed data for a specific task
-func (s *Service) GetFullTaskData(ctx *context.Context, taskID int64) (*models.Task, []models.Comment, error) {
+func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Task, []models.Comment, error) {
 	log.Info("GetFullTaskData called", "task_id", taskID)
 	log.Debug("Fetching task data from Vikunja", "task_id", taskID)
 	task, err := s.Vikunja.GetTaskByID(ctx, taskID)

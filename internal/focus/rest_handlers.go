@@ -85,7 +85,7 @@ func DailyFocusHandler(service *Service) fiber.Handler {
 		}
 
 		log.Debug("calling service.GetFocusTasks", "opts", opts)
-		items, err := service.GetFocusTasks(&ctx, &opts)
+		items, err := service.GetFocusTasks(ctx, &opts)
 		if err != nil {
 			log.Error("focus service error", "date", req.Date, "hours", req.Hours, "error", err)
 			return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{

@@ -10,10 +10,8 @@ import (
 
 	"github.com/BelKirill/vikunja-mcp/docs"
 	"github.com/BelKirill/vikunja-mcp/internal/focus"
-	"github.com/BelKirill/vikunja-mcp/internal/peek"
-	"github.com/BelKirill/vikunja-mcp/internal/review"
 	"github.com/charmbracelet/log"
-	"github.com/gofiber/fiber/v2"
+	fiber "github.com/gofiber/fiber/v2"
 	fiberSwagger "github.com/gofiber/swagger"
 )
 
@@ -28,9 +26,7 @@ func main() {
 	app.Get("/docs/*", fiberSwagger.HandlerDefault)
 
 	// tool routes
-	peek.RegisterRoutes(app)
 	focus.RegisterRoutes(app)
-	review.RegisterRoutes(app)
 
 	port := os.Getenv("PORT")
 	if port == "" {

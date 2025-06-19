@@ -44,7 +44,7 @@ func TestClient_Get_Success(t *testing.T) {
 
 	var result map[string]interface{}
 	ctx := context.Background()
-	err := c.Get(&ctx, "endpoint", &result)
+	err := c.Get(ctx, "endpoint", &result)
 	require.NoError(t, err)
 	assert.Equal(t, expected, result)
 }
@@ -53,7 +53,7 @@ func TestClient_Get_InvalidURL(t *testing.T) {
 	c := &Client{baseURL: "http://[::1]:namedport/"}
 	var result interface{}
 	ctx := context.Background()
-	err := c.Get(&ctx, "bad endpoint", &result)
+	err := c.Get(ctx, "bad endpoint", &result)
 	assert.Error(t, err)
 }
 
@@ -69,7 +69,7 @@ func TestClient_Post_Success(t *testing.T) {
 
 	var result map[string]interface{}
 	ctx := context.Background()
-	err := c.Post(&ctx, "endpoint", map[string]string{"foo": "bar"}, &result)
+	err := c.Post(ctx, "endpoint", map[string]string{"foo": "bar"}, &result)
 	require.NoError(t, err)
 	assert.Equal(t, expected, result)
 }
@@ -79,7 +79,7 @@ func TestClient_Post_MarshalError(t *testing.T) {
 	ch := make(chan int)
 	var result interface{}
 	ctx := context.Background()
-	err := c.Post(&ctx, "endpoint", ch, &result)
+	err := c.Post(ctx, "endpoint", ch, &result)
 	assert.Error(t, err)
 }
 
@@ -95,7 +95,7 @@ func TestClient_Put_Success(t *testing.T) {
 
 	var result map[string]interface{}
 	ctx := context.Background()
-	err := c.Put(&ctx, "endpoint", map[string]string{"foo": "bar"}, &result)
+	err := c.Put(ctx, "endpoint", map[string]string{"foo": "bar"}, &result)
 	require.NoError(t, err)
 	assert.Equal(t, expected, result)
 }
@@ -105,7 +105,7 @@ func TestClient_Put_MarshalError(t *testing.T) {
 	ch := make(chan int)
 	var result interface{}
 	ctx := context.Background()
-	err := c.Put(&ctx, "endpoint", ch, &result)
+	err := c.Put(ctx, "endpoint", ch, &result)
 	assert.Error(t, err)
 }
 
@@ -118,14 +118,14 @@ func TestClient_Delete_Success(t *testing.T) {
 	c := newTestClient(resp, nil)
 
 	ctx := context.Background()
-	err := c.Delete(&ctx, "endpoint")
+	err := c.Delete(ctx, "endpoint")
 	require.NoError(t, err)
 }
 
 func TestClient_Delete_InvalidURL(t *testing.T) {
 	c := &Client{baseURL: "http://[::1]:namedport/"}
 	ctx := context.Background()
-	err := c.Delete(&ctx, "bad endpoint")
+	err := c.Delete(ctx, "bad endpoint")
 	assert.Error(t, err)
 }
 
@@ -138,6 +138,6 @@ func TestClient_Get_RequestError(t *testing.T) {
 	}
 	var result interface{}
 	ctx := context.Background()
-	err := c.Get(&ctx, "endpoint", &result)
+	err := c.Get(ctx, "endpoint", &result)
 	assert.Error(t, err)
 }

@@ -64,7 +64,7 @@ func WithLearning(enabled bool) EngineOption {
 }
 
 // SuggestFilter return AI filtered tasks
-func (e *FocusEngine) SuggestFilter(ctx *context.Context, filter *string) (*models.FilterSuggestionResponse, error) {
+func (e *FocusEngine) SuggestFilter(ctx context.Context, filter *string) (*models.FilterSuggestionResponse, error) {
 	log.Info("FocusEngine.SuggestFilter called", "filter", &filter)
 
 	response, err := e.decisionEngine.SuggestFilter(ctx, filter)
@@ -78,7 +78,7 @@ func (e *FocusEngine) SuggestFilter(ctx *context.Context, filter *string) (*mode
 }
 
 // GetFocusTasks returns AI-ranked tasks for focus session
-func (e *FocusEngine) GetFocusTasks(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) (*models.DecisionResponse, error) {
+func (e *FocusEngine) GetFocusTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) (*models.DecisionResponse, error) {
 	log.Info("FocusEngine.GetFocusTasks called", "task_count", len(tasks), "opts", opts)
 
 	// Step 1: Apply contextual filters
@@ -112,7 +112,7 @@ func (e *FocusEngine) GetFocusTasks(ctx *context.Context, tasks []models.Task, o
 }
 
 // applyContextualFilters runs all contextual filters in sequence
-func (e *FocusEngine) applyContextualFilters(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
+func (e *FocusEngine) applyContextualFilters(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
 	filtered := tasks
 
 	for _, filter := range e.contextualFilters {
@@ -128,11 +128,11 @@ func (e *FocusEngine) applyContextualFilters(ctx *context.Context, tasks []model
 }
 
 // buildDecisionRequest creates rich context for AI decision making
-func (e *FocusEngine) buildDecisionRequest(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) *models.DecisionRequest {
+func (e *FocusEngine) buildDecisionRequest(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) *models.DecisionRequest {
 	// Use context to get current time if available, otherwise fallback to time.Now()
 	var now time.Time
 	if ctx != nil {
-		if deadline, ok := (*ctx).Deadline(); ok {
+		if deadline, ok := ctx.Deadline(); ok {
 			now = deadline
 		} else {
 			now = time.Now()
@@ -165,7 +165,7 @@ func (e *FocusEngine) buildDecisionRequest(ctx *context.Context, tasks []models.
 }
 
 // fallbackToHeuristic provides deterministic task selection when AI fails
-func (e *FocusEngine) fallbackToHeuristic(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) (*models.DecisionResponse, error) {
+func (e *FocusEngine) fallbackToHeuristic(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) (*models.DecisionResponse, error) {
 	log.Info("Using heuristic fallback for task selection")
 
 	rankedTasks := e.fallbackStrategy.SelectTasks(ctx, tasks, opts)
@@ -235,7 +235,7 @@ func (f *TimeConstraintFilter) Name() string {
 	return "time_constraint"
 }
 
-func (f *TimeConstraintFilter) Filter(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
+func (f *TimeConstraintFilter) Filter(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
 	var filtered []models.Task
 
 	for _, task := range tasks {
@@ -268,7 +268,7 @@ func (f *EnergyModeFilter) Name() string {
 	return "energy_mode"
 }
 
-func (f *EnergyModeFilter) Filter(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
+func (f *EnergyModeFilter) Filter(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
 	var filtered []models.Task
 
 	for _, task := range tasks {
@@ -327,7 +327,7 @@ func (f *DependencyFilter) Name() string {
 	return "dependency"
 }
 
-func (f *DependencyFilter) Filter(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
+func (f *DependencyFilter) Filter(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.Task {
 	// For now, just return all tasks
 	// In the future, this would check for:
 	// - Blocked by other incomplete tasks
@@ -347,7 +347,7 @@ func NewHeuristicFallback() HeuristicFallback {
 	return HeuristicFallback{}
 }
 
-func (h HeuristicFallback) SelectTasks(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) []models.RankedTask {
+func (h HeuristicFallback) SelectTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.RankedTask {
 	log.Info("HeuristicFallback.SelectTasks called", "task_count", len(tasks), "opts", opts)
 	var ranked []models.RankedTask
 
@@ -377,7 +377,7 @@ func (h HeuristicFallback) SelectTasks(ctx *context.Context, tasks []models.Task
 	return ranked
 }
 
-func (h HeuristicFallback) GetRecommendation(ctx *context.Context, tasks []models.Task, opts *models.FocusOptions) *models.TaskRecommendation {
+func (h HeuristicFallback) GetRecommendation(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) *models.TaskRecommendation {
 	log.Info("HeuristicFallback.GetRecommendation called", "task_count", len(tasks), "opts", opts)
 	ranked := h.SelectTasks(ctx, tasks, opts)
 

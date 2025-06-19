@@ -13,7 +13,7 @@ import (
 )
 
 // Get performs a GET request and unmarshals the response into result.
-func (c *Client) Get(ctx *context.Context, endpoint string, result interface{}) error {
+func (c *Client) Get(ctx context.Context, endpoint string, result interface{}) error {
 	log.Info("GET request", "endpoint", endpoint)
 	log.Debug("Base URL", "baseURL", c.baseURL)
 	fullURL := c.baseURL + endpoint
@@ -34,7 +34,7 @@ func (c *Client) Get(ctx *context.Context, endpoint string, result interface{}) 
 }
 
 // Post performs a POST request with a JSON body and unmarshals the response into result.
-func (c *Client) Post(ctx *context.Context, endpoint string, body interface{}, result interface{}) error {
+func (c *Client) Post(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	log.Info("POST request", "endpoint", endpoint)
 	var r io.Reader
 	if body != nil {
@@ -57,7 +57,7 @@ func (c *Client) Post(ctx *context.Context, endpoint string, body interface{}, r
 }
 
 // Put performs a PUT request with a JSON body and unmarshals the response into result.
-func (c *Client) Put(ctx *context.Context, endpoint string, body interface{}, result interface{}) error {
+func (c *Client) Put(ctx context.Context, endpoint string, body interface{}, result interface{}) error {
 	log.Info("PUT request", "endpoint", endpoint)
 	var r io.Reader
 	if body != nil {
@@ -80,7 +80,7 @@ func (c *Client) Put(ctx *context.Context, endpoint string, body interface{}, re
 }
 
 // Delete performs a DELETE request.
-func (c *Client) Delete(ctx *context.Context, endpoint string) error {
+func (c *Client) Delete(ctx context.Context, endpoint string) error {
 	log.Info("DELETE request", "endpoint", endpoint)
 	fullURL := c.baseURL + endpoint
 	log.Debug("Full URL", "URL", fullURL)

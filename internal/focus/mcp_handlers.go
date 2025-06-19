@@ -42,8 +42,8 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.GetFocusTasks", "opts", opts)
-	backContext := context.Background()
-	tasks, err := service.GetFocusTasks(&backContext, &opts)
+	ctx := context.Background()
+	tasks, err := service.GetFocusTasks(ctx, &opts)
 	if err != nil {
 		log.Error("Failed to get focus tasks", "error", err)
 		return nil, err
@@ -76,8 +76,8 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 	taskID := int64(taskIDFloat)
 
 	log.Debug("Calling service.GetTaskMetadata", "task_id", taskID)
-	backContext := context.Background()
-	task, comments, err := service.GetFullTaskData(&backContext, taskID)
+	ctx := context.Background()
+	task, comments, err := service.GetFullTaskData(ctx, taskID)
 	if err != nil {
 		log.Error("Failed to get task data", "task_id", taskID, "error", err)
 		return nil, err
@@ -159,8 +159,8 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.UpsertTask", "action", action, "task", task)
-	backContext := context.Background()
-	result, err := service.UpsertTask(&backContext, &task)
+	ctx := context.Background()
+	result, err := service.UpsertTask(ctx, &task)
 	if err != nil {
 		log.Error("Failed to upsert task", "error", err, "action", action)
 		return nil, err
@@ -207,8 +207,8 @@ func handleGetFilteredTasks(service *Service, args map[string]interface{}) (inte
 	}
 
 	log.Debug("Calling service.GetFilteredTasks", "filter", filter, "useAI", useAI)
-	backContext := context.Background()
-	tasks, err := service.GetFilteredTasks(&backContext, filter, useAI)
+	ctx := context.Background()
+	tasks, err := service.GetFilteredTasks(ctx, filter, useAI)
 	if err != nil {
 		log.Error("Failed to get filtered tasks", "error", err, "filter", filter)
 		return nil, err

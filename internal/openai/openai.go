@@ -36,7 +36,7 @@ func NewOpenAIDecisionEngine(config OpenAIConfig) *OpenAIDecisionEngine {
 		config.BaseURL = "https://api.openai.com/v1"
 	}
 	if config.Model == "" {
-		config.Model = "gpt-4"
+		config.Model = "gpt-4o-mini"
 	}
 	if config.MaxTokens == 0 {
 		config.MaxTokens = 1000
@@ -85,7 +85,7 @@ type apiError struct {
 }
 
 // callOpenAI makes the actual API call to OpenAI
-func (e *OpenAIDecisionEngine) callOpenAI(ctx *context.Context, prompt string) (string, error) {
+func (e *OpenAIDecisionEngine) callOpenAI(ctx context.Context, prompt string) (string, error) {
 	log.Info("Calling OpenAI API", "model", e.config.Model, "max_tokens", e.config.MaxTokens)
 	log.Debug("Prompt sent to OpenAI", "prompt", prompt)
 

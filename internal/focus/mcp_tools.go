@@ -115,7 +115,7 @@ func RegisterMCPTools(server *mcp.Server) error {
 	// Register the upsert_task tool
 	log.Debug("Registering upsert_task tool with MCP server")
 	server.RegisterTool(mcp.Tool{
-		Name:        "upsert_task",
+		Name:        "upsert-task",
 		Description: "Create a new task or update an existing task (including marking complete)",
 		InputSchema: map[string]interface{}{
 			"type": "object",

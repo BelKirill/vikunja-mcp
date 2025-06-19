@@ -11,7 +11,7 @@ import (
 )
 
 // SuggestFilter uses OpenAI to intelligently build a filter expression
-func (e *OpenAIDecisionEngine) SuggestFilter(ctx *context.Context, request *string) (*models.FilterSuggestionResponse, error) {
+func (e *OpenAIDecisionEngine) SuggestFilter(ctx context.Context, request *string) (*models.FilterSuggestionResponse, error) {
 	log.Info("OpenAI: Suggesting a filter expression", "request", request)
 
 	prompt := e.buildFilterSuggestionPrompt(*request)

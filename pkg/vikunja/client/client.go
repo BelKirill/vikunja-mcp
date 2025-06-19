@@ -105,7 +105,7 @@ func (c *Client) url(path string) string {
 }
 
 // newRequest builds an HTTP request with context and common headers.
-func (c *Client) newRequest(ctx *context.Context, method, path string, body io.Reader) (*http.Request, error) {
+func (c *Client) newRequest(ctx context.Context, method, path string, body io.Reader) (*http.Request, error) {
 	log.Debug("newRequest called", "method", method, "path", path)
 	req, err := http.NewRequestWithContext(ctx, method, c.url(path), body)
 	if err != nil {
