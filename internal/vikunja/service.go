@@ -3,6 +3,7 @@ package vikunja
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/BelKirill/vikunja-mcp/models"
@@ -28,7 +29,7 @@ func NewService() (*Service, error) {
 }
 
 // GetUserTasks fetches all tasks for the current user and enriches them with metadata.
-func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
+func (s *Service) GetUserTasks(ctx *context.Context) ([]models.Task, error) {
 	log.Info("GetUserTasks called")
 	rawTasks, err := s.Client.GetAllTasks(ctx)
 	if err != nil {
@@ -48,7 +49,7 @@ func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
 
 // GetFilteredTask fetches tasks using a filter
 // https://vikunja.io/docs/filters/
-func (s *Service) GetFilteredTasks(ctx context.Context, filter *string) ([]models.Task, error) {
+func (s *Service) GetFilteredTasks(ctx *context.Context, filter *string) ([]models.Task, error) {
 	log.Info("GetFilteredTask called")
 	filtered, err := s.Client.GetFilteredTasks(ctx, filter)
 	if err != nil {
@@ -67,7 +68,7 @@ func (s *Service) GetFilteredTasks(ctx context.Context, filter *string) ([]model
 }
 
 // GetTaskByID fetches a single task by its ID.
-func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, error) {
+func (s *Service) GetTaskByID(ctx *context.Context, id int64) (*models.Task, error) {
 	log.Info("GetTaskByID called", "id", id)
 	task, err := s.Client.GetTask(ctx, id)
 	if err != nil {
@@ -84,8 +85,22 @@ func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, erro
 	return result, nil
 }
 
+// GetTaskCommentsByID fetches all comments for a given task ID
+func (s *Service) GetTaskCommentsByID(ctx *context.Context, taskID int64) ([]models.Comment, error) {
+	log.Info("GetTaskCommentsByID called", "task_id", taskID)
+	endpoint := fmt.Sprintf("/api/v1/tasks/%d/comments", taskID)
+	var comments []models.Comment
+	err := s.Client.Get(ctx, endpoint, &comments)
+	if err != nil {
+		log.Error("Failed to fetch comments", "task_id", taskID, "error", err)
+		return nil, err
+	}
+	log.Info("Fetched comments for task", "task_id", taskID, "count", len(comments))
+	return comments, nil
+}
+
 // GetIncompleteTasks returns all tasks that are not marked as done.
-func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error) {
+func (s *Service) GetIncompleteTasks(ctx *context.Context) ([]models.Task, error) {
 	log.Info("GetIncompleteTasks called")
 	tasks, err := s.GetUserTasks(ctx)
 	if err != nil {
@@ -104,7 +119,7 @@ func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error)
 }
 
 // UpsertTask creates or updates a task with intelligent field merging
-func (s *Service) UpsertTask(ctx context.Context, task models.RawTask) (*models.RawTask, error) {
+func (s *Service) UpsertTask(ctx *context.Context, task *models.RawTask) (*models.RawTask, error) {
 	log.Info("UpsertTask called", "task_id", task.ID)
 
 	var finalTask models.RawTask
@@ -162,7 +177,7 @@ func (s *Service) UpsertTask(ctx context.Context, task models.RawTask) (*models.
 	} else {
 		// Creating new task - use provided data as-is
 		log.Debug("Creating new task")
-		finalTask = task
+		finalTask = *task
 	}
 
 	// If metadata is provided via description field (from MCP),
@@ -227,7 +242,7 @@ type UpsertTaskOptions struct {
 	ProjectID   *int64  `json:"project_id,omitempty"`
 }
 
-func (s *Service) UpsertTaskSelective(ctx context.Context, opts UpsertTaskOptions) (*models.RawTask, error) {
+func (s *Service) UpsertTaskSelective(ctx *context.Context, opts UpsertTaskOptions) (*models.RawTask, error) {
 	var finalTask models.RawTask
 
 	// If updating existing task
@@ -305,7 +320,7 @@ func (s *Service) UpsertTaskSelective(ctx context.Context, opts UpsertTaskOption
 }
 
 // Me fetches the current user information.
-func (s *Service) Me(ctx context.Context) (*models.User, error) {
+func (s *Service) Me(ctx *context.Context) (*models.User, error) {
 	log.Info("Me called")
 	var user models.User
 	err := s.Client.Get(ctx, "/api/v1/user", &user)

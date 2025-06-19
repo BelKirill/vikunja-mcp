@@ -66,7 +66,7 @@ func initializeFocusEngine() (*engine.FocusEngine, error) {
 	return focusEngine, nil
 }
 
-func (s Service) GetFilteredTasks(ctx context.Context, filter string, useAI bool) ([]models.Task, error) {
+func (s Service) GetFilteredTasks(ctx *context.Context, filter string, useAI bool) ([]models.Task, error) {
 	log.Info("GetFilteredTasks called", "filter", filter, "useAI", useAI)
 
 	finalFilter := filter
@@ -96,7 +96,7 @@ func (s Service) GetFilteredTasks(ctx context.Context, filter string, useAI bool
 }
 
 // GetFocusTasks returns AI-ranked tasks suitable for focus sessions
-func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) ([]models.Task, error) {
+func (s *Service) GetFocusTasks(ctx *context.Context, opts *models.FocusOptions) ([]models.Task, error) {
 	log.Info("GetFocusTasks called with AI engine", "opts", opts)
 
 	// Get all incomplete tasks from Vikunja
@@ -158,24 +158,32 @@ func (s *Service) EstimateSessionLength(task *models.FocusResult, userMaxMinutes
 }
 
 // UpsertTask creates or updates a task through the Vikunja service
-func (s *Service) UpsertTask(ctx context.Context, task *models.RawTask) (*models.RawTask, error) {
+func (s *Service) UpsertTask(ctx *context.Context, task *models.RawTask) (*models.RawTask, error) {
 	log.Info("UpsertTask called in focus.Service", "task_id", task.ID)
 	log.Debug("UpsertTask details", "task", task)
-	return s.Vikunja.UpsertTask(ctx, *task)
+	return s.Vikunja.UpsertTask(ctx, task)
 }
 
-// GetTaskMetadata retrieves detailed metadata for a specific task
-func (s *Service) GetTaskMetadata(ctx context.Context, taskID int64) (*models.Task, error) {
-	log.Info("GetTaskMetadata called", "task_id", taskID)
-	log.Debug("Fetching task metadata from Vikunja", "task_id", taskID)
+// GetFullTaskData retrieves detailed data for a specific task
+func (s *Service) GetFullTaskData(ctx *context.Context, taskID int64) (*models.Task, []models.Comment, error) {
+	log.Info("GetFullTaskData called", "task_id", taskID)
+	log.Debug("Fetching task data from Vikunja", "task_id", taskID)
 	task, err := s.Vikunja.GetTaskByID(ctx, taskID)
 	if err != nil {
-		log.Error("Failed to get task by ID in GetTaskMetadata", "task_id", taskID, "error", err)
-		return nil, err
+		log.Error("Failed to get task by ID in GetFullTaskData", "task_id", taskID, "error", err)
+		return nil, nil, err
 	}
+
+	log.Debug("Fetching comments from Vikunja", "task_id", taskID)
+	comments, err := s.Vikunja.GetTaskCommentsByID(ctx, taskID)
+	if err != nil {
+		log.Error("Failed to get task comments by ID in GetTaskCommentsByID", "task_id", taskID, "error", err)
+		return task, nil, err
+	}
+
 	log.Info("Returning task metadata", "task_id", taskID)
-	log.Debug("Task metadata result", "task", task)
-	return task, nil
+	log.Debug("Task data result", "task", task, "comments", comments)
+	return task, comments, nil
 }
 
 // =============================================================================

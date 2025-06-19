@@ -56,10 +56,10 @@ func RegisterMCPTools(server *mcp.Server) error {
 	})
 
 	// Register task metadata reader
-	log.Debug("Registering get-task-metadata tool with MCP server")
+	log.Debug("Registering get-full-task tool with MCP server")
 	server.RegisterTool(mcp.Tool{
-		Name:        "get-task-metadata",
-		Description: "Extract hyperfocus metadata from a specific task",
+		Name:        "get-full-task",
+		Description: "Provide all the details possible for one task",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{
@@ -71,8 +71,8 @@ func RegisterMCPTools(server *mcp.Server) error {
 			"required": []string{"task_id"},
 		},
 	}, func(args map[string]interface{}) (interface{}, error) {
-		log.Debug("get-task-metadata tool invoked", "args", args)
-		return handleGetTaskMetadata(vikunjaSvc, args)
+		log.Debug("get-full-task tool invoked", "args", args)
+		return handleGetFullTask(vikunjaSvc, args)
 	})
 
 	// Register filtered task retrieval tool

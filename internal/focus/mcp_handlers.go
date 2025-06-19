@@ -42,7 +42,8 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.GetFocusTasks", "opts", opts)
-	tasks, err := service.GetFocusTasks(context.Background(), &opts)
+	backContext := context.Background()
+	tasks, err := service.GetFocusTasks(&backContext, &opts)
 	if err != nil {
 		log.Error("Failed to get focus tasks", "error", err)
 		return nil, err
@@ -64,9 +65,9 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	return resp, nil
 }
 
-// handleGetTaskMetadata retrieves metadata for a specific task
-func handleGetTaskMetadata(service *Service, args map[string]interface{}) (interface{}, error) {
-	log.Debug("handleGetTaskMetadata called", "args", args)
+// handleGetFullTask retrieves full data for a specific task
+func handleGetFullTask(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleGetFullTask called", "args", args)
 	taskIDFloat, ok := args["task_id"].(float64)
 	if !ok {
 		log.Error("task_id missing or not a number", "args", args)
@@ -75,14 +76,15 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 	taskID := int64(taskIDFloat)
 
 	log.Debug("Calling service.GetTaskMetadata", "task_id", taskID)
-	task, err := service.GetTaskMetadata(context.Background(), taskID)
+	backContext := context.Background()
+	task, comments, err := service.GetFullTaskData(&backContext, taskID)
 	if err != nil {
-		log.Error("Failed to get task metadata", "task_id", taskID, "error", err)
+		log.Error("Failed to get task data", "task_id", taskID, "error", err)
 		return nil, err
 	}
 
 	if task == nil {
-		log.Debug("No metadata found for task", "task_id", taskID)
+		log.Debug("No data found for task", "task_id", taskID)
 		return map[string]interface{}{
 			"task_id":             taskID,
 			"title":               "",
@@ -107,6 +109,7 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 		"project_id":          task.RawTask.ProjectID,
 		"has_hyperfocus_data": task.Metadata != nil,
 		"metadata":            task.Metadata,
+		"comments":            comments,
 		"created":             task.RawTask.Created,
 		"updated":             task.RawTask.Updated,
 	}
@@ -156,7 +159,8 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.UpsertTask", "action", action, "task", task)
-	result, err := service.UpsertTask(context.Background(), &task)
+	backContext := context.Background()
+	result, err := service.UpsertTask(&backContext, &task)
 	if err != nil {
 		log.Error("Failed to upsert task", "error", err, "action", action)
 		return nil, err
@@ -203,7 +207,8 @@ func handleGetFilteredTasks(service *Service, args map[string]interface{}) (inte
 	}
 
 	log.Debug("Calling service.GetFilteredTasks", "filter", filter, "useAI", useAI)
-	tasks, err := service.GetFilteredTasks(context.Background(), filter, useAI)
+	backContext := context.Background()
+	tasks, err := service.GetFilteredTasks(&backContext, filter, useAI)
 	if err != nil {
 		log.Error("Failed to get filtered tasks", "error", err, "filter", filter)
 		return nil, err

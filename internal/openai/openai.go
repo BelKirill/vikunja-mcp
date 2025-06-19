@@ -85,7 +85,7 @@ type apiError struct {
 }
 
 // callOpenAI makes the actual API call to OpenAI
-func (e *OpenAIDecisionEngine) callOpenAI(ctx context.Context, prompt string) (string, error) {
+func (e *OpenAIDecisionEngine) callOpenAI(ctx *context.Context, prompt string) (string, error) {
 	log.Info("Calling OpenAI API", "model", e.config.Model, "max_tokens", e.config.MaxTokens)
 	log.Debug("Prompt sent to OpenAI", "prompt", prompt)
 

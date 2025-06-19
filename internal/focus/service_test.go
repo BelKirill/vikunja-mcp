@@ -14,7 +14,7 @@ type MockVikunjaService struct {
 	ShouldError bool
 }
 
-func (m *MockVikunjaService) GetIncompleteTasks(ctx context.Context) ([]interface{}, error) {
+func (m *MockVikunjaService) GetIncompleteTasks(ctx *context.Context) ([]interface{}, error) {
 	if m.ShouldError {
 		return nil, assert.AnError
 	}
@@ -36,7 +36,7 @@ func TestFocusService_Focus_Empty(t *testing.T) {
 		Date:       time.Now().String(),
 	}
 
-	items, _ := s.GetFocusTasks(ctx, &opts)
+	items, _ := s.GetFocusTasks(&ctx, &opts)
 	assert.IsType(t, models.FocusResult{}, items)
 }
 
@@ -53,7 +53,7 @@ func TestFocusService_GetFocusTasks_Empty(t *testing.T) {
 		MaxTasks:   10,
 		Date:       time.Now().Format("2006-01-02"),
 	}
-	items, err := s.GetFocusTasks(ctx, &opts)
+	items, err := s.GetFocusTasks(&ctx, &opts)
 	assert.NoError(t, err)
 	assert.IsType(t, []models.FocusResult{}, items)
 }

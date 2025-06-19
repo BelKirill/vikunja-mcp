@@ -14,7 +14,7 @@ import (
 // ListTasks returns all tasks visible to the authenticated user.
 //
 //	GET /api/v1/tasks
-func (c *Client) GetAllTasks(ctx context.Context) ([]models.RawTask, error) {
+func (c *Client) GetAllTasks(ctx *context.Context) ([]models.RawTask, error) {
 	log.Info("GetAllTasks called")
 	var allTasks []models.RawTask
 	page := 1
@@ -50,7 +50,7 @@ func (c *Client) GetAllTasks(ctx context.Context) ([]models.RawTask, error) {
 // ListTasks returns all tasks visible to the authenticated user and passing the filter.
 //
 //	GET /api/v1/tasks
-func (c *Client) GetFilteredTasks(ctx context.Context, filter *string) ([]models.RawTask, error) {
+func (c *Client) GetFilteredTasks(ctx *context.Context, filter *string) ([]models.RawTask, error) {
 	log.Info("GetFilteredTasks called")
 	var allTasks []models.RawTask
 	page := 1
@@ -87,7 +87,7 @@ func (c *Client) GetFilteredTasks(ctx context.Context, filter *string) ([]models
 // GetTask returns a single task by its ID.
 //
 //	GET /api/v1/tasks/{id}
-func (c *Client) GetTask(ctx context.Context, id int64) (*models.RawTask, error) {
+func (c *Client) GetTask(ctx *context.Context, id int64) (*models.RawTask, error) {
 	log.Info("GetTask called", "id", id)
 	endpoint := fmt.Sprintf("/api/v1/tasks/%d", id)
 	var t models.RawTask
@@ -101,7 +101,7 @@ func (c *Client) GetTask(ctx context.Context, id int64) (*models.RawTask, error)
 }
 
 // UpsertTask creates a new task or updates an existing one using RawTask
-func (c *Client) UpsertTask(ctx context.Context, taskData models.RawTask) (*models.RawTask, error) {
+func (c *Client) UpsertTask(ctx *context.Context, taskData models.RawTask) (*models.RawTask, error) {
 	log.Info("UpsertTask called", "task_id", taskData.ID)
 	log.Debug("UpsertTask details", "taskData", taskData)
 	if taskData.ID == 0 {
@@ -110,7 +110,7 @@ func (c *Client) UpsertTask(ctx context.Context, taskData models.RawTask) (*mode
 	return c.updateTask(ctx, &taskData)
 }
 
-func (c *Client) createTask(ctx context.Context, taskData *models.RawTask) (*models.RawTask, error) {
+func (c *Client) createTask(ctx *context.Context, taskData *models.RawTask) (*models.RawTask, error) {
 	log.Info("createTask called", "project", taskData.ProjectID)
 	log.Debug("createTask details", "taskData", taskData)
 	endpoint := fmt.Sprintf("/api/v1/projects/%d/tasks", taskData.ProjectID)
@@ -131,7 +131,7 @@ func (c *Client) createTask(ctx context.Context, taskData *models.RawTask) (*mod
 	return &result, nil
 }
 
-func (c *Client) updateTask(ctx context.Context, taskData *models.RawTask) (*models.RawTask, error) {
+func (c *Client) updateTask(ctx *context.Context, taskData *models.RawTask) (*models.RawTask, error) {
 	log.Info("updateTask called", "task_id", taskData.ID)
 	log.Debug("updateTask details", "taskData", taskData)
 	endpoint := fmt.Sprintf("/api/v1/tasks/%d", taskData.ID)
@@ -153,7 +153,7 @@ func (c *Client) updateTask(ctx context.Context, taskData *models.RawTask) (*mod
 }
 
 // getWithResponse performs a GET request and returns the http.Response for header inspection.
-func (c *Client) getWithResponse(ctx context.Context, endpoint string, result interface{}) (*http.Response, error) {
+func (c *Client) getWithResponse(ctx *context.Context, endpoint string, result interface{}) (*http.Response, error) {
 	log.Info("GET request (with response)", "endpoint", endpoint)
 	fullURL := c.baseURL + endpoint
 	req, err := c.newRequest(ctx, http.MethodGet, fullURL, nil)
