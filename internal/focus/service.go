@@ -3,6 +3,7 @@ package focus
 import (
 	"context"
 	"os"
+	"time"
 
 	"github.com/BelKirill/vikunja-mcp/internal/engine"
 	"github.com/BelKirill/vikunja-mcp/internal/openai"
@@ -15,10 +16,12 @@ import (
 type Service struct {
 	Vikunja     *vikunja.Service
 	FocusEngine *engine.FocusEngine
+	sessionManager *openai.SessionManager
+  threadManager  *openai.ThreadManager
 }
 
 // NewService creates a new Focus Service with Vikunja dependency and AI engine
-func NewService() (*Service, error) {
+func NewService(sessionMgr *openai.SessionManager, threadMgr *openai.ThreadManager) (*Service, error) {
 	log.Info("NewService (focus) called")
 
 	// Initialize Vikunja service
@@ -40,7 +43,38 @@ func NewService() (*Service, error) {
 	return &Service{
 		Vikunja:     vikunjaSvc,
 		FocusEngine: focusEngine,
+		sessionManager: sessionMgr,
+    threadManager:  threadMgr,
 	}, nil
+}
+
+func (s *Service) getOrCreateUserSession(ctx context.Context, userID string) (*openai.Session, error) {
+    // Try to get active session first
+    session, err := s.sessionManager.GetActiveSession(ctx, userID)
+    if err == nil {
+        return session, nil
+    }
+
+    // Create new session if none exists
+    opts := openai.SessionOptions{
+        UserID: userID,
+        InitialContext: &openai.SessionContext{
+            CompletionRate: 1.0, // optimistic start
+            EnergyPatterns: make(map[string]float64),
+        },
+    }
+
+    return s.sessionManager.CreateSession(ctx, opts)
+}
+
+func (s *Service) updateSessionWithRecommendations(session *openai.Session, tasks []models.Task) {
+    taskIDs := make([]int, len(tasks))
+	for i, task := range tasks {
+		taskIDs[i] = int(task.RawTask.ID)
+	}
+    
+    session.Metadata.TasksRequested = taskIDs
+    session.UpdatedAt = time.Now()
 }
 
 // initializeFocusEngine creates and configures the focus engine with AI decision making
@@ -48,7 +82,7 @@ func initializeFocusEngine() (*engine.FocusEngine, error) {
 	// Configure OpenAI decision engine
 	openaiConfig := openai.OpenAIConfig{
 		APIKey: os.Getenv("OPENAI_API_KEY"),
-		Model:  getEnvOrDefault("OPENAI_MODEL", "gpt-4"),
+		Model:  getEnvOrDefault("OPENAI_MODEL", "gpt-4.1-mini"),
 	}
 
 	if openaiConfig.APIKey == "" {

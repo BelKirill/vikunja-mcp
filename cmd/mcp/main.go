@@ -33,18 +33,18 @@ func main() {
 	server := mcp.NewServer("vikunja-mcp", "0.1.0")
 
 	// Create focus server config with session support
-	// focusConfig := focus.ServerConfig{
-	// 	SessionManager:  sessionManager,
-	// 	ThreadManager:   threadManager,
-	// 	EnableSessions:  sessionManager != nil,
-	// 	SessionDefaults: getDefaultSessionConfig(),
-	// }
+	focusConfig := focus.ServerConfig{
+		SessionManager:  sessionManager,
+		ThreadManager:   threadManager,
+		EnableSessions:  sessionManager != nil,
+		// SessionDefaults: getDefaultSessionConfig(),
+	}
 
 	// Register tools with session support
 	if sessionManager != nil {
 		log.Info("=== SESSION MANAGEMENT ENABLED ===")
-		err = focus.RegisterMCPTools(server) // Your existing function
-		// err = focus.RegisterMCPToolsWithSessions(server, focusConfig)
+		// err = focus.RegisterMCPTools(server) // Your existing function
+		err = focus.RegisterMCPToolsWithSessions(server, focusConfig)
 	} else {
 		log.Info("=== RUNNING WITHOUT SESSIONS ===")
 		err = focus.RegisterMCPTools(server) // Your existing function

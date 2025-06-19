@@ -3,12 +3,14 @@ package focus
 import (
 	"github.com/BelKirill/vikunja-mcp/pkg/mcp"
 	"github.com/charmbracelet/log"
+
+	"github.com/BelKirill/vikunja-mcp/internal/openai"
 )
 
 // RegisterMCPTools registers focus-related MCP tools
-func RegisterMCPTools(server *mcp.Server) error {
+func RegisterMCPTools(server *mcp.Server, sessionMgr *openai.SessionManager, threadMgr *openai.ThreadManager) error {
 	log.Debug("Registering MCP tools for focus package")
-	vikunjaSvc, err := NewService()
+	vikunjaSvc, err := NewService(sessionMgr, threadMgr)
 	if err != nil {
 		log.Error("Failed to create focus service for MCP tools", "error", err)
 		return err
