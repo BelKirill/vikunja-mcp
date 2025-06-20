@@ -1,10 +1,6 @@
-name: CI/CD Pipeline
+name: Release Pipeline
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   release:
     types: [ published ]
 
@@ -13,46 +9,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # Disabled until MCP-23 is completed
-  # test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v4
-    
-  #   - name: Set up Go
-  #     uses: actions/setup-go@v4
-  #     with:
-  #       go-version: '1.24.4'
-        
-  #   - name: Cache Go modules
-  #     uses: actions/cache@v3
-  #     with:
-  #       path: ~/go/pkg/mod
-  #       key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-  #       restore-keys: |
-  #         ${{ runner.os }}-go-
-          
-  #   - name: Download dependencies
-  #     run: go mod download
-      
-  #   - name: Verify dependencies
-  #     run: go mod verify
-      
-  #   - name: Run go vet
-  #     run: go vet ./...
-      
-  #   - name: Run tests
-  #     run: go test -race -coverprofile=coverage.out ./...
-      
-  #   - name: Upload coverage reports
-  #     uses: codecov/codecov-action@v3
-  #     with:
-  #       file: ./coverage.out
-  #       flags: unittests
-  #       name: codecov-umbrella
-
   build-and-push:
-    # needs: [test]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -78,16 +35,9 @@ jobs:
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags: |
-          type=ref,event=branch
-          type=ref,event=pr
-          type=sha,prefix={{branch}}-
-          type=raw,value=latest,enable={{is_default_branch}}
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
-        labels: |
-          org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-          org.opencontainers.image.description=ADHD-optimized task management MCP server
-          org.opencontainers.image.licenses=Apache-2.0
+          type=raw,value=latest
           
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
@@ -99,16 +49,3 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        
-    # - name: Run Trivy vulnerability scanner
-    #   uses: aquasecurity/trivy-action@master
-    #   with:
-    #     image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-    #     format: 'sarif'
-    #     output: 'trivy-results.sarif'
-        
-    # - name: Upload Trivy scan results
-    #   uses: github/codeql-action/upload-sarif@v2
-    #   if: always()
-    #   with:
-    #     sarif_file: 'trivy-results.sarif'
