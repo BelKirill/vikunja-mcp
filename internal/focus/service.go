@@ -66,7 +66,7 @@ func initializeFocusEngine() (*engine.FocusEngine, error) {
 	return focusEngine, nil
 }
 
-func (s Service) GetFilteredTasks(ctx context.Context, filter string, useAI bool) ([]models.Task, error) {
+func (s Service) GetFilteredTasks(ctx context.Context, filter string, useAI bool) ([]models.RawTask, error) {
 	log.Info("GetFilteredTasks called", "filter", filter, "useAI", useAI)
 
 	finalFilter := filter
@@ -100,12 +100,18 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) 
 	log.Info("GetFocusTasks called with AI engine", "opts", opts)
 
 	// Get all incomplete tasks from Vikunja
-	tasks, err := s.Vikunja.GetIncompleteTasks(ctx)
+	rawTasks, err := s.Vikunja.GetIncompleteTasks(ctx)
 	if err != nil {
 		log.Error("Failed to get incomplete tasks from Vikunja", "error", err)
 		return nil, err
 	}
-	log.Info("Fetched incomplete tasks", "count", len(tasks))
+	log.Info("Fetched incomplete tasks", "count", len(rawTasks))
+
+	var tasks []models.Task
+	tasks, err = s.EnrichTasks(ctx, rawTasks)
+	if err != nil {
+		log.Warn("Failed to enrich tasks in GetFocusTasks", "error", err)
+	}
 
 	// Use AI-powered focus engine for intelligent task selection
 	decision, err := s.FocusEngine.GetFocusTasks(ctx, tasks, opts)
@@ -168,10 +174,29 @@ func (s *Service) UpsertTask(ctx context.Context, task *models.RawTask) (*models
 func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Task, []models.Comment, error) {
 	log.Info("GetFullTaskData called", "task_id", taskID)
 	log.Debug("Fetching task data from Vikunja", "task_id", taskID)
-	task, err := s.Vikunja.GetTaskByID(ctx, taskID)
+	rawTask, err := s.Vikunja.GetTaskByID(ctx, taskID)
 	if err != nil {
 		log.Error("Failed to get task by ID in GetFullTaskData", "task_id", taskID, "error", err)
 		return nil, nil, err
+	}
+
+	task, enriched, err := s.FocusEngine.EnrichTask(ctx, rawTask)
+	if err != nil {
+		log.Warn("Failed to enrich task in GetFullTaskData", "task_id", taskID, "error", err)
+		task = &models.Task{
+			Identifier:       rawTask.Identifier,
+			RawTask:          rawTask,
+			CleanDescription: rawTask.Description,
+		}
+	}
+
+	if enriched {
+		updated, err := s.Vikunja.UpsertTask(ctx, task.RawTask)
+		if err != nil {
+			log.Warn("Could not save enriched data", "description", task.RawTask.Description)
+		} else {
+			task.RawTask = updated
+		}
 	}
 
 	log.Debug("Fetching comments from Vikunja", "task_id", taskID)
@@ -184,6 +209,40 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 	log.Info("Returning task metadata", "task_id", taskID)
 	log.Debug("Task data result", "task", task, "comments", comments)
 	return task, comments, nil
+}
+
+func (s *Service) EnrichTasks(ctx context.Context, tasks []models.RawTask) ([]models.Task, error) {
+	log.Info("enrichTasks called", "task_count", len(tasks))
+	enrichedTasks := make([]models.Task, 0, len(tasks))
+
+	for _, task := range tasks {
+		log.Debug("Enriching task", "task_id", task.ID)
+		var enriched *models.Task
+		enriched, upsert, err := s.FocusEngine.EnrichTask(ctx, &task)
+		if err != nil {
+			log.Error("Failed to enrich task", "error", err, "task_id", task.ID)
+			fullTask := &models.Task{
+				Identifier:       task.Identifier,
+				CleanDescription: task.Description,
+				RawTask:          &task,
+			}
+			enrichedTasks = append(enrichedTasks, *fullTask)
+			continue
+		}
+
+		if upsert {
+			updated, err := s.Vikunja.UpsertTask(ctx, enriched.RawTask)
+			if err != nil {
+				log.Error("Failed to upsert enriched task", "error", err, "task_id", enriched.RawTask.ID)
+			} else {
+				enriched.RawTask = updated
+			}
+		}
+
+		enrichedTasks = append(enrichedTasks, *enriched)
+	}
+	log.Info("enrichTasks returning", "enriched_count", len(enrichedTasks))
+	return enrichedTasks, nil
 }
 
 // AddComment adds a comment to a specific task
