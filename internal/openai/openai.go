@@ -17,7 +17,7 @@ import (
 type OpenAIConfig struct {
 	APIKey      string
 	BaseURL     string        // Default: "https://api.openai.com/v1"
-	Model       string        // Default: "gpt-4"
+	Model       string        // Default: "gpt-4o-mini"
 	MaxTokens   int           // Default: 1000
 	Temperature float64       // Default: 0.3 for consistent decisions
 	Timeout     time.Duration // Default: 30s

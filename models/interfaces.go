@@ -19,6 +19,7 @@ type FocusService interface {
 type DecisionEngine interface {
 	RankTasks(ctx context.Context, request *DecisionRequest) (*DecisionResponse, error)
 	SuggestFilter(ctx context.Context, request *string) (*FilterSuggestionResponse, error)
+	EnrichTask(ctx context.Context, task *RawTask) (*HyperFocusMetadata, error)
 }
 
 // ContextualFilter applies business rules before AI ranking
