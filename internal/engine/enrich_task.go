@@ -1,6 +1,7 @@
-package vikunja
+package engine
 
 import (
+	"context"
 	"encoding/json"
 	"strings"
 
@@ -10,7 +11,7 @@ import (
 
 // extractJSON safely extracts the first valid JSON object from a string
 // Returns the JSON string and any error encountered
-func extractJSON(input string) (string, error) {
+func (e *FocusEngine) extractJSON(input string) (string, error) {
 	log.Debug("extractJSON called", "input_length", len(input))
 	if input == "" {
 		log.Debug("extractJSON: input is empty")
@@ -91,52 +92,56 @@ func extractJSON(input string) (string, error) {
 	return "", nil // No valid JSON found
 }
 
-// embedMetadataInDescription safely embeds hyperfocus metadata into a task description
-func embedMetadataInDescription(description string, metadata *models.HyperFocusMetadata) string {
-	log.Debug("embedMetadataInDescription called", "desc_length", len(description), "metadata", metadata)
-	if metadata == nil {
-		log.Debug("No metadata provided, returning original description")
-		return description
-	}
+// // embedMetadataInDescription safely embeds hyperfocus metadata into a task description
+// func (e *FocusEngine) embedMetadataInDescription(description string, metadata *models.HyperFocusMetadata) string {
+// 	log.Debug("embedMetadataInDescription called", "desc_length", len(description), "metadata", metadata)
+// 	if metadata == nil {
+// 		log.Debug("No metadata provided, returning original description")
+// 		return description
+// 	}
 
-	// Remove any existing JSON metadata first
-	existingJSON, err := extractJSON(description)
-	cleanDesc := description
-	if err == nil && existingJSON != "" {
-		log.Debug("Existing JSON found in description, cleaning", "existingJSON", existingJSON)
-		cleanDesc = strings.Replace(description, existingJSON, "", 1)
-		cleanDesc = strings.TrimSpace(cleanDesc)
-	}
+// 	// Remove any existing JSON metadata first
+// 	existingJSON, err := e.extractJSON(description)
+// 	cleanDesc := description
+// 	if err == nil && existingJSON != "" {
+// 		log.Debug("Existing JSON found in description, cleaning", "existingJSON", existingJSON)
+// 		cleanDesc = strings.Replace(description, existingJSON, "", 1)
+// 		cleanDesc = strings.TrimSpace(cleanDesc)
+// 	}
 
-	// Create new metadata JSON
-	metadataMap := map[string]interface{}{
-		"energy":           metadata.Energy,
-		"mode":             metadata.Mode,
-		"extend":           metadata.Extend,
-		"minutes":          metadata.Minutes,
-		"estimate":         metadata.Estimate,
-		"hyper_focus_comp": metadata.HyperFocusCompatability,
-	}
+// 	// Create new metadata JSON
+// 	metadataMap := map[string]interface{}{
+// 		"energy":           metadata.Energy,
+// 		"mode":             metadata.Mode,
+// 		"extend":           metadata.Extend,
+// 		"minutes":          metadata.Minutes,
+// 		"estimate":         metadata.Estimate,
+// 		"hyper_focus_comp": metadata.HyperFocusCompatability,
+// 		"instructions": 		metadata.Instructions,
+// 		"dependencies": 		metadata.Dependencies,
+// 		"context_hints": 		metadata.ContextualHints,
 
-	metadataJSON, err := json.Marshal(metadataMap)
-	if err != nil {
-		log.Error("Failed to marshal metadata", "error", err)
-		return description // Return original on error
-	}
-	log.Debug("Metadata marshaled to JSON", "json", string(metadataJSON))
+// 	}
 
-	// Combine clean description with new metadata
-	if cleanDesc == "" {
-		log.Debug("Clean description is empty, returning only metadata JSON")
-		return string(metadataJSON)
-	}
-	log.Debug("Returning combined description and metadata JSON")
-	return cleanDesc + " " + string(metadataJSON)
-}
+// 	metadataJSON, err := json.Marshal(metadataMap)
+// 	if err != nil {
+// 		log.Error("Failed to marshal metadata", "error", err)
+// 		return description // Return original on error
+// 	}
+// 	log.Debug("Metadata marshaled to JSON", "json", string(metadataJSON))
 
-func enrichTask(task *models.RawTask) (*models.Task, error) {
+// 	// Combine clean description with new metadata
+// 	if cleanDesc == "" {
+// 		log.Debug("Clean description is empty, returning only metadata JSON")
+// 		return string(metadataJSON)
+// 	}
+// 	log.Debug("Returning combined description and metadata JSON")
+// 	return cleanDesc + " " + string(metadataJSON)
+// }
+
+func (e *FocusEngine) EnrichTask(ctx context.Context, task *models.RawTask) (*models.Task, error) {
 	log.Info("enrichTask called", "task_id", task.ID, "title", task.Title)
-	meta, err := extractJSON(task.Description)
+	meta, err := e.extractJSON(task.Description)
 	if err != nil {
 		log.Error("Failed to extract JSON from task description", "error", err, "task_id", task.ID)
 		meta = ""
@@ -208,16 +213,22 @@ func enrichTask(task *models.RawTask) (*models.Task, error) {
 	return enrichedTask, nil
 }
 
-func enrichTasks(tasks []models.RawTask) ([]models.Task, error) {
+func (e *FocusEngine) EnrichTasks(ctx context.Context, tasks []models.RawTask) ([]models.Task, error) {
 	log.Info("enrichTasks called", "task_count", len(tasks))
 	enrichedTasks := make([]models.Task, 0, len(tasks))
 
 	for _, task := range tasks {
 		log.Debug("Enriching task", "task_id", task.ID)
-		enriched, err := enrichTask(&task)
+		var enriched *models.Task
+		enriched, err := e.EnrichTask(ctx, &task)
 		if err != nil {
 			log.Error("Failed to enrich task", "error", err, "task_id", task.ID)
-			continue
+			fullTask := &models.Task{
+				Identifier:       task.Identifier,
+				CleanDescription: task.Description,
+				RawTask:          &task,
+			}
+			enrichedTasks = append(enrichedTasks, *fullTask)
 		}
 		enrichedTasks = append(enrichedTasks, *enriched)
 	}

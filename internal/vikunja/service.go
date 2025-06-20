@@ -2,9 +2,7 @@ package vikunja
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"strings"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/BelKirill/vikunja-mcp/pkg/vikunja/client"
@@ -29,46 +27,32 @@ func NewService() (*Service, error) {
 }
 
 // GetUserTasks fetches all tasks for the current user and enriches them with metadata.
-func (s *Service) GetUserTasks(ctx context.Context) ([]models.Task, error) {
+func (s *Service) GetUserTasks(ctx context.Context) ([]models.RawTask, error) {
 	log.Info("GetUserTasks called")
 	rawTasks, err := s.Client.GetAllTasks(ctx)
 	if err != nil {
 		log.Error("Failed to get all tasks", "error", err)
 		return nil, err
 	}
-	log.Debug("Fetched raw tasks", "count", len(rawTasks))
-
-	enrichedTasks, err := enrichTasks(rawTasks)
-	if err != nil {
-		log.Error("Failed to enrich tasks", "error", err)
-		return nil, err
-	}
-	log.Info("GetUserTasks returning", "enriched_count", len(enrichedTasks))
-	return enrichedTasks, nil
+	log.Info("Fetched raw tasks", "count", len(rawTasks))
+	return rawTasks, nil
 }
 
 // GetFilteredTask fetches tasks using a filter
 // https://vikunja.io/docs/filters/
-func (s *Service) GetFilteredTasks(ctx context.Context, filter *string) ([]models.Task, error) {
+func (s *Service) GetFilteredTasks(ctx context.Context, filter *string) ([]models.RawTask, error) {
 	log.Info("GetFilteredTask called")
 	filtered, err := s.Client.GetFilteredTasks(ctx, filter)
 	if err != nil {
 		log.Error("Failed to get filter", "error", err)
 		return nil, err
 	}
-	log.Debug("Fetched filtered raw tasks", "count", len(filtered))
-
-	enrichedTasks, err := enrichTasks(filtered)
-	if err != nil {
-		log.Error("Failed to enrich tasks", "error", err)
-		return nil, err
-	}
-	log.Info("GetUserTasks returning", "enriched_count", len(enrichedTasks))
-	return enrichedTasks, nil
+	log.Info("Fetched filtered raw tasks", "count", len(filtered))
+	return filtered, nil
 }
 
 // GetTaskByID fetches a single task by its ID.
-func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, error) {
+func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.RawTask, error) {
 	log.Info("GetTaskByID called", "id", id)
 	task, err := s.Client.GetTask(ctx, id)
 	if err != nil {
@@ -76,13 +60,7 @@ func (s *Service) GetTaskByID(ctx context.Context, id int64) (*models.Task, erro
 		return nil, err
 	}
 	log.Debug("Fetched task", "task", task)
-	result, err := enrichTask(task)
-	if err != nil {
-		log.Error("Failed to enrich task by ID", "id", id, "error", err)
-		return nil, err
-	}
-	log.Info("GetTaskByID returning", "id", id, "has_metadata", result.Metadata != nil)
-	return result, nil
+	return task, nil
 }
 
 // GetTaskCommentsByID fetches all comments for a given task ID
@@ -100,17 +78,17 @@ func (s *Service) GetTaskCommentsByID(ctx context.Context, taskID int64) ([]mode
 }
 
 // GetIncompleteTasks returns all tasks that are not marked as done.
-func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.Task, error) {
+func (s *Service) GetIncompleteTasks(ctx context.Context) ([]models.RawTask, error) {
 	log.Info("GetIncompleteTasks called")
 	tasks, err := s.GetUserTasks(ctx)
 	if err != nil {
 		log.Error("Failed to get user tasks", "error", err)
 		return nil, err
 	}
-	var result []models.Task
+	var result []models.RawTask
 	for _, t := range tasks {
-		if !t.RawTask.Done {
-			log.Debug("Task is incomplete", "task_id", t.RawTask.ID)
+		if !t.Done {
+			log.Debug("Task is incomplete", "task_id", t.ID)
 			result = append(result, t)
 		}
 	}
@@ -178,21 +156,6 @@ func (s *Service) UpsertTask(ctx context.Context, task *models.RawTask) (*models
 		// Creating new task - use provided data as-is
 		log.Debug("Creating new task")
 		finalTask = *task
-	}
-
-	// If metadata is provided via description field (from MCP),
-	// treat the description AS the metadata JSON and embed it properly
-	if finalTask.Description != "" {
-		// Check if description contains JSON metadata
-		if strings.Contains(finalTask.Description, "{") && strings.Contains(finalTask.Description, "energy") {
-			// Parse the JSON metadata from description
-			var metadata models.HyperFocusMetadata
-			if err := json.Unmarshal([]byte(finalTask.Description), &metadata); err == nil {
-				log.Debug("Parsed metadata from description JSON", "task_id", finalTask.ID)
-				// Embed metadata as JSON in description
-				finalTask.Description = embedMetadataInDescription("", &metadata)
-			}
-		}
 	}
 
 	// Assign the value of the vikunja service Me to assignee
