@@ -180,13 +180,22 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 		return nil, nil, err
 	}
 
-	task, _, err := s.FocusEngine.EnrichTask(ctx, rawTask)
+	task, enriched, err := s.FocusEngine.EnrichTask(ctx, rawTask)
 	if err != nil {
 		log.Warn("Failed to enrich task in GetFullTaskData", "task_id", taskID, "error", err)
 		task = &models.Task{
 			Identifier:       rawTask.Identifier,
 			RawTask:          rawTask,
 			CleanDescription: rawTask.Description,
+		}
+	}
+
+	if enriched {
+		updated, err := s.Vikunja.UpsertTask(ctx, task.RawTask)
+		if err != nil {
+			log.Warn("Could not save enriched data", "description", task.RawTask.Description)
+		} else {
+			task.RawTask = updated
 		}
 	}
 
