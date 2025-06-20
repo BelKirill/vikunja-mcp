@@ -1,0 +1,32 @@
+services:
+  seq:
+    image: datalust/seq
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=admin123  # ← ADD THIS
+    volumes:
+      - seq-data:/data  # ← ADD THIS
+    networks:
+      - vector-net
+
+  vector:
+    image: timberio/vector:0.47.0-debian
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./vector.yaml:/etc/vector/vector.yaml 
+    networks:
+      - vector-net
+
+volumes:
+  seq-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/gilblinov/projects/tmp
+      o: bind
+
+networks:
+  vector-net:
+    driver: bridge

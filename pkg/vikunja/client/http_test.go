@@ -43,7 +43,8 @@ func TestClient_Get_Success(t *testing.T) {
 	c := newTestClient(resp, nil)
 
 	var result map[string]interface{}
-	err := c.Get(context.Background(), "endpoint", &result)
+	ctx := context.Background()
+	err := c.Get(ctx, "endpoint", &result)
 	require.NoError(t, err)
 	assert.Equal(t, expected, result)
 }
@@ -51,7 +52,8 @@ func TestClient_Get_Success(t *testing.T) {
 func TestClient_Get_InvalidURL(t *testing.T) {
 	c := &Client{baseURL: "http://[::1]:namedport/"}
 	var result interface{}
-	err := c.Get(context.Background(), "bad endpoint", &result)
+	ctx := context.Background()
+	err := c.Get(ctx, "bad endpoint", &result)
 	assert.Error(t, err)
 }
 
@@ -66,7 +68,8 @@ func TestClient_Post_Success(t *testing.T) {
 	c := newTestClient(resp, nil)
 
 	var result map[string]interface{}
-	err := c.Post(context.Background(), "endpoint", map[string]string{"foo": "bar"}, &result)
+	ctx := context.Background()
+	err := c.Post(ctx, "endpoint", map[string]string{"foo": "bar"}, &result)
 	require.NoError(t, err)
 	assert.Equal(t, expected, result)
 }
@@ -75,7 +78,8 @@ func TestClient_Post_MarshalError(t *testing.T) {
 	c := &Client{baseURL: "http://test/"}
 	ch := make(chan int)
 	var result interface{}
-	err := c.Post(context.Background(), "endpoint", ch, &result)
+	ctx := context.Background()
+	err := c.Post(ctx, "endpoint", ch, &result)
 	assert.Error(t, err)
 }
 
@@ -90,7 +94,8 @@ func TestClient_Put_Success(t *testing.T) {
 	c := newTestClient(resp, nil)
 
 	var result map[string]interface{}
-	err := c.Put(context.Background(), "endpoint", map[string]string{"foo": "bar"}, &result)
+	ctx := context.Background()
+	err := c.Put(ctx, "endpoint", map[string]string{"foo": "bar"}, &result)
 	require.NoError(t, err)
 	assert.Equal(t, expected, result)
 }
@@ -99,7 +104,8 @@ func TestClient_Put_MarshalError(t *testing.T) {
 	c := &Client{baseURL: "http://test/"}
 	ch := make(chan int)
 	var result interface{}
-	err := c.Put(context.Background(), "endpoint", ch, &result)
+	ctx := context.Background()
+	err := c.Put(ctx, "endpoint", ch, &result)
 	assert.Error(t, err)
 }
 
@@ -111,13 +117,15 @@ func TestClient_Delete_Success(t *testing.T) {
 	}
 	c := newTestClient(resp, nil)
 
-	err := c.Delete(context.Background(), "endpoint")
+	ctx := context.Background()
+	err := c.Delete(ctx, "endpoint")
 	require.NoError(t, err)
 }
 
 func TestClient_Delete_InvalidURL(t *testing.T) {
 	c := &Client{baseURL: "http://[::1]:namedport/"}
-	err := c.Delete(context.Background(), "bad endpoint")
+	ctx := context.Background()
+	err := c.Delete(ctx, "bad endpoint")
 	assert.Error(t, err)
 }
 
@@ -129,6 +137,7 @@ func TestClient_Get_RequestError(t *testing.T) {
 		},
 	}
 	var result interface{}
-	err := c.Get(context.Background(), "endpoint", &result)
+	ctx := context.Background()
+	err := c.Get(ctx, "endpoint", &result)
 	assert.Error(t, err)
 }

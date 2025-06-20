@@ -32,7 +32,8 @@ func TestGetAllTasks_Success(t *testing.T) {
 		},
 	}
 
-	tasks, err := mc.GetAllTasks(context.Background())
+	ctx := context.Background()
+	tasks, err := mc.GetAllTasks(ctx)
 	assert.NoError(t, err)
 	assert.Equal(t, expected, tasks)
 }
@@ -44,7 +45,8 @@ func TestGetAllTasks_Error(t *testing.T) {
 		},
 	}
 
-	tasks, err := mc.GetAllTasks(context.Background())
+	ctx := context.Background()
+	tasks, err := mc.GetAllTasks(ctx)
 	assert.Error(t, err)
 	assert.Nil(t, tasks)
 }
@@ -59,7 +61,8 @@ func TestGetTask_Success(t *testing.T) {
 		},
 	}
 
-	task, err := mc.GetTask(context.Background(), 42)
+	ctx := context.Background()
+	task, err := mc.GetTask(ctx, 42)
 	assert.NoError(t, err)
 	assert.Equal(t, &expected, task)
 }
@@ -70,8 +73,8 @@ func TestGetTask_Error(t *testing.T) {
 			return errors.New("not found")
 		},
 	}
-
-	task, err := mc.GetTask(context.Background(), 99)
+	ctx := context.Background()
+	task, err := mc.GetTask(ctx, 99)
 	assert.Error(t, err)
 	assert.Nil(t, task)
 }

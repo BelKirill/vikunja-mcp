@@ -42,7 +42,8 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.GetFocusTasks", "opts", opts)
-	tasks, err := service.GetFocusTasks(context.Background(), &opts)
+	ctx := context.Background()
+	tasks, err := service.GetFocusTasks(ctx, &opts)
 	if err != nil {
 		log.Error("Failed to get focus tasks", "error", err)
 		return nil, err
@@ -64,9 +65,9 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	return resp, nil
 }
 
-// handleGetTaskMetadata retrieves metadata for a specific task
-func handleGetTaskMetadata(service *Service, args map[string]interface{}) (interface{}, error) {
-	log.Debug("handleGetTaskMetadata called", "args", args)
+// handleGetFullTask retrieves full data for a specific task
+func handleGetFullTask(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleGetFullTask called", "args", args)
 	taskIDFloat, ok := args["task_id"].(float64)
 	if !ok {
 		log.Error("task_id missing or not a number", "args", args)
@@ -74,15 +75,16 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 	}
 	taskID := int64(taskIDFloat)
 
-	log.Debug("Calling service.GetTaskMetadata", "task_id", taskID)
-	task, err := service.GetTaskMetadata(context.Background(), taskID)
+	log.Debug("Calling service.GetFullTaskData", "task_id", taskID)
+	ctx := context.Background()
+	task, comments, err := service.GetFullTaskData(ctx, taskID)
 	if err != nil {
-		log.Error("Failed to get task metadata", "task_id", taskID, "error", err)
+		log.Error("Failed to get task data", "task_id", taskID, "error", err)
 		return nil, err
 	}
 
 	if task == nil {
-		log.Debug("No metadata found for task", "task_id", taskID)
+		log.Debug("No data found for task", "task_id", taskID)
 		return map[string]interface{}{
 			"task_id":             taskID,
 			"title":               "",
@@ -94,7 +96,7 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 		}, nil
 	}
 
-	log.Debug("Task metadata found", "task_id", taskID, "metadata", task.Metadata)
+	log.Debug("Task data found", "task_id", taskID, "metadata", task.Metadata, "comments", comments)
 	// Return enriched task data
 	resp := map[string]interface{}{
 		"task_id":             task.RawTask.ID,
@@ -107,10 +109,61 @@ func handleGetTaskMetadata(service *Service, args map[string]interface{}) (inter
 		"project_id":          task.RawTask.ProjectID,
 		"has_hyperfocus_data": task.Metadata != nil,
 		"metadata":            task.Metadata,
+		"comments":            comments,
 		"created":             task.RawTask.Created,
 		"updated":             task.RawTask.Updated,
 	}
 	log.Debug("handleGetTaskMetadata response ready", "resp", resp)
+	return resp, nil
+}
+
+// handleAddComment adds a comment for a specific task
+func handleAddComment(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleAddComment called", "args", args)
+	taskIDFloat, ok := args["task_id"].(float64)
+	if !ok {
+		log.Error("task_id missing or not a number", "args", args)
+		return nil, fmt.Errorf("task_id must be a number")
+	}
+	taskID := int64(taskIDFloat)
+
+	comment, ok := args["comment"].(string)
+	if !ok {
+		log.Error("No comment has been found or is not a string")
+		return nil, fmt.Errorf("comment must be a string")
+	}
+
+	if comment == "" {
+		log.Error("No comment found, empty string")
+		return nil, fmt.Errorf("must have a comment")
+	}
+
+	log.Debug("Calling service.AddComment", "task_id", taskID)
+	ctx := context.Background()
+	taskComment, err := service.AddComment(ctx, taskID, &comment)
+	if err != nil {
+		log.Error("Failed to add comment", "task_id", taskID, "comment", comment, "error", err)
+		return nil, err
+	}
+
+	if taskComment == nil {
+		log.Debug("Could no create comment", "task_id", taskID)
+		return map[string]interface{}{
+			"status":  "failed",
+			"task_id": taskID,
+			"comment": comment,
+		}, nil
+	}
+
+	log.Debug("Task comment found", "task_id", taskID, "comment", comment)
+	// Return enriched task data
+	resp := map[string]interface{}{
+		"status":  "succeeded",
+		"task_id": taskID,
+		"comment": taskComment,
+	}
+
+	log.Debug("AddComment response ready", "resp", resp)
 	return resp, nil
 }
 
@@ -156,7 +209,8 @@ func handleUpsertTask(service *Service, args map[string]interface{}) (interface{
 	}
 
 	log.Debug("Calling service.UpsertTask", "action", action, "task", task)
-	result, err := service.UpsertTask(context.Background(), &task)
+	ctx := context.Background()
+	result, err := service.UpsertTask(ctx, &task)
 	if err != nil {
 		log.Error("Failed to upsert task", "error", err, "action", action)
 		return nil, err
@@ -203,7 +257,8 @@ func handleGetFilteredTasks(service *Service, args map[string]interface{}) (inte
 	}
 
 	log.Debug("Calling service.GetFilteredTasks", "filter", filter, "useAI", useAI)
-	tasks, err := service.GetFilteredTasks(context.Background(), filter, useAI)
+	ctx := context.Background()
+	tasks, err := service.GetFilteredTasks(ctx, filter, useAI)
 	if err != nil {
 		log.Error("Failed to get filtered tasks", "error", err, "filter", filter)
 		return nil, err

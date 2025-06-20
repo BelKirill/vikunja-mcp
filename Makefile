@@ -16,8 +16,13 @@ test:
 	go test -v -cover ./...
 
 # Build the server binary
-build:
+build-binary:
 	go build -o bin/server ./cmd/mcp/main.go
+
+docker:
+	docker buildx build . -f Dockerfile -t vikunja-mcp:latest
+
+build: build-binary docker
 
 ci-local: fmt goimports lint
 

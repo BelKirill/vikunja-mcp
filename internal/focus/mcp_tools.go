@@ -55,11 +55,11 @@ func RegisterMCPTools(server *mcp.Server) error {
 		return handleDailyFocus(vikunjaSvc, args)
 	})
 
-	// Register task metadata reader
-	log.Debug("Registering get-task-metadata tool with MCP server")
+	// Register task full data reader
+	log.Debug("Registering get-full-task tool with MCP server")
 	server.RegisterTool(mcp.Tool{
-		Name:        "get-task-metadata",
-		Description: "Extract hyperfocus metadata from a specific task",
+		Name:        "get-full-task",
+		Description: "Provide all the details possible for one task",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{
@@ -71,8 +71,32 @@ func RegisterMCPTools(server *mcp.Server) error {
 			"required": []string{"task_id"},
 		},
 	}, func(args map[string]interface{}) (interface{}, error) {
-		log.Debug("get-task-metadata tool invoked", "args", args)
-		return handleGetTaskMetadata(vikunjaSvc, args)
+		log.Debug("get-full-task tool invoked", "args", args)
+		return handleGetFullTask(vikunjaSvc, args)
+	})
+
+	// Register task comment tool
+	log.Debug("Registering add-comment tool with MCP server")
+	server.RegisterTool(mcp.Tool{
+		Name:        "add-comment",
+		Description: "Add a comment to a task",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"task_id": map[string]interface{}{
+					"type":        "integer",
+					"description": "Vikunja task ID",
+				},
+				"comment": map[string]interface{}{
+					"type":        "string",
+					"description": "The comment to add to the task",
+				},
+			},
+			"required": []string{"task_id", "comment"},
+		},
+	}, func(args map[string]interface{}) (interface{}, error) {
+		log.Debug("add-comment tool invoked", "args", args)
+		return handleAddComment(vikunjaSvc, args)
 	})
 
 	// Register filtered task retrieval tool
@@ -115,7 +139,7 @@ func RegisterMCPTools(server *mcp.Server) error {
 	// Register the upsert_task tool
 	log.Debug("Registering upsert_task tool with MCP server")
 	server.RegisterTool(mcp.Tool{
-		Name:        "upsert_task",
+		Name:        "upsert-task",
 		Description: "Create a new task or update an existing task (including marking complete)",
 		InputSchema: map[string]interface{}{
 			"type": "object",

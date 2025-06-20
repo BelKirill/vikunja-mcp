@@ -89,6 +89,7 @@ type Task struct {
 	Identifier       string              `json:"identifier"`
 	RawTask          *RawTask            `json:"raw_task"`
 	Metadata         *HyperFocusMetadata `json:"metadata,omitempty"`
+	Comments         []Comment           `json:"comments,omitempty"`
 	FocusScore       float64             `json:"focus_score,omitempty"`
 	CleanDescription string              `json:"clean_description"`
 }

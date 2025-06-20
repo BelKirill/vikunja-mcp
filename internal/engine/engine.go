@@ -43,9 +43,9 @@ func NewFocusEngine(decisionEngine models.DecisionEngine, options ...EngineOptio
 type EngineOption func(*FocusEngine)
 
 // WithFallbackStrategy sets a custom fallback strategy
-func WithFallbackStrategy(strategy models.FallbackStrategy) EngineOption {
+func WithFallbackStrategy(strategy *models.FallbackStrategy) EngineOption {
 	return func(e *FocusEngine) {
-		e.fallbackStrategy = strategy
+		e.fallbackStrategy = *strategy
 	}
 }
 
@@ -129,7 +129,17 @@ func (e *FocusEngine) applyContextualFilters(ctx context.Context, tasks []models
 
 // buildDecisionRequest creates rich context for AI decision making
 func (e *FocusEngine) buildDecisionRequest(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) *models.DecisionRequest {
-	now := time.Now()
+	// Use context to get current time if available, otherwise fallback to time.Now()
+	var now time.Time
+	if ctx != nil {
+		if deadline, ok := ctx.Deadline(); ok {
+			now = deadline
+		} else {
+			now = time.Now()
+		}
+	} else {
+		now = time.Now()
+	}
 
 	request := &models.DecisionRequest{
 		Energy:         opts.Energy,
@@ -333,11 +343,11 @@ func (f *DependencyFilter) Filter(ctx context.Context, tasks []models.Task, opts
 // HeuristicFallback provides deterministic task selection using business rules
 type HeuristicFallback struct{}
 
-func NewHeuristicFallback() *HeuristicFallback {
-	return &HeuristicFallback{}
+func NewHeuristicFallback() HeuristicFallback {
+	return HeuristicFallback{}
 }
 
-func (h *HeuristicFallback) SelectTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.RankedTask {
+func (h HeuristicFallback) SelectTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) []models.RankedTask {
 	log.Info("HeuristicFallback.SelectTasks called", "task_count", len(tasks), "opts", opts)
 	var ranked []models.RankedTask
 
@@ -367,7 +377,7 @@ func (h *HeuristicFallback) SelectTasks(ctx context.Context, tasks []models.Task
 	return ranked
 }
 
-func (h *HeuristicFallback) GetRecommendation(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) *models.TaskRecommendation {
+func (h HeuristicFallback) GetRecommendation(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) *models.TaskRecommendation {
 	log.Info("HeuristicFallback.GetRecommendation called", "task_count", len(tasks), "opts", opts)
 	ranked := h.SelectTasks(ctx, tasks, opts)
 
@@ -392,7 +402,7 @@ func (h *HeuristicFallback) GetRecommendation(ctx context.Context, tasks []model
 	}
 }
 
-func (h *HeuristicFallback) calculateHeuristicScore(task models.Task, opts *models.FocusOptions) float64 {
+func (h HeuristicFallback) calculateHeuristicScore(task models.Task, opts *models.FocusOptions) float64 {
 	score := 0.0
 
 	if task.Metadata == nil {
@@ -418,7 +428,7 @@ func (h *HeuristicFallback) calculateHeuristicScore(task models.Task, opts *mode
 	return score
 }
 
-func (h *HeuristicFallback) getReasoningFactors(task models.Task, opts *models.FocusOptions) []string {
+func (h HeuristicFallback) getReasoningFactors(task models.Task, opts *models.FocusOptions) []string {
 	var factors []string
 
 	if task.RawTask.Priority >= 4 {
@@ -442,7 +452,7 @@ func (h *HeuristicFallback) getReasoningFactors(task models.Task, opts *models.F
 	return factors
 }
 
-func (h *HeuristicFallback) estimateSessionLength(task models.Task, maxMinutes int) int {
+func (h HeuristicFallback) estimateSessionLength(task models.Task, maxMinutes int) int {
 	if task.Metadata == nil {
 		return min(25, maxMinutes) // Default pomodoro
 	}
@@ -455,7 +465,7 @@ func (h *HeuristicFallback) estimateSessionLength(task models.Task, maxMinutes i
 	return min(baseMinutes, maxMinutes)
 }
 
-func (h *HeuristicFallback) getSessionStrategy(task models.Task) string {
+func (h HeuristicFallback) getSessionStrategy(task models.Task) string {
 	if task.Metadata == nil {
 		return "pomodoro"
 	}
@@ -471,7 +481,7 @@ func (h *HeuristicFallback) getSessionStrategy(task models.Task) string {
 	return "pomodoro"
 }
 
-func (h *HeuristicFallback) getEnergyMatchScore(taskEnergy, userEnergy string) float64 {
+func (h HeuristicFallback) getEnergyMatchScore(taskEnergy, userEnergy string) float64 {
 	if taskEnergy == userEnergy {
 		return 1.0
 	}
@@ -495,7 +505,7 @@ func (h *HeuristicFallback) getEnergyMatchScore(taskEnergy, userEnergy string) f
 	return 0.3 // Poor compatibility
 }
 
-func (h *HeuristicFallback) getModeMatchScore(taskMode, userMode string) float64 {
+func (h HeuristicFallback) getModeMatchScore(taskMode, userMode string) float64 {
 	if taskMode == userMode {
 		return 1.0
 	}
@@ -512,7 +522,7 @@ func (h *HeuristicFallback) getModeMatchScore(taskMode, userMode string) float64
 	return 0.2
 }
 
-func (h *HeuristicFallback) getTimeFitScore(metadata *models.HyperFocusMetadata, maxMinutes int) float64 {
+func (h HeuristicFallback) getTimeFitScore(metadata *models.HyperFocusMetadata, maxMinutes int) float64 {
 	baseMinutes := metadata.Minutes
 
 	if baseMinutes <= maxMinutes {

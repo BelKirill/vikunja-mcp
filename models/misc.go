@@ -53,3 +53,12 @@ type Subscription struct {
 	EntityID int    `json:"entity_id"`
 	Created  string `json:"created"`
 }
+
+type Comment struct {
+	ID        int               `json:"id"`
+	Author    User              `json:"author"`
+	Comment   string            `json:"comment"`
+	Created   string            `json:"created"`
+	Updated   string            `json:"updated"`
+	Reactions map[string][]User `json:"reactions"`
+}
