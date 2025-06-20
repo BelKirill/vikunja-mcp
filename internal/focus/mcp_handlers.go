@@ -75,7 +75,7 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 	}
 	taskID := int64(taskIDFloat)
 
-	log.Debug("Calling service.GetTaskMetadata", "task_id", taskID)
+	log.Debug("Calling service.GetFullTaskData", "task_id", taskID)
 	ctx := context.Background()
 	task, comments, err := service.GetFullTaskData(ctx, taskID)
 	if err != nil {
@@ -96,7 +96,7 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 		}, nil
 	}
 
-	log.Debug("Task metadata found", "task_id", taskID, "metadata", task.Metadata)
+	log.Debug("Task data found", "task_id", taskID, "metadata", task.Metadata, "comments", comments)
 	// Return enriched task data
 	resp := map[string]interface{}{
 		"task_id":             task.RawTask.ID,
@@ -114,6 +114,56 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 		"updated":             task.RawTask.Updated,
 	}
 	log.Debug("handleGetTaskMetadata response ready", "resp", resp)
+	return resp, nil
+}
+
+// handleAddComment adds a comment for a specific task
+func handleAddComment(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleAddComment called", "args", args)
+	taskIDFloat, ok := args["task_id"].(float64)
+	if !ok {
+		log.Error("task_id missing or not a number", "args", args)
+		return nil, fmt.Errorf("task_id must be a number")
+	}
+	taskID := int64(taskIDFloat)
+
+	comment, ok := args["comment"].(string)
+	if !ok {
+		log.Error("No comment has been found or is not a string")
+		return nil, fmt.Errorf("comment must be a string")
+	}
+
+	if comment == "" {
+		log.Error("No comment found, empty string")
+		return nil, fmt.Errorf("must have a comment")
+	}
+
+	log.Debug("Calling service.AddComment", "task_id", taskID)
+	ctx := context.Background()
+	taskComment, err := service.AddComment(ctx, taskID, &comment)
+	if err != nil {
+		log.Error("Failed to add comment", "task_id", taskID, "comment", comment, "error", err)
+		return nil, err
+	}
+
+	if taskComment == nil {
+		log.Debug("Could no create comment", "task_id", taskID)
+		return map[string]interface{}{
+			"status":  "failed",
+			"task_id": taskID,
+			"comment": comment,
+		}, nil
+	}
+
+	log.Debug("Task comment found", "task_id", taskID, "comment", comment)
+	// Return enriched task data
+	resp := map[string]interface{}{
+		"status":  "succeeded",
+		"task_id": taskID,
+		"comment": taskComment,
+	}
+
+	log.Debug("AddComment response ready", "resp", resp)
 	return resp, nil
 }
 

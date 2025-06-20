@@ -55,7 +55,7 @@ func RegisterMCPTools(server *mcp.Server) error {
 		return handleDailyFocus(vikunjaSvc, args)
 	})
 
-	// Register task metadata reader
+	// Register task full data reader
 	log.Debug("Registering get-full-task tool with MCP server")
 	server.RegisterTool(mcp.Tool{
 		Name:        "get-full-task",
@@ -73,6 +73,30 @@ func RegisterMCPTools(server *mcp.Server) error {
 	}, func(args map[string]interface{}) (interface{}, error) {
 		log.Debug("get-full-task tool invoked", "args", args)
 		return handleGetFullTask(vikunjaSvc, args)
+	})
+
+	// Register task comment tool
+	log.Debug("Registering add-comment tool with MCP server")
+	server.RegisterTool(mcp.Tool{
+		Name:        "add-comment",
+		Description: "Add a comment to a task",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"task_id": map[string]interface{}{
+					"type":        "integer",
+					"description": "Vikunja task ID",
+				},
+				"comment": map[string]interface{}{
+					"type":        "string",
+					"description": "The comment to add to the task",
+				},
+			},
+			"required": []string{"task_id", "comment"},
+		},
+	}, func(args map[string]interface{}) (interface{}, error) {
+		log.Debug("add-comment tool invoked", "args", args)
+		return handleAddComment(vikunjaSvc, args)
 	})
 
 	// Register filtered task retrieval tool

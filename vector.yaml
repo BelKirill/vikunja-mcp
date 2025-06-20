@@ -1,0 +1,30 @@
+sources:
+  docker:
+    type: "docker_logs"
+
+transforms:
+  seq_format:
+    type: "remap"
+    inputs: ["docker"]
+    source: |
+      .@t = format_timestamp!(now(), "%Y-%m-%dT%H:%M:%S%.fZ")
+      .@mt = .message
+      .container = .container_name
+      del(.message)
+      del(.timestamp)
+      del(.stream)
+      del(.source_type)
+
+sinks:
+  seq:
+    type: "http"
+    inputs: ["seq_format"]
+    uri: "http://seq:80/api/events/raw?clef"
+    method: "post"
+    encoding:
+      codec: "json"
+    framing:
+      method: "newline_delimited"
+    request:
+      headers:
+        Content-Type: "application/vnd.serilog.clef"

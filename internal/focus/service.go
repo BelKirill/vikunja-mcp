@@ -186,6 +186,15 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 	return task, comments, nil
 }
 
+// AddComment adds a comment to a specific task
+func (s *Service) AddComment(ctx context.Context, taskID int64, comment *string) (*models.Comment, error) {
+	newComment, err := s.Vikunja.AddComment(ctx, taskID, comment)
+	if err != nil {
+		return nil, err
+	}
+	return newComment, nil
+}
+
 // =============================================================================
 // Fallback Methods (for when AI is unavailable)
 // =============================================================================

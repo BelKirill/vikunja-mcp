@@ -331,3 +331,23 @@ func (s *Service) Me(ctx context.Context) (*models.User, error) {
 	log.Info("Me returning user", "user_id", user.ID, "username", user.Username)
 	return &user, nil
 }
+
+// AddComment adds a new comment to the task
+func (s *Service) AddComment(ctx context.Context, taskID int64, comment *string) (*models.Comment, error) {
+	log.Info("AddComment called")
+	var newComment struct {
+		Comment string
+	}
+
+	newComment.Comment = *comment
+
+	endpoint := fmt.Sprintf("/api/v1/tasks/%d/comments", taskID)
+
+	var createdComment models.Comment
+	if err := s.Client.Put(ctx, endpoint, &newComment, &createdComment); err != nil {
+		log.Error("Failed to add comment", "taskID", taskID, "error", err)
+		return nil, err
+	}
+
+	return &createdComment, nil
+}
