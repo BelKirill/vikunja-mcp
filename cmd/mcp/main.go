@@ -12,6 +12,8 @@ func main() {
 	// Force logs to stderr for MCP
 	log.SetOutput(os.Stderr)
 	log.SetLevel(log.DebugLevel)
+	// For global logger
+	log.SetFormatter(log.JSONFormatter)
 
 	log.Info("=== MCP SERVER STARTING ===")
 

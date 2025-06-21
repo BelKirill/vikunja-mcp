@@ -10,6 +10,74 @@ transforms:
       .@t = format_timestamp!(now(), "%Y-%m-%dT%H:%M:%S%.fZ")
       .@mt = .message
       .container = .container_name
+      # Line 12: Debug indicator  
+      .json_parsed = true
+      
+      # Extract level and structured fields from JSON logs
+      parsed = parse_json(.message) ?? null
+      # Line 25: Preserve original
+      .original_message = .message
+
+      if parsed != null && exists(parsed.level) {
+        level = downcase(to_string(parsed.level) ?? "info")
+
+        # Use proper VRL conditional syntax
+        if level == "debug" {
+          .@l = "Debug"
+        } else if level == "info" {
+          .@l = "Information" 
+        } else if level == "warn" || level == "warning" {
+          .@l = "Warning"
+        } else if level == "error" {
+          .@l = "Error"
+        } else if level == "fatal" {
+          .@l = "Fatal"
+        } else {
+          .@l = "Information"
+        }
+        
+        # Extract structured message and fields
+        if exists(parsed.msg) {
+          .@mt = to_string(parsed.msg) ?? ""
+          .message = to_string(parsed.msg) ?? ""
+        }
+        
+        # Extract known MCP fields
+        if exists(parsed.component) {
+          .component = to_string(parsed.component) ?? ""
+        }
+        if exists(parsed.operation) {
+          .operation = to_string(parsed.operation) ?? ""
+        }
+        if exists(parsed.task_id) {
+          .task_id = parsed.task_id
+        }
+        if exists(parsed.duration) {
+          .duration = to_string(parsed.duration) ?? ""
+        }
+        if exists(parsed.error) {
+          .error = to_string(parsed.error) ?? ""
+        }
+        if exists(parsed.err) {
+          .error = to_string(parsed.err) ?? ""
+        }
+        
+        # Replace the manual field extraction with:
+        # Remove only the duplicates, keep everything else
+        parsed = del(parsed.time)
+        parsed = del(parsed.level) 
+        parsed = del(parsed.msg)
+        # Merge ALL remaining fields
+        . = merge(., parsed) ?? .
+        
+        # Merge remaining fields (like count) into the event - handle errors
+        . = merge(., parsed) ?? .
+        
+      } else {
+        .@l = "Information"
+        .message = .message  # Store raw message in separate field
+      }
+      
       del(.message)
       del(.timestamp)
       del(.stream)
