@@ -131,6 +131,7 @@ Your job is to rank tasks for a focus session based on the user's current state 
 
 ## Instructions:
 1. Analyze each task considering:
+	 - Users specific instructions
    - Energy level compatibility (low/medium/high/social)
    - Mode alignment (deep/quick/admin)
    - Time constraints and task estimates
