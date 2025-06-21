@@ -58,7 +58,13 @@ func (e *OpenAIDecisionEngine) parseTaskRankingResponse(response string, tasks [
 		Strategy   string  `json:"strategy"`
 	}
 
-	if err := json.Unmarshal([]byte(response), &aiResponse); err != nil {
+	cleanJSON, err := e.sanitizeResponse(response)
+	if err != nil {
+		log.Error("Error in sanitizing response!", "response", response)
+		return nil, fmt.Errorf("failed to parse enrichment response: %w", err)
+	}
+
+	if err := json.Unmarshal([]byte(cleanJSON), &aiResponse); err != nil {
 		return nil, fmt.Errorf("failed to parse AI response JSON: %w", err)
 	}
 

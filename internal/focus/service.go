@@ -2,6 +2,7 @@ package focus
 
 import (
 	"context"
+	"sync"
 
 	"github.com/BelKirill/vikunja-mcp/internal/config"
 	"github.com/BelKirill/vikunja-mcp/internal/engine"
@@ -107,11 +108,7 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) 
 	}
 	log.Info("Fetched incomplete tasks", "count", len(rawTasks))
 
-	var tasks []models.Task
-	tasks, err = s.EnrichTasks(ctx, rawTasks)
-	if err != nil {
-		log.Warn("Failed to enrich tasks in GetFocusTasks", "error", err)
-	}
+	tasks := s.EnrichTasksParallel(ctx, rawTasks)
 
 	// Use AI-powered focus engine for intelligent task selection
 	decision, err := s.FocusEngine.GetFocusTasks(ctx, tasks, opts)
@@ -211,6 +208,45 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 	return task, comments, nil
 }
 
+func (s *Service) EnrichTasksParallel(ctx context.Context, tasks []models.RawTask) []models.Task {
+	enriched := make([]models.Task, len(tasks))
+	var wg sync.WaitGroup
+	semaphore := make(chan struct{}, 10) // Limit concurrent calls
+
+	for i, task := range tasks {
+		wg.Add(1)
+		go func(index int, t models.RawTask) {
+			defer wg.Done()
+			semaphore <- struct{}{}        // Acquire
+			defer func() { <-semaphore }() // Release
+
+			enrichedTask, upsert, err := s.FocusEngine.EnrichTask(ctx, &t)
+			if err != nil {
+				log.Warn("Enrich task failed", "taskID", t.ID)
+				structuredTask := models.Task{
+					Identifier:       task.Identifier,
+					CleanDescription: task.Description,
+					RawTask:          &task,
+				}
+				enriched[index] = structuredTask
+			} else {
+				if upsert {
+					updated, err := s.Vikunja.UpsertTask(ctx, enrichedTask.RawTask)
+					if err != nil {
+						log.Error("Failed to upsert enriched task", "error", err, "task_id", enrichedTask.RawTask.ID)
+					} else {
+						enrichedTask.RawTask.Description = updated.Description
+					}
+				}
+				enriched[index] = *enrichedTask
+			}
+		}(i, task)
+	}
+
+	wg.Wait()
+	return enriched
+}
+
 func (s *Service) EnrichTasks(ctx context.Context, tasks []models.RawTask) ([]models.Task, error) {
 	log.Info("enrichTasks called", "task_count", len(tasks))
 	enrichedTasks := make([]models.Task, 0, len(tasks))
@@ -235,7 +271,7 @@ func (s *Service) EnrichTasks(ctx context.Context, tasks []models.RawTask) ([]mo
 			if err != nil {
 				log.Error("Failed to upsert enriched task", "error", err, "task_id", enriched.RawTask.ID)
 			} else {
-				enriched.RawTask = updated
+				enriched.RawTask.Description = updated.Description
 			}
 		}
 

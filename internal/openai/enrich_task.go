@@ -38,8 +38,15 @@ func (e *OpenAIDecisionEngine) EnrichTask(ctx context.Context, task *models.RawT
 // parseEnrichTaskResponse parses OpenAI's enrichment response
 func (e *OpenAIDecisionEngine) parseEnrichTaskResponse(response string) (*models.HyperFocusMetadata, error) {
 	var metadata models.HyperFocusMetadata
-	if err := json.Unmarshal([]byte(response), &metadata); err != nil {
-		log.Error("Failed to unmarshal enrichment response", "error", err, "response", response)
+
+	cleanJSON, err := e.sanitizeResponse(response)
+	if err != nil {
+		log.Error("Error in sanitizing response!", "response", response)
+		return nil, fmt.Errorf("failed to parse enrichment response: %w", err)
+	}
+
+	if err := json.Unmarshal([]byte(cleanJSON), &metadata); err != nil {
+		log.Error("Failed to unmarshal enrichment response", "error", err, "response", cleanJSON)
 		return nil, fmt.Errorf("failed to parse enrichment response: %w", err)
 	}
 	return &metadata, nil
