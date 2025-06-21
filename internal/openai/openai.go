@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/charmbracelet/log"
@@ -82,6 +83,20 @@ type apiError struct {
 	Message string `json:"message"`
 	Type    string `json:"type"`
 	Code    string `json:"code"`
+}
+
+// sanitizeResponse removes anything other than JSON. Two JSONs will break it.
+func (e *OpenAIDecisionEngine) sanitizeResponse(response string) (string, error) {
+	// Trim to JSON object boundaries
+	start := strings.Index(response, "{")
+	end := strings.LastIndex(response, "}")
+	if start == -1 || end == -1 || start > end {
+		log.Error("No JSON object found in response", "response", response)
+		return "", fmt.Errorf("no JSON object found in response")
+	}
+	cleanResponse := response[start : end+1]
+
+	return cleanResponse, nil
 }
 
 // callOpenAI makes the actual API call to OpenAI

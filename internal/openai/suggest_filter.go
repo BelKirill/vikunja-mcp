@@ -48,7 +48,13 @@ func (e *OpenAIDecisionEngine) parseFilterSuggestionResponse(response string) (*
 		Strategy   string  `json:"strategy"`
 	}
 
-	if err := json.Unmarshal([]byte(response), &aiResponse); err != nil {
+	cleanJSON, err := e.sanitizeResponse(response)
+	if err != nil {
+		log.Error("Error in sanitizing response!", "response", response)
+		return nil, fmt.Errorf("failed to parse enrichment response: %w", err)
+	}
+
+	if err := json.Unmarshal([]byte(cleanJSON), &aiResponse); err != nil {
 		log.Error("Failed to unmarshal JSON response", "error", err, "response", response)
 
 		// Return fallback response if parsing fails
