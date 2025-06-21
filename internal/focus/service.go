@@ -235,7 +235,7 @@ func (s *Service) EnrichTasks(ctx context.Context, tasks []models.RawTask) ([]mo
 			if err != nil {
 				log.Error("Failed to upsert enriched task", "error", err, "task_id", enriched.RawTask.ID)
 			} else {
-				enriched.RawTask = updated
+				enriched.RawTask.Description = updated.Description
 			}
 		}
 
