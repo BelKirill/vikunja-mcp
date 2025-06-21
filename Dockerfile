@@ -45,7 +45,7 @@ ENV SERVER_PORT="8080"
 ENV LOG_LEVEL="info"
 ENV READ_TIMEOUT="30s"
 ENV WRITE_TIMEOUT="30s"
-ENV OPENAI_MODEL="gpt-4"
+ENV OPENAI_MODEL="gpt-4o-mini"
 ENV OPENAI_BASE_URL="https://api.openai.com/v1"
 
 # Add health check metadata
