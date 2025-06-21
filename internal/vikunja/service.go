@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/BelKirill/vikunja-mcp/internal/config"
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/BelKirill/vikunja-mcp/pkg/vikunja/client"
 	"github.com/charmbracelet/log"
@@ -17,7 +18,7 @@ type Service struct {
 // NewService creates a new Service with the given Vikunja client.
 func NewService() (*Service, error) {
 	log.Info("NewService called for vikunja.Service")
-	vikClient, err := client.NewClient()
+	vikClient, err := client.NewClientWithCredentials(config.GetVikunja().URL, config.GetVikunja().Token)
 	if err != nil {
 		log.Error("Failed to create Vikunja client", "error", err)
 		return nil, err

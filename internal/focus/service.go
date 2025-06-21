@@ -2,8 +2,8 @@ package focus
 
 import (
 	"context"
-	"os"
 
+	"github.com/BelKirill/vikunja-mcp/internal/config"
 	"github.com/BelKirill/vikunja-mcp/internal/engine"
 	"github.com/BelKirill/vikunja-mcp/internal/openai"
 	vikunja "github.com/BelKirill/vikunja-mcp/internal/vikunja"
@@ -47,8 +47,8 @@ func NewService() (*Service, error) {
 func initializeFocusEngine() (*engine.FocusEngine, error) {
 	// Configure OpenAI decision engine
 	openaiConfig := openai.OpenAIConfig{
-		APIKey: os.Getenv("OPENAI_API_KEY"),
-		Model:  getEnvOrDefault("OPENAI_MODEL", "gpt-4o-mini"),
+		APIKey: config.GetOpenAI().APIKey,
+		Model:  config.GetOpenAI().Model,
 	}
 
 	if openaiConfig.APIKey == "" {
@@ -261,14 +261,6 @@ func (s *Service) AddComment(ctx context.Context, taskID int64, comment *string)
 // =============================================================================
 // Utility Functions
 // =============================================================================
-
-// getEnvOrDefault returns environment variable value or default
-func getEnvOrDefault(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
-}
 
 // min returns the smaller of two integers
 func min(a, b int) int {
