@@ -50,8 +50,8 @@ type HyperFocusMetadata struct {
 	ContextualHints         ContextualHints `json:"contextual_hints"` // Currently: Chain tracking for tasks
 }
 
-// RawTask represents the complete task data from Vikunja API
-type RawTask struct {
+// FullRawTask represents the complete task data from Vikunja API
+type FullRawTask struct {
 	ID                     int64                    `json:"id"`
 	Title                  string                   `json:"title"`
 	Description            string                   `json:"description"`
@@ -82,6 +82,20 @@ type RawTask struct {
 	Reactions              map[string][]User        `json:"reactions"`
 	RelatedTasks           map[string][]interface{} `json:"related_tasks"`
 	Subscription           Subscription             `json:"subscription"`
+}
+
+// RawTask represents the essential task data from Vikunja API (optimized for cost reduction)
+type RawTask struct {
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Done        bool   `json:"done"`
+	HexColor    string `json:"hex_color"`
+	Identifier  string `json:"identifier"`
+	Priority    int    `json:"priority"`
+	ProjectID   int64  `json:"project_id"`
+	Created     string `json:"created"`
+	Updated     string `json:"updated"`
 }
 
 // Task represents an enriched task with parsed hyperfocus metadata
