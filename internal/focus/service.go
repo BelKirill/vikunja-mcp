@@ -48,7 +48,7 @@ func initializeFocusEngine() (*engine.FocusEngine, error) {
 	// Configure OpenAI decision engine
 	openaiConfig := openai.OpenAIConfig{
 		APIKey: os.Getenv("OPENAI_API_KEY"),
-		Model:  getEnvOrDefault("OPENAI_MODEL", "gpt-4"),
+		Model:  getEnvOrDefault("OPENAI_MODEL", "gpt-4o-mini"),
 	}
 
 	if openaiConfig.APIKey == "" {
