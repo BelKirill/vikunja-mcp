@@ -108,6 +108,7 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) 
 	}
 	log.Info("Fetched incomplete tasks", "count", len(rawTasks))
 
+	log.Info("Sending to project filter", "exclude project", opts.ExcludeProjects, "only_projects", opts.OnlyProjects)
 	rawTasksFiltered := filterTasksByProjects(rawTasks, opts.ExcludeProjects, opts.OnlyProjects)
 
 	tasks := s.EnrichTasksParallel(ctx, rawTasksFiltered)
@@ -308,31 +309,40 @@ func min(a, b int) int {
 	return b
 }
 
-func filterTasksByProjects(tasks []models.RawTask, excludeProjects []int, onlyProjects []int) []models.RawTask {
+func filterTasksByProjects(tasks []models.RawTask, excludeProjects []int64, onlyProjects []int64) []models.RawTask {
+	log.Info("filterTasksByProjects called", "total_tasks", len(tasks), "excludeProjects", excludeProjects, "onlyProjects", onlyProjects)
 	filtered := make([]models.RawTask, 0, len(tasks))
 
 	for _, task := range tasks {
+		projectID := task.ProjectID
 		// Skip excluded projects
-		if contains(excludeProjects, int(task.ProjectID)) {
+		if contains(excludeProjects, projectID) {
+			log.Info("Excluding task due to excludeProjects", "task_id", task.ID, "project_id", projectID)
 			continue
 		}
 
 		// If onlyProjects specified, task must be in that list
-		if len(onlyProjects) > 0 && !contains(onlyProjects, int(task.ProjectID)) {
+		if len(onlyProjects) > 0 && !contains(onlyProjects, projectID) {
+			log.Info("Excluding task not in onlyProjects", "task_id", task.ID, "project_id", projectID)
 			continue
 		}
 
+		log.Info("Including task", "task_id", task.ID, "project_id", projectID)
 		filtered = append(filtered, task)
 	}
 
+	log.Info("filterTasksByProjects result", "filtered_count", len(filtered))
 	return filtered
 }
 
-func contains(slice []int, item int) bool {
+func contains(slice []int64, item int64) bool {
+	log.Debug("contains called", "slice", slice, "item", item)
 	for _, v := range slice {
 		if v == item {
+			log.Debug("Item found in slice", "item", item)
 			return true
 		}
 	}
+	log.Debug("Item not found in slice", "item", item)
 	return false
 }

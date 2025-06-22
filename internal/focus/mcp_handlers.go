@@ -19,6 +19,8 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 		Instructions: "General request, give a good assortment of tasks",
 	}
 
+	log.Debug("Parsing from args", "args", args)
+
 	// Parse arguments with defaults
 	if energy, ok := args["energy"].(string); ok {
 		log.Debug("Parsed energy from args", "energy", energy)
@@ -39,6 +41,30 @@ func handleDailyFocus(service *Service, args map[string]interface{}) (interface{
 	if instructions, ok := args["instructions"].(string); ok {
 		log.Debug("Parsed instructions from args", "instructions", instructions)
 		opts.Instructions = instructions
+	}
+	if excludeProjectsRaw, ok := args["exclude_projects"]; ok {
+		if excludeProjectsIface, ok := excludeProjectsRaw.([]interface{}); ok {
+			excludeProjects := make([]int64, 0, len(excludeProjectsIface))
+			for _, v := range excludeProjectsIface {
+				if num, ok := v.(float64); ok {
+					excludeProjects = append(excludeProjects, int64(num))
+				}
+			}
+			log.Debug("Parsed excludeProjects from args", "excludeProjects", excludeProjects)
+			opts.ExcludeProjects = excludeProjects
+		}
+	}
+	if onlyProjectsRaw, ok := args["only_projects"]; ok {
+		if onlyProjectsIface, ok := onlyProjectsRaw.([]interface{}); ok {
+			onlyProjects := make([]int64, 0, len(onlyProjectsIface))
+			for _, v := range onlyProjectsIface {
+				if num, ok := v.(float64); ok {
+					onlyProjects = append(onlyProjects, int64(num))
+				}
+			}
+			log.Debug("Parsed only_projects from args", "only_projects", onlyProjects)
+			opts.OnlyProjects = onlyProjects
+		}
 	}
 
 	log.Debug("Calling service.GetFocusTasks", "opts", opts)
