@@ -46,7 +46,21 @@ func RegisterMCPTools(server *mcp.Server) error {
 				},
 				"instructions": map[string]interface{}{
 					"type":        "string",
-					"description": "Additional details about the current request of the user",
+					"description": "Free text instructions for choosing appropriate tasks",
+				},
+				"only_projects": map[string]interface{}{
+					"type":        "array",
+					"description": "Restrict selection to these project IDs",
+					"items": map[string]interface{}{
+						"type": "integer",
+					},
+				},
+				"exclude_projects": map[string]interface{}{
+					"type":        "array",
+					"description": "Project IDs to exclude from the task selection",
+					"items": map[string]interface{}{
+						"type": "integer",
+					},
 				},
 			},
 		},

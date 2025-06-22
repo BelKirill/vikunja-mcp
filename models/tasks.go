@@ -2,13 +2,15 @@ package models
 
 // FocusOptions represents the criteria for selecting focus tasks
 type FocusOptions struct {
-	Energy       string `json:"energy"`           // "low"|"medium"|"high"|"social"
-	Mode         string `json:"mode"`             // "deep"|"quick"|"admin"
-	MaxMinutes   int    `json:"max_minutes"`      // Maximum available time for session
-	MaxTasks     int    `json:"max_tasks"`        // Maximum number of tasks to return
-	Date         string `json:"date"`             // Target date for focus session
-	HyperFocus   int    `json:"hyperfocus_level"` // Target hyperfocus level
-	Instructions string `json:"instructions"`
+	Energy          string `json:"energy"`           // "low"|"medium"|"high"|"social"
+	Mode            string `json:"mode"`             // "deep"|"quick"|"admin"
+	MaxMinutes      int    `json:"max_minutes"`      // Maximum available time for session
+	MaxTasks        int    `json:"max_tasks"`        // Maximum number of tasks to return
+	Date            string `json:"date"`             // Target date for focus session
+	HyperFocus      int    `json:"hyperfocus_level"` // Target hyperfocus level
+	Instructions    string `json:"instructions"`     // Free text instructions for selecting the tasks
+	ExcludeProjects []int  `json:"exclude_projects,omitempty"`
+	OnlyProjects    []int  `json:"only_projects,omitempty"`
 }
 
 // FocusResult represents a task recommended for a focus session with enriched metadata

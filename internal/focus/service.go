@@ -108,7 +108,9 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) 
 	}
 	log.Info("Fetched incomplete tasks", "count", len(rawTasks))
 
-	tasks := s.EnrichTasksParallel(ctx, rawTasks)
+	rawTasksFiltered := filterTasksByProjects(rawTasks, opts.ExcludeProjects, opts.OnlyProjects)
+
+	tasks := s.EnrichTasksParallel(ctx, rawTasksFiltered)
 
 	// Use AI-powered focus engine for intelligent task selection
 	decision, err := s.FocusEngine.GetFocusTasks(ctx, tasks, opts)
@@ -304,4 +306,33 @@ func min(a, b int) int {
 		return a
 	}
 	return b
+}
+
+func filterTasksByProjects(tasks []models.RawTask, excludeProjects []int, onlyProjects []int) []models.RawTask {
+	filtered := make([]models.RawTask, 0, len(tasks))
+
+	for _, task := range tasks {
+		// Skip excluded projects
+		if contains(excludeProjects, int(task.ProjectID)) {
+			continue
+		}
+
+		// If onlyProjects specified, task must be in that list
+		if len(onlyProjects) > 0 && !contains(onlyProjects, int(task.ProjectID)) {
+			continue
+		}
+
+		filtered = append(filtered, task)
+	}
+
+	return filtered
+}
+
+func contains(slice []int, item int) bool {
+	for _, v := range slice {
+		if v == item {
+			return true
+		}
+	}
+	return false
 }
