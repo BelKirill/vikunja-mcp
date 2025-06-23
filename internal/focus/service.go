@@ -173,6 +173,14 @@ func (s *Service) UpsertTask(ctx context.Context, task *models.RawTask) (*models
 // GetFullTaskData retrieves detailed data for a specific task
 func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Task, []models.Comment, error) {
 	log.Info("GetFullTaskData called", "task_id", taskID)
+	availableLabels := []models.PartialLabel{}
+	vikunjaLabels, err := s.Vikunja.GetAllLabels(ctx)
+	if err != nil {
+		log.Warn("Error in bringing available labels", "error", err)
+	} else {
+		availableLabels = vikunjaLabels
+	}
+
 	log.Debug("Fetching task data from Vikunja", "task_id", taskID)
 	rawTask, err := s.Vikunja.GetTaskByID(ctx, taskID)
 	if err != nil {
@@ -180,7 +188,7 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 		return nil, nil, err
 	}
 
-	task, enriched, err := s.FocusEngine.EnrichTask(ctx, rawTask)
+	task, enriched, err := s.FocusEngine.EnrichTask(ctx, rawTask, availableLabels)
 	if err != nil {
 		log.Warn("Failed to enrich task in GetFullTaskData", "task_id", taskID, "error", err)
 		task = &models.Task{
@@ -193,9 +201,17 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 	if enriched {
 		updated, err := s.Vikunja.UpsertTask(ctx, task.RawTask)
 		if err != nil {
-			log.Warn("Could not save enriched data", "description", task.RawTask.Description)
+			log.Warn("Could not save enriched data", "description", task.RawTask.Description, "err", err)
 		} else {
-			task.RawTask = updated
+			task.RawTask.Description = updated.Description
+		}
+	}
+	if len(task.RawTask.Labels) > 0 {
+		createdLabels, err := s.Vikunja.AddLabels(ctx, task.RawTask.ID, task.RawTask.Created, task.RawTask.Labels)
+		if err != nil {
+			log.Warn("Could not save label data", "labels", task.RawTask.Labels, "err", err)
+		} else {
+			task.RawTask.Labels = createdLabels
 		}
 	}
 
@@ -213,6 +229,14 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 
 func (s *Service) EnrichTasksParallel(ctx context.Context, tasks []models.RawTask) []models.Task {
 	enriched := make([]models.Task, len(tasks))
+	availableLabels := []models.PartialLabel{}
+	vikunjaLabels, err := s.Vikunja.GetAllLabels(ctx)
+	if err != nil {
+		log.Warn("Error in bringing available labels", "error", err)
+	} else {
+		availableLabels = vikunjaLabels
+	}
+
 	var wg sync.WaitGroup
 	semaphore := make(chan struct{}, 10) // Limit concurrent calls
 
@@ -223,7 +247,7 @@ func (s *Service) EnrichTasksParallel(ctx context.Context, tasks []models.RawTas
 			semaphore <- struct{}{}        // Acquire
 			defer func() { <-semaphore }() // Release
 
-			enrichedTask, upsert, err := s.FocusEngine.EnrichTask(ctx, &t)
+			enrichedTask, upsert, err := s.FocusEngine.EnrichTask(ctx, &t, availableLabels)
 			if err != nil {
 				log.Warn("Enrich task failed", "taskID", t.ID)
 				structuredTask := models.Task{
@@ -239,6 +263,7 @@ func (s *Service) EnrichTasksParallel(ctx context.Context, tasks []models.RawTas
 						log.Error("Failed to upsert enriched task", "error", err, "task_id", enrichedTask.RawTask.ID)
 					} else {
 						enrichedTask.RawTask.Description = updated.Description
+						enrichedTask.RawTask.Labels = updated.Labels
 					}
 				}
 				enriched[index] = *enrichedTask
@@ -248,40 +273,6 @@ func (s *Service) EnrichTasksParallel(ctx context.Context, tasks []models.RawTas
 
 	wg.Wait()
 	return enriched
-}
-
-func (s *Service) EnrichTasks(ctx context.Context, tasks []models.RawTask) ([]models.Task, error) {
-	log.Info("enrichTasks called", "task_count", len(tasks))
-	enrichedTasks := make([]models.Task, 0, len(tasks))
-
-	for _, task := range tasks {
-		log.Debug("Enriching task", "task_id", task.ID)
-		var enriched *models.Task
-		enriched, upsert, err := s.FocusEngine.EnrichTask(ctx, &task)
-		if err != nil {
-			log.Error("Failed to enrich task", "error", err, "task_id", task.ID)
-			fullTask := &models.Task{
-				Identifier:       task.Identifier,
-				CleanDescription: task.Description,
-				RawTask:          &task,
-			}
-			enrichedTasks = append(enrichedTasks, *fullTask)
-			continue
-		}
-
-		if upsert {
-			updated, err := s.Vikunja.UpsertTask(ctx, enriched.RawTask)
-			if err != nil {
-				log.Error("Failed to upsert enriched task", "error", err, "task_id", enriched.RawTask.ID)
-			} else {
-				enriched.RawTask.Description = updated.Description
-			}
-		}
-
-		enrichedTasks = append(enrichedTasks, *enriched)
-	}
-	log.Info("enrichTasks returning", "enriched_count", len(enrichedTasks))
-	return enrichedTasks, nil
 }
 
 // AddComment adds a comment to a specific task

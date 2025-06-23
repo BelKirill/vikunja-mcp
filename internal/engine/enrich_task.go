@@ -138,85 +138,104 @@ func (e *FocusEngine) embedMetadataInDescription(description string, metadata *m
 	return cleanDesc + " " + string(metadataJSON)
 }
 
-func (e *FocusEngine) EnrichTask(ctx context.Context, task *models.RawTask) (*models.Task, bool, error) {
+// Refactored EnrichTask to use the new helper functions and include labeling
+func (e *FocusEngine) EnrichTask(ctx context.Context, task *models.RawTask, availableLabels []models.PartialLabel) (*models.Task, bool, error) {
 	log.Info("enrichTask called", "task_id", task.ID, "title", task.Title)
-
-	enriched := false
-	meta, err := e.extractJSON(task.Description)
-	if err != nil {
-		log.Error("Failed to extract JSON from task description", "error", err, "task_id", task.ID)
-		meta = ""
-	}
 
 	enrichedTask := &models.Task{
 		RawTask:          task,             // Embed the raw task
 		CleanDescription: task.Description, // Will be cleaned below
 		Identifier:       task.Identifier,  // For human readable identifier like 'mcp-63'
 	}
-	if meta == "" {
-		log.Debug("No JSON metadata found, using defaults", "task_id", task.ID)
-		// No JSON metadata found - enriching with AI
-		newMeta, err := e.decisionEngine.EnrichTask(ctx, task)
-		if err != nil {
-			log.Warn("Couldn't get AI enrichment", "err", err)
-		} else {
-			enrichedTask.Metadata = newMeta
-			newDesc := e.embedMetadataInDescription(enrichedTask.RawTask.Description, newMeta)
+
+	// Step 1: Enrich metadata
+	metadata, enriched, err := e.enrichMetadata(ctx, task)
+	if err != nil {
+		log.Warn("Couldn't get metadata enrichment", "err", err)
+	} else if metadata != nil {
+		enrichedTask.Metadata = metadata
+
+		if enriched {
+			// If we enriched with AI, embed the new metadata in description
+			newDesc := e.embedMetadataInDescription(enrichedTask.RawTask.Description, metadata)
 			enrichedTask.RawTask.Description = newDesc
-			enriched = true
-		} // Description stays as-is since no JSON to remove
-	} else {
-		log.Debug("JSON metadata found, attempting to unmarshal", "json", meta, "task_id", task.ID)
-		// Parse the JSON metadata
-		var hyperfocusData models.HyperFocusMetadata
-		if err := json.Unmarshal([]byte(meta), &hyperfocusData); err != nil {
-			log.Error("Failed to unmarshal hyperfocus metadata", "error", err, "json", meta, "task_id", task.ID)
 		} else {
-			log.Debug("Valid JSON metadata found and unmarshaled", "task_id", task.ID, "metadata", hyperfocusData)
-			// Valid JSON metadata found
-			enrichedTask.Metadata = &hyperfocusData
+			// If metadata was already there, clean the description
+			meta, _ := e.extractJSON(task.Description)
+			if meta != "" {
+				enrichedTask.CleanDescription = strings.Replace(task.Description, meta, "", 1)
+				enrichedTask.CleanDescription = strings.TrimSpace(enrichedTask.CleanDescription)
+				log.Debug("Cleaned description after removing JSON metadata", "clean_description", enrichedTask.CleanDescription)
+			}
 		}
-		// Clean the description by removing the JSON metadata
-		enrichedTask.CleanDescription = strings.Replace(task.Description, meta, "", 1)
-		enrichedTask.CleanDescription = strings.TrimSpace(enrichedTask.CleanDescription)
-		log.Debug("Cleaned description after removing JSON metadata", "clean_description", enrichedTask.CleanDescription)
 	}
-	log.Info("enrichTask returning", "task_id", task.ID, "has_metadata", enrichedTask.Metadata != nil)
+
+	// Step 2: Label task (get AI suggestions)
+	if len(availableLabels) > 0 {
+		suggestedLabels, err := e.LabelTask(ctx, task, availableLabels)
+		if err != nil {
+			log.Warn("Couldn't get label suggestions", "err", err)
+		} else {
+			enrichedTask.RawTask.Labels = suggestedLabels
+			enriched = true
+			log.Debug("Added suggested labels", "task_id", task.ID, "suggested_count", len(suggestedLabels))
+		}
+	} else {
+		log.Debug("No available labels provided, skipping label suggestions")
+	}
+
+	log.Info("enrichTask returning", "task_id", task.ID, "has_metadata", enrichedTask.Metadata != nil, "suggested_labels_count", len(enrichedTask.RawTask.Labels))
 	return enrichedTask, enriched, nil
 }
 
-// // enrichMinimalTask enriches a MinimalTask with additional metadata or computed fields.
-// func enrichMinimalTask(task *models.MinimalTask) *models.MinimalTask {
-// 	log.Debug("enrichMinimalTask called", "task", task)
-// 	if task == nil {
-// 		log.Debug("enrichMinimalTask: task is nil")
-// 		return nil
-// 	}
-// 	if task.Priority == 0 {
-// 		log.Debug("Setting default priority", "task_id", task.TaskID)
-// 		task.Priority = 3 // default priority
-// 	}
-// 	if task.Metadata == nil {
-// 		log.Debug("Setting default metadata", "task_id", task.TaskID)
-// 		task.Metadata = &models.HyperFocusMetadata{
-// 			Energy:                  "medium",
-// 			Mode:                    "quick",
-// 			Extend:                  false,
-// 			Minutes:                 25,
-// 			Estimate:                25,
-// 			HyperFocusCompatability: 3,
-// 		}
-// 	}
-// 	if task.Title != "" && (containsIgnoreCase(task.Title, "urgent") || containsIgnoreCase(task.Description, "urgent")) {
-// 		log.Info("Task marked as urgent", "task_id", task.TaskID)
-// 		task.Priority = 5
-// 	}
-// 	log.Debug("enrichMinimalTask returning", "task", task)
-// 	return task
-// }
+// enrichMetadata handles just the metadata enrichment part
+func (e *FocusEngine) enrichMetadata(ctx context.Context, task *models.RawTask) (*models.HyperFocusMetadata, bool, error) {
+	log.Info("enrichMetadata called", "task_id", task.ID, "title", task.Title)
 
-// // containsIgnoreCase checks if substr is in s, case-insensitive
-// func containsIgnoreCase(s, substr string) bool {
-// 	log.Debug("containsIgnoreCase called", "s", s, "substr", substr)
-// 	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
-// }
+	meta, err := e.extractJSON(task.Description)
+	if err != nil {
+		log.Error("Failed to extract JSON from task description", "error", err, "task_id", task.ID)
+		meta = ""
+	}
+
+	if meta == "" {
+		log.Debug("No JSON metadata found, using AI enrichment", "task_id", task.ID)
+		// No JSON metadata found - get AI enrichment
+		newMeta, err := e.decisionEngine.EnrichTask(ctx, task)
+		if err != nil {
+			log.Warn("Couldn't get AI enrichment", "err", err)
+			return nil, false, err
+		}
+		return newMeta, true, nil // true = was enriched by AI
+	} else {
+		log.Debug("JSON metadata found, attempting to unmarshal", "json", meta, "task_id", task.ID)
+		// Parse existing JSON metadata
+		var hyperfocusData models.HyperFocusMetadata
+		if err := json.Unmarshal([]byte(meta), &hyperfocusData); err != nil {
+			log.Error("Failed to unmarshal hyperfocus metadata", "error", err, "json", meta, "task_id", task.ID)
+			return nil, false, err
+		}
+		log.Debug("Valid JSON metadata found and unmarshaled", "task_id", task.ID, "metadata", hyperfocusData)
+		return &hyperfocusData, false, nil // false = already had metadata
+	}
+}
+
+// LabelTask suggests appropriate labels for a task using AI
+func (e *FocusEngine) LabelTask(ctx context.Context, task *models.RawTask, availableLabels []models.PartialLabel) ([]models.PartialLabel, error) {
+	log.Info("LabelTask called", "task_id", task.ID, "title", task.Title, "available_labels_count", len(availableLabels))
+
+	if len(availableLabels) == 0 {
+		log.Debug("No available labels provided, returning empty slice")
+		return []models.PartialLabel{}, nil
+	}
+
+	// Use the decision engine to get AI label suggestions
+	suggestedLabels, err := e.decisionEngine.LabelTask(ctx, task, availableLabels)
+	if err != nil {
+		log.Error("Failed to get AI label suggestions", "error", err, "task_id", task.ID)
+		return nil, err
+	}
+
+	log.Info("AI suggested labels", "task_id", task.ID, "suggested_count", len(suggestedLabels))
+	return suggestedLabels, nil
+}
