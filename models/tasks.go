@@ -88,16 +88,17 @@ type FullRawTask struct {
 
 // RawTask represents the essential task data from Vikunja API (optimized for cost reduction)
 type RawTask struct {
-	ID          int64  `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Done        bool   `json:"done"`
-	HexColor    string `json:"hex_color"`
-	Identifier  string `json:"identifier"`
-	Priority    int    `json:"priority"`
-	ProjectID   int64  `json:"project_id"`
-	Created     string `json:"created"`
-	Updated     string `json:"updated"`
+	ID          int64          `json:"id"`
+	Title       string         `json:"title"`
+	Description string         `json:"description"`
+	Done        bool           `json:"done"`
+	HexColor    string         `json:"hex_color"`
+	Identifier  string         `json:"identifier"`
+	Priority    int            `json:"priority"`
+	ProjectID   int64          `json:"project_id"`
+	Created     string         `json:"created"`
+	Updated     string         `json:"updated"`
+	Labels      []PartialLabel `json:"labels"`
 }
 
 // Task represents an enriched task with parsed hyperfocus metadata

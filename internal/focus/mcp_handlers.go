@@ -138,6 +138,7 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 		"comments":            comments,
 		"created":             task.RawTask.Created,
 		"updated":             task.RawTask.Updated,
+		"labels":              task.RawTask.Labels,
 	}
 	log.Debug("handleGetTaskMetadata response ready", "resp", resp)
 	return resp, nil

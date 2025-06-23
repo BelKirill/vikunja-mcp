@@ -29,6 +29,14 @@ type Attachment struct {
 }
 
 // Label represents a task label/tag
+type PartialLabel struct {
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	HexColor    string `json:"hex_color"`
+}
+
+// Label represents a task label/tag
 type Label struct {
 	ID          int    `json:"id"`
 	Title       string `json:"title"`
