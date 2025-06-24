@@ -38,57 +38,6 @@ func (e *OpenAIDecisionEngine) LabelTask(ctx context.Context, task *models.RawTa
 	return suggestedLabels, nil
 }
 
-// buildLabelTaskSystemPrompt creates the system prompt with available labels
-func (e *OpenAIDecisionEngine) buildLabelTaskSystemPrompt(availableLabels []models.PartialLabel) string {
-	// Convert available labels to JSON for the prompt
-	labelsJSON := "["
-	for i, label := range availableLabels {
-		labelData := map[string]interface{}{
-			"id":          label.ID,
-			"title":       label.Title,
-			"description": label.Description,
-		}
-		labelBytes, _ := json.Marshal(labelData)
-		labelsJSON += string(labelBytes)
-		if i < len(availableLabels)-1 {
-			labelsJSON += ","
-		}
-	}
-	labelsJSON += "]"
-
-	return fmt.Sprintf(`You are a productivity AI that helps categorize tasks with appropriate labels for an ADHD developer.
-
-Your job: Analyze the given task and suggest which of the available labels should be applied.
-
-AVAILABLE LABELS:
-%s
-
-Guidelines:
-- Only suggest labels that genuinely apply to the task
-- Consider task complexity, type of work, priority indicators, and context
-- For ADHD productivity: prioritize labels that help with energy management, context switching, and focus
-- Return 0-5 labels maximum (don't over-label)
-- Focus on actionable categorization
-
-Response format: Return a JSON array of label IDs that should be applied.
-Example: [1, 3, 7] or [] for no labels
-
-Return only the JSON array, no other text.`, labelsJSON)
-}
-
-// buildLabelTaskUserPrompt creates the user prompt with the task details
-func (e *OpenAIDecisionEngine) buildLabelTaskUserPrompt(task *models.RawTask) string {
-	taskJSON, err := json.MarshalIndent(task, "", "  ")
-	if err != nil {
-		log.Error("Failed to marshal task to JSON", "error", err)
-		// Fallback to basic string representation
-		return fmt.Sprintf("Task ID: %d\nTitle: %s\nDescription: %s\nPriority: %d",
-			task.ID, task.Title, task.Description, task.Priority)
-	}
-
-	return fmt.Sprintf("Analyze this task and suggest appropriate labels:\n\n%s", string(taskJSON))
-}
-
 // parseLabelTaskResponse parses OpenAI's label suggestion response
 func (e *OpenAIDecisionEngine) parseLabelTaskResponse(response string, availableLabels []models.PartialLabel) ([]models.PartialLabel, error) {
 	cleanJSON, err := e.sanitizeResponse(response)
@@ -122,4 +71,88 @@ func (e *OpenAIDecisionEngine) parseLabelTaskResponse(response string, available
 	}
 
 	return suggestedLabels, nil
+}
+
+// buildLabelTaskSystemPrompt creates the system prompt with available labels
+func (e *OpenAIDecisionEngine) buildLabelTaskSystemPrompt(availableLabels []models.PartialLabel) string {
+	// Convert available labels to JSON for the prompt
+	labelsJSON := "["
+	for i, label := range availableLabels {
+		labelData := map[string]interface{}{
+			"id":          label.ID,
+			"title":       label.Title,
+			"description": label.Description,
+		}
+		labelBytes, _ := json.Marshal(labelData)
+		labelsJSON += string(labelBytes)
+		if i < len(availableLabels)-1 {
+			labelsJSON += ","
+		}
+	}
+	labelsJSON += "]"
+
+	return fmt.Sprintf(`You are a productivity AI that categorizes tasks for an ADHD developer. Be selective and specific with labels.
+
+AVAILABLE LABELS:
+%s
+
+LABEL CATEGORIES & SPECIFIC USAGE:
+• TECHNICAL: coding, development, API work, debugging, architecture
+• CREATIVE: design, writing, brainstorming, planning, ideation  
+• ADMINISTRATIVE: paperwork, forms, compliance, bureaucracy (rare)
+• COMMUNICATION: meetings, emails, calls, collaboration
+• LEARNING: study, research, tutorials, certification prep
+• CONTEXT: online, quick, urgent (when specifically relevant)
+• FOCUS: ONLY for tasks requiring 30+ minutes of sustained concentration
+
+STRICT RULES:
+1. **"focus" is NOT automatic** - Only for genuine deep work (30+ min concentration)
+2. **Be minimalist** - 1-2 labels usually sufficient, 3 maximum
+3. **Match the primary work type** - What is this task actually doing?
+4. **Quick tasks (< 15 min) rarely need "focus"**
+5. **Routine tasks rarely need special labels**
+
+GOOD EXAMPLES:
+• "Fix authentication bug" → [technical] 
+• "Design API architecture" → [technical, design]
+• "5-minute standup meeting" → [communication]
+• "Fill out expense report" → [admin]
+• "Study 2-hour course module" → [learning, focus]
+• "Quick email check" → [communication]
+• "Write comprehensive documentation" → [technical, writing]
+
+BAD EXAMPLES (avoid these):
+• "Fix small bug" → [technical, focus] ❌ (no focus needed for quick fix)
+• "Simple task" → [focus] ❌ (focus is overused)
+• "Any development work" → [admin] ❌ (admin is wrong category)
+
+Response format: Return ONLY a JSON array of label IDs.
+Example: [14] or [3, 14] or [] for no labels
+
+Be selective - not every task needs multiple labels or "focus"!`, labelsJSON)
+}
+
+// buildLabelTaskUserPrompt creates the user prompt with the task details
+func (e *OpenAIDecisionEngine) buildLabelTaskUserPrompt(task *models.RawTask) string {
+	taskJSON, err := json.MarshalIndent(task, "", "  ")
+	if err != nil {
+		log.Error("Failed to marshal task to JSON", "error", err)
+		// Fallback to basic string representation
+		return fmt.Sprintf("Task ID: %d\nTitle: %s\nDescription: %s\nPriority: %d",
+			task.ID, task.Title, task.Description, task.Priority)
+	}
+
+	return fmt.Sprintf(`Categorize this task with minimal, specific labels.
+
+Ask yourself:
+1. What type of work is this primarily? (technical/creative/communication/learning/admin)
+2. Does this genuinely need sustained concentration (30+ min)? If yes, add "focus"
+3. Are there other specific context labels that help? (online/quick/urgent)
+
+Be selective - most tasks need only 1-2 labels maximum.
+
+TASK TO ANALYZE:
+%s
+
+Return only the JSON array of the most essential label IDs for this task.`, string(taskJSON))
 }

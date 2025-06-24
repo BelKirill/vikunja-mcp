@@ -263,7 +263,12 @@ func (s *Service) EnrichTasksParallel(ctx context.Context, tasks []models.RawTas
 						log.Error("Failed to upsert enriched task", "error", err, "task_id", enrichedTask.RawTask.ID)
 					} else {
 						enrichedTask.RawTask.Description = updated.Description
-						enrichedTask.RawTask.Labels = updated.Labels
+					}
+					newLabels, err := s.Vikunja.AddLabels(ctx, enrichedTask.RawTask.ID, enrichedTask.RawTask.Created, enrichedTask.RawTask.Labels)
+					if err != nil {
+						log.Error("Failed to add labels", "error", err)
+					} else {
+						enrichedTask.RawTask.Labels = newLabels
 					}
 				}
 				enriched[index] = *enrichedTask
