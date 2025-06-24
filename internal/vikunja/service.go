@@ -199,96 +199,6 @@ type UpsertTaskOptions struct {
 	ProjectID   *int64  `json:"project_id,omitempty"`
 }
 
-func (s *Service) UpsertTaskSelective(ctx context.Context, opts UpsertTaskOptions) (*models.RawTask, error) {
-	var finalTask models.RawTask
-
-	// If updating existing task
-	if opts.TaskID != nil && *opts.TaskID > 0 {
-		log.Debug("Selective update - fetching existing task", "task_id", *opts.TaskID)
-		existing, err := s.Client.GetTask(ctx, int64(*opts.TaskID))
-		if err != nil {
-			log.Error("Failed to get existing task for selective update", "task_id", *opts.TaskID, "error", err)
-			return nil, err
-		}
-
-		// Start with existing data
-		finalTask = *existing
-
-		// Only update fields that were explicitly provided (not nil)
-		if opts.Title != nil {
-			log.Debug("Selective update: title", "task_id", *opts.TaskID, "new_title", *opts.Title)
-			finalTask.Title = *opts.Title
-		}
-
-		if opts.Description != nil {
-			log.Debug("Selective update: description", "task_id", *opts.TaskID)
-			finalTask.Description = *opts.Description
-		}
-
-		if opts.Priority != nil {
-			log.Debug("Selective update: priority", "task_id", *opts.TaskID, "new_priority", *opts.Priority)
-			finalTask.Priority = *opts.Priority
-		}
-
-		if opts.HexColor != nil {
-			log.Debug("Selective update: hex_color", "task_id", *opts.TaskID, "new_color", *opts.HexColor)
-			finalTask.HexColor = *opts.HexColor
-		}
-
-		if opts.Done != nil {
-			log.Debug("Selective update: done", "task_id", *opts.TaskID, "new_done", *opts.Done)
-			finalTask.Done = *opts.Done
-		}
-
-		if opts.ProjectID != nil {
-			log.Debug("Selective update: project_id", "task_id", *opts.TaskID, "new_project_id", *opts.ProjectID)
-			finalTask.ProjectID = *opts.ProjectID
-		}
-
-	} else {
-		// Creating new task
-		log.Debug("Selective create - new task")
-		if opts.Title != nil {
-			finalTask.Title = *opts.Title
-		}
-		if opts.Description != nil {
-			finalTask.Description = *opts.Description
-		}
-		if opts.Priority != nil {
-			finalTask.Priority = *opts.Priority
-		} else {
-			finalTask.Priority = 3 // Default priority
-		}
-		if opts.HexColor != nil {
-			finalTask.HexColor = *opts.HexColor
-		}
-		if opts.Done != nil {
-			finalTask.Done = *opts.Done
-		}
-		if opts.ProjectID != nil {
-			finalTask.ProjectID = *opts.ProjectID
-		}
-	}
-
-	// Apply the same metadata processing and user assignment as before
-	// ... (same logic as in UpsertTask)
-
-	return s.Client.UpsertTask(ctx, finalTask)
-}
-
-// Me fetches the current user information.
-func (s *Service) Me(ctx context.Context) (*models.User, error) {
-	log.Info("Me called")
-	var user models.User
-	err := s.Client.Get(ctx, "/api/v1/user", &user)
-	if err != nil {
-		log.Error("Failed to fetch current user", "error", err)
-		return nil, err
-	}
-	log.Info("Me returning user", "user_id", user.ID, "username", user.Username)
-	return &user, nil
-}
-
 // AddComment adds a new comment to the task
 func (s *Service) AddComment(ctx context.Context, taskID int64, comment *string) (*models.Comment, error) {
 	log.Info("AddComment called")
@@ -307,4 +217,44 @@ func (s *Service) AddComment(ctx context.Context, taskID int64, comment *string)
 	}
 
 	return &createdComment, nil
+}
+
+func (s *Service) GetAllLabels(ctx context.Context) ([]models.PartialLabel, error) {
+	log.Info("GetAllLabels called")
+
+	var labels []models.PartialLabel
+	err := s.Client.Get(ctx, "/api/v1/labels", &labels)
+	if err != nil {
+		log.Error("Failed to fetch available labels", "error", err)
+		return nil, err
+	}
+	log.Info("GetAllLabels returning user", "labels", labels)
+	return labels, nil
+}
+
+func (s *Service) AddLabels(ctx context.Context, taskID int64, created string, labels []models.PartialLabel) ([]models.PartialLabel, error) {
+	log.Info("AddLabels called", "task_id", taskID, "labels_count", len(labels))
+
+	type labelPayload struct {
+		Created string `json:"created"`
+		LabelID int    `json:"label_id"`
+	}
+
+	endpoint := fmt.Sprintf("/api/v1/tasks/%d/labels", taskID)
+
+	var createdLabels []models.PartialLabel
+
+	for _, label := range labels {
+		payload := labelPayload{Created: created, LabelID: label.ID}
+		var result labelPayload // ✅ Fixed: Single object, not array
+		if err := s.Client.Put(ctx, endpoint, &payload, &result); err != nil {
+			log.Error("Failed to add label", "taskID", taskID, "labelID", label.ID, "error", err)
+			return nil, err
+		}
+		log.Debug("Successfully added label", "task_id", taskID, "label_id", label.ID, "response", result)
+		createdLabels = append(createdLabels, label)
+	}
+
+	log.Info("AddLabels completed successfully", "task_id", taskID, "added_count", len(createdLabels))
+	return createdLabels, nil
 }
