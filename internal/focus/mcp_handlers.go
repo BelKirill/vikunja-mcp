@@ -103,7 +103,7 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 
 	log.Debug("Calling service.GetFullTaskData", "task_id", taskID)
 	ctx := context.Background()
-	task, comments, err := service.GetFullTaskData(ctx, taskID)
+	task, comments, project, err := service.GetFullTaskData(ctx, taskID)
 	if err != nil {
 		log.Error("Failed to get task data", "task_id", taskID, "error", err)
 		return nil, err
@@ -132,10 +132,10 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 		"hex_color":           task.RawTask.HexColor,
 		"done":                task.RawTask.Done,
 		"priority":            task.RawTask.Priority,
-		"project_id":          task.RawTask.ProjectID,
 		"has_hyperfocus_data": task.Metadata != nil,
 		"metadata":            task.Metadata,
 		"comments":            comments,
+		"project":             project,
 		"created":             task.RawTask.Created,
 		"updated":             task.RawTask.Updated,
 		"labels":              task.RawTask.Labels,

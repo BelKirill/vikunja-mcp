@@ -113,8 +113,14 @@ func (s *Service) GetFocusTasks(ctx context.Context, opts *models.FocusOptions) 
 
 	tasks := s.EnrichTasksParallel(ctx, rawTasksFiltered)
 
+	projects, err := s.Vikunja.GetAllProjects(ctx)
+	if err != nil {
+		log.Warn("Could not bring project list", "err", err)
+		projects = []models.PartialProject{}
+	}
+
 	// Use AI-powered focus engine for intelligent task selection
-	decision, err := s.FocusEngine.GetFocusTasks(ctx, tasks, opts)
+	decision, err := s.FocusEngine.GetFocusTasks(ctx, tasks, opts, projects)
 	if err != nil {
 		log.Error("Focus engine failed", "error", err)
 		// Fallback to basic filtering if AI fails
@@ -171,7 +177,7 @@ func (s *Service) UpsertTask(ctx context.Context, task *models.RawTask) (*models
 }
 
 // GetFullTaskData retrieves detailed data for a specific task
-func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Task, []models.Comment, error) {
+func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Task, []models.Comment, *models.PartialProject, error) {
 	log.Info("GetFullTaskData called", "task_id", taskID)
 	availableLabels := []models.PartialLabel{}
 	vikunjaLabels, err := s.Vikunja.GetAllLabels(ctx)
@@ -185,12 +191,12 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 	rawTask, err := s.Vikunja.GetTaskByID(ctx, taskID)
 	if err != nil {
 		log.Error("Failed to get task by ID in GetFullTaskData", "task_id", taskID, "error", err)
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	task, enriched, err := s.FocusEngine.EnrichTask(ctx, rawTask, availableLabels)
 	if err != nil {
-		log.Warn("Failed to enrich task in GetFullTaskData", "task_id", taskID, "error", err)
+		log.Warn("Failed to enrich task in GetFullTaskData", "taskID", taskID, "error", err)
 		task = &models.Task{
 			Identifier:       rawTask.Identifier,
 			RawTask:          rawTask,
@@ -215,16 +221,23 @@ func (s *Service) GetFullTaskData(ctx context.Context, taskID int64) (*models.Ta
 		}
 	}
 
-	log.Debug("Fetching comments from Vikunja", "task_id", taskID)
+	log.Debug("Fetching comments from Vikunja", "taskID", taskID)
 	comments, err := s.Vikunja.GetTaskCommentsByID(ctx, taskID)
 	if err != nil {
-		log.Error("Failed to get task comments by ID in GetTaskCommentsByID", "task_id", taskID, "error", err)
-		return task, nil, err
+		log.Warn("Failed to get task comments by ID in GetTaskCommentsByID", "task_id", taskID, "error", err)
+		comments = []models.Comment{}
+	}
+
+	log.Debug("Fetching project data from Vikunja", "ProjectID", task.RawTask.ProjectID)
+	project, err := s.Vikunja.GetProject(ctx, task.RawTask.ProjectID)
+	if err != nil {
+		log.Warn("Failed to get project by ID in GetProject", "task_id", taskID, "error", err)
+		project = &models.PartialProject{}
 	}
 
 	log.Info("Returning task metadata", "task_id", taskID)
 	log.Debug("Task data result", "task", task, "comments", comments)
-	return task, comments, nil
+	return task, comments, project, nil
 }
 
 func (s *Service) EnrichTasksParallel(ctx context.Context, tasks []models.RawTask) []models.Task {

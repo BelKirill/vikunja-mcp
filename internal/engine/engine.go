@@ -78,7 +78,7 @@ func (e *FocusEngine) SuggestFilter(ctx context.Context, filter *string) (*model
 }
 
 // GetFocusTasks returns AI-ranked tasks for focus session
-func (e *FocusEngine) GetFocusTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) (*models.DecisionResponse, error) {
+func (e *FocusEngine) GetFocusTasks(ctx context.Context, tasks []models.Task, opts *models.FocusOptions, projects []models.PartialProject) (*models.DecisionResponse, error) {
 	log.Info("FocusEngine.GetFocusTasks called", "task_count", len(tasks), "opts", opts)
 
 	// Step 1: Apply contextual filters
@@ -95,7 +95,7 @@ func (e *FocusEngine) GetFocusTasks(ctx context.Context, tasks []models.Task, op
 	}
 
 	// Step 2: Build decision request with rich context
-	request := e.buildDecisionRequest(ctx, filteredTasks, opts)
+	request := e.buildDecisionRequest(ctx, filteredTasks, opts, projects)
 
 	// Step 3: Try AI-powered ranking
 	response, err := e.decisionEngine.RankTasks(ctx, request)
@@ -128,7 +128,7 @@ func (e *FocusEngine) applyContextualFilters(ctx context.Context, tasks []models
 }
 
 // buildDecisionRequest creates rich context for AI decision making
-func (e *FocusEngine) buildDecisionRequest(ctx context.Context, tasks []models.Task, opts *models.FocusOptions) *models.DecisionRequest {
+func (e *FocusEngine) buildDecisionRequest(ctx context.Context, tasks []models.Task, opts *models.FocusOptions, projects []models.PartialProject) *models.DecisionRequest {
 	// Use context to get current time if available, otherwise fallback to time.Now()
 	var now time.Time
 	if ctx != nil {
@@ -142,6 +142,7 @@ func (e *FocusEngine) buildDecisionRequest(ctx context.Context, tasks []models.T
 	}
 
 	request := &models.DecisionRequest{
+		Projects:       projects,
 		Energy:         opts.Energy,
 		Mode:           opts.Mode,
 		MaxMinutes:     opts.MaxMinutes,

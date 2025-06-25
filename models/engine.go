@@ -16,7 +16,8 @@ type DecisionRequest struct {
 	Instructions string    `json:"instructions"` // Free text instructions
 
 	// Available tasks with rich metadata
-	CandidateTasks []Task `json:"candidate_tasks"`
+	CandidateTasks []Task           `json:"candidate_tasks"`
+	Projects       []PartialProject `json:"projects"`
 
 	// Historical context (for learning)
 	RecentSessions  []FocusSession    `json:"recent_sessions,omitempty"`
