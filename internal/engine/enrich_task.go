@@ -171,7 +171,7 @@ func (e *FocusEngine) EnrichTask(ctx context.Context, task *models.RawTask, avai
 	}
 
 	// Step 2: Label task (get AI suggestions)
-	if len(availableLabels) > 0 {
+	if len(enrichedTask.RawTask.Labels) == 0 && len(availableLabels) > 0 {
 		suggestedLabels, err := e.LabelTask(ctx, task, availableLabels)
 		if err != nil {
 			log.Warn("Couldn't get label suggestions", "err", err)
