@@ -3,6 +3,7 @@ package focus
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/charmbracelet/log"
@@ -103,7 +104,7 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 
 	log.Debug("Calling service.GetFullTaskData", "task_id", taskID)
 	ctx := context.Background()
-	task, comments, err := service.GetFullTaskData(ctx, taskID)
+	task, comments, project, err := service.GetFullTaskData(ctx, taskID)
 	if err != nil {
 		log.Error("Failed to get task data", "task_id", taskID, "error", err)
 		return nil, err
@@ -132,10 +133,10 @@ func handleGetFullTask(service *Service, args map[string]interface{}) (interface
 		"hex_color":           task.RawTask.HexColor,
 		"done":                task.RawTask.Done,
 		"priority":            task.RawTask.Priority,
-		"project_id":          task.RawTask.ProjectID,
 		"has_hyperfocus_data": task.Metadata != nil,
 		"metadata":            task.Metadata,
 		"comments":            comments,
+		"project":             project,
 		"created":             task.RawTask.Created,
 		"updated":             task.RawTask.Updated,
 		"labels":              task.RawTask.Labels,
@@ -306,4 +307,96 @@ func handleGetFilteredTasks(service *Service, args map[string]interface{}) (inte
 
 	log.Debug("handleGetFilteredTasks response ready", "resp", resp)
 	return resp, nil
+}
+
+// handleExportProjectJSON processes the export-project-json tool call
+func handleExportProjectJSON(service *Service, args map[string]interface{}) (interface{}, error) {
+	log.Debug("handleExportProjectJSON called", "args", args)
+	ctx := context.Background()
+
+	// Parse output_path (required)
+	outputPath, ok := args["output_path"].(string)
+	if !ok || outputPath == "" {
+		log.Error("output_path missing or not a string", "args", args)
+		return nil, fmt.Errorf("output_path is required and must be a string")
+	}
+
+	// Validate and clean the output path for security
+	outputPath = filepath.Clean(outputPath)
+
+	// Convert to absolute path to resolve working directory issues in MCP
+	absOutputPath, pathErr := filepath.Abs(outputPath)
+	if pathErr != nil {
+		log.Error("Failed to resolve absolute path", "path", outputPath, "error", pathErr)
+		return nil, fmt.Errorf("invalid output path: %w", pathErr)
+	}
+
+	log.Debug("Resolved output path", "original", outputPath, "absolute", absOutputPath)
+
+	// Parse optional arguments with defaults
+	options := models.ExportOptions{
+		OutputPath:       absOutputPath, // Use absolute path
+		IncludeCompleted: false,
+		IncludeComments:  false,
+		IncludeMetadata:  true,
+		PrettyPrint:      true,
+	}
+
+	if includeCompleted, ok := args["include_completed"].(bool); ok {
+		options.IncludeCompleted = includeCompleted
+		log.Debug("Parsed include_completed from args", "include_completed", includeCompleted)
+	}
+
+	if includeComments, ok := args["include_comments"].(bool); ok {
+		options.IncludeComments = includeComments
+		log.Debug("Parsed include_comments from args", "include_comments", includeComments)
+	}
+
+	if includeMetadata, ok := args["include_metadata"].(bool); ok {
+		options.IncludeMetadata = includeMetadata
+		log.Debug("Parsed include_metadata from args", "include_metadata", includeMetadata)
+	}
+
+	if customFilter, ok := args["custom_filter"].(string); ok && customFilter != "" {
+		options.CustomFilter = customFilter
+		log.Debug("Parsed custom_filter from args", "custom_filter", customFilter)
+	}
+
+	if prettyPrint, ok := args["pretty_print"].(bool); ok {
+		options.PrettyPrint = prettyPrint
+		log.Debug("Parsed pretty_print from args", "pretty_print", prettyPrint)
+	}
+
+	// Check if project_id is provided
+	var result *models.ExportResult
+	var err error
+
+	if projectIDFloat, ok := args["project_id"].(float64); ok {
+		// Export specific project
+		projectID := int64(projectIDFloat)
+		log.Debug("Exporting specific project", "project_id", projectID)
+		result, err = service.ExportProjectToJSON(ctx, projectID, options)
+	} else {
+		// Export all projects
+		log.Debug("Exporting all projects")
+		result, err = service.ExportAllProjectsToJSON(ctx, options)
+	}
+
+	if err != nil {
+		log.Error("Export failed", "error", err)
+		return map[string]interface{}{
+			"success": false,
+			"error":   err.Error(),
+		}, nil
+	}
+
+	log.Info("Export completed successfully", "result", result)
+
+	return map[string]interface{}{
+		"success":       result.Success,
+		"file_path":     result.FilePath,
+		"task_count":    result.TaskCount,
+		"project_count": result.ProjectCount,
+		"file_size":     result.FileSize,
+	}, nil
 }

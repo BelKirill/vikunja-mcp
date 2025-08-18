@@ -258,3 +258,29 @@ func (s *Service) AddLabels(ctx context.Context, taskID int64, created string, l
 	log.Info("AddLabels completed successfully", "task_id", taskID, "added_count", len(createdLabels))
 	return createdLabels, nil
 }
+
+func (s *Service) GetProject(ctx context.Context, projectID int64) (*models.PartialProject, error) {
+	log.Info("GetProject called")
+
+	var project models.PartialProject
+	err := s.Client.Get(ctx, fmt.Sprintf("/api/v1/projects/%d", int(projectID)), &project)
+	if err != nil {
+		log.Error("Failed to fetch available project", "error", err)
+		return nil, err
+	}
+	log.Info("GetProject returning project", "project", project)
+	return &project, nil
+}
+
+func (s *Service) GetAllProjects(ctx context.Context) ([]models.PartialProject, error) {
+	log.Info("GetAllProjects called")
+
+	var projects []models.PartialProject
+	err := s.Client.Get(ctx, "/api/v1/projects", &projects)
+	if err != nil {
+		log.Error("Failed to fetch available projects", "error", err)
+		return nil, err
+	}
+	log.Info("GetAllProjects returning project", "projects", projects)
+	return projects, nil
+}

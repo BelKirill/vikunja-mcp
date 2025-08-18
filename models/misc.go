@@ -70,3 +70,9 @@ type Comment struct {
 	Updated   string            `json:"updated"`
 	Reactions map[string][]User `json:"reactions"`
 }
+
+type PartialProject struct {
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+}
