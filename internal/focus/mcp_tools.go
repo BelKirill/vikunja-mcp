@@ -196,6 +196,54 @@ func RegisterMCPTools(server *mcp.Server) error {
 		return handleUpsertTask(vikunjaSvc, args)
 	})
 
+	// Register the export-project-json tool
+	log.Debug("Registering export-project-json tool with MCP server")
+	server.RegisterTool(mcp.Tool{
+		Name:        "export-project-json",
+		Description: "Export all tasks from a project to local JSON file with enriched metadata",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"project_id": map[string]interface{}{
+					"type":        "integer",
+					"description": "Project ID to export (omit to export all projects)",
+				},
+				"output_path": map[string]interface{}{
+					"type":        "string",
+					"description": "Local file path for JSON export (e.g., './export.json')",
+				},
+				"include_completed": map[string]interface{}{
+					"type":        "boolean",
+					"description": "Include completed tasks in export (default: false)",
+					"default":     false,
+				},
+				"include_comments": map[string]interface{}{
+					"type":        "boolean",
+					"description": "Include task comments in export (default: false)",
+					"default":     false,
+				},
+				"include_metadata": map[string]interface{}{
+					"type":        "boolean",
+					"description": "Include AI-generated hyperfocus metadata (default: true)",
+					"default":     true,
+				},
+				"custom_filter": map[string]interface{}{
+					"type":        "string",
+					"description": "Vikunja filter expression to limit export scope",
+				},
+				"pretty_print": map[string]interface{}{
+					"type":        "boolean",
+					"description": "Format JSON with indentation for readability (default: true)",
+					"default":     true,
+				},
+			},
+			"required": []string{"output_path"},
+		},
+	}, func(args map[string]interface{}) (interface{}, error) {
+		log.Debug("export-project-json tool invoked", "args", args)
+		return handleExportProjectJSON(vikunjaSvc, args)
+	})
+
 	log.Debug("All MCP tools registered for focus package")
 	return nil
 }
