@@ -3,6 +3,7 @@ package focus
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
 	"github.com/BelKirill/vikunja-mcp/models"
 	"github.com/charmbracelet/log"
@@ -320,9 +321,21 @@ func handleExportProjectJSON(service *Service, args map[string]interface{}) (int
 		return nil, fmt.Errorf("output_path is required and must be a string")
 	}
 
+	// Validate and clean the output path for security
+	outputPath = filepath.Clean(outputPath)
+
+	// Convert to absolute path to resolve working directory issues in MCP
+	absOutputPath, pathErr := filepath.Abs(outputPath)
+	if pathErr != nil {
+		log.Error("Failed to resolve absolute path", "path", outputPath, "error", pathErr)
+		return nil, fmt.Errorf("invalid output path: %w", pathErr)
+	}
+
+	log.Debug("Resolved output path", "original", outputPath, "absolute", absOutputPath)
+
 	// Parse optional arguments with defaults
 	options := models.ExportOptions{
-		OutputPath:       outputPath,
+		OutputPath:       absOutputPath, // Use absolute path
 		IncludeCompleted: false,
 		IncludeComments:  false,
 		IncludeMetadata:  true,

@@ -441,8 +441,13 @@ func (s *Service) buildProjectExport(ctx context.Context, projectID int64, optio
 
 // writeExportToFile writes a ProjectExport to a JSON file
 func writeExportToFile(export *models.ProjectExport, outputPath string, prettyPrint bool) (int64, error) {
+	// Convert to absolute path for MCP compatibility
+	absPath, err := filepath.Abs(outputPath)
+	if err != nil {
+		return 0, fmt.Errorf("failed to resolve absolute path: %w", err)
+	}
+
 	var jsonData []byte
-	var err error
 
 	if prettyPrint {
 		jsonData, err = json.MarshalIndent(export, "", "  ")
@@ -454,18 +459,25 @@ func writeExportToFile(export *models.ProjectExport, outputPath string, prettyPr
 		return 0, fmt.Errorf("failed to marshal export data: %w", err)
 	}
 
-	err = os.WriteFile(outputPath, jsonData, 0644)
+	// Write file with more permissive permissions for MCP environment
+	err = os.WriteFile(absPath, jsonData, 0666)
 	if err != nil {
-		return 0, fmt.Errorf("failed to write file: %w", err)
+		return 0, fmt.Errorf("failed to write file to %s: %w", absPath, err)
 	}
 
+	log.Debug("Successfully wrote export file", "path", absPath, "size", len(jsonData))
 	return int64(len(jsonData)), nil
 }
 
 // writeMultiExportToFile writes a MultiProjectExport to a JSON file
 func writeMultiExportToFile(export *models.MultiProjectExport, outputPath string, prettyPrint bool) (int64, error) {
+	// Convert to absolute path for MCP compatibility
+	absPath, err := filepath.Abs(outputPath)
+	if err != nil {
+		return 0, fmt.Errorf("failed to resolve absolute path: %w", err)
+	}
+
 	var jsonData []byte
-	var err error
 
 	if prettyPrint {
 		jsonData, err = json.MarshalIndent(export, "", "  ")
@@ -477,20 +489,36 @@ func writeMultiExportToFile(export *models.MultiProjectExport, outputPath string
 		return 0, fmt.Errorf("failed to marshal export data: %w", err)
 	}
 
-	err = os.WriteFile(outputPath, jsonData, 0644)
+	// Write file with more permissive permissions for MCP environment
+	err = os.WriteFile(absPath, jsonData, 0666)
 	if err != nil {
-		return 0, fmt.Errorf("failed to write file: %w", err)
+		return 0, fmt.Errorf("failed to write file to %s: %w", absPath, err)
 	}
 
+	log.Debug("Successfully wrote multi-export file", "path", absPath, "size", len(jsonData))
 	return int64(len(jsonData)), nil
 }
 
 // ensureDirectoryExists creates the directory for the output path if it doesn't exist
 func ensureDirectoryExists(outputPath string) error {
-	dir := filepath.Dir(outputPath)
-	if dir == "." {
-		return nil // Current directory
+	// Convert to absolute path to handle MCP working directory issues
+	absPath, err := filepath.Abs(outputPath)
+	if err != nil {
+		return fmt.Errorf("failed to resolve absolute path: %w", err)
 	}
 
-	return os.MkdirAll(dir, 0755)
+	dir := filepath.Dir(absPath)
+
+	// Check if directory already exists
+	if _, err := os.Stat(dir); err == nil {
+		return nil // Directory exists
+	}
+
+	// Create directory with more permissive permissions for MCP environment
+	err = os.MkdirAll(dir, 0755)
+	if err != nil {
+		return fmt.Errorf("failed to create directory %s: %w", dir, err)
+	}
+
+	return nil
 }
